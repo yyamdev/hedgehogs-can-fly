@@ -42,15 +42,12 @@ void AiDriver::tick(std::vector<Entity*> &entities) {
 
     // decide what to do
     Entity *closestGrenade = get_cloeset_grenade(entities);
-    if (closestGrenade && util::len(dude->position - closestGrenade->position) < 200.f) {
+    if (closestGrenade && util::len(dude->position - closestGrenade->position) < AI_GRENADE_FLEE_DIST) {
         state = AI_STATE_FLEE;
         grenade = closestGrenade;
-    } else {
-        // change to attack
-        if (state != AI_STATE_ATTACK) {
-            state = AI_STATE_ATTACK;
-            attackCooldownTimer.restart();
-        }
+    } else if (state != AI_STATE_ATTACK) {
+        // seek player
+        state = AI_STATE_SEEK_PLAYER;
     }
 
     // flee grenade
@@ -58,8 +55,8 @@ void AiDriver::tick(std::vector<Entity*> &entities) {
         if (!grenade)
             state = AI_STATE_IDLE;
         else {
-            NavNode *nodeRight = get_closest_node(navGraph, grenade->position + sf::Vector2f(200.f, 0.f));
-            NavNode *nodeLeft = get_closest_node(navGraph, grenade->position - sf::Vector2f(200.f, 0.f));
+            NavNode *nodeRight = get_closest_node(navGraph, grenade->position + sf::Vector2f(AI_GRENADE_FLEE_DIST, 0.f));
+            NavNode *nodeLeft = get_closest_node(navGraph, grenade->position - sf::Vector2f(AI_GRENADE_FLEE_DIST, 0.f));
             NavNode *choice = NULL;
             // move in opposite direction to grenade velocity
             if (dude->position.x - grenade->position.x > 0.f)
@@ -72,12 +69,22 @@ void AiDriver::tick(std::vector<Entity*> &entities) {
 
     // attack player
     if (state == AI_STATE_ATTACK) {
-        // if done 'aiming'
-        if (attackCooldownTimer.getElapsedTime().asSeconds() > 1.f && player) {
+        if (player) {
             float xDif = player->position.x - dude->position.x;
-            dude->throw_grenade(sf::Vector2f(util::sign(xDif), -1.f), std::fabs(xDif) / 70.f);
-            std::cout << xDif / 70.f << std::endl;
+            dude->throw_grenade(sf::Vector2f(util::sign(xDif), -1.f), std::fabs(xDif) / 60.f);
             state = AI_STATE_IDLE;
+        }
+    }
+
+    // seek player
+    if (state == AI_STATE_SEEK_PLAYER && player) {
+        if (recalcPlayerPath.getElapsedTime().asSeconds() > 1.f) {
+            NavNode *nodePlayer = get_closest_node(navGraph, player->position);
+            find_path(get_closest_node(navGraph, dude->position), nodePlayer, navGraph, &currentPath);
+            recalcPlayerPath.restart();
+        }
+        if (util::len(player->position - dude->position) < AI_SEEK_PLAYER_DIST) {
+            state = AI_STATE_ATTACK;
         }
     }
 

@@ -25,4 +25,8 @@ private:
     // hp indicators
     HpBar hpPlayer;
     HpBar hpAi;
+
+    // cooldown indicators
+    float cooldownPlayer;
+    float cooldownAi;
 };

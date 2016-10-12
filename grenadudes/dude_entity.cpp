@@ -101,6 +101,9 @@ void EntityDude::tick(std::vector<Entity*> &entities) {
     if (position.y > (float)WINDOW_HEIGHT) {
         remove = true;
     }
+
+    // notify about cooldown change
+    notify(EVENT_DUDE_COOLDOWN_CHANGE, (void*)this);
 }
 
 void EntityDude::draw(sf::RenderWindow &window) {
@@ -153,7 +156,9 @@ DudeCollisionResponse EntityDude::intersecting_terrain(EntityTerrain *terrain, s
     return res;
 }
 
-bool EntityDude::is_jumping(){ return isJumping; }
+bool EntityDude::is_jumping() { return isJumping; }
+
+sf::Time EntityDude::get_cooldown_time() { return shootCooldownTimer.getElapsedTime(); }
 
 float EntityDude::get_y_on_terrain(sf::Vector2f position) { // find the new y at a specific point
     if (!terrain) return -1.f;
@@ -198,12 +203,15 @@ void EntityDude::jump() {
 }
 
 void EntityDude::throw_grenade(sf::Vector2f dir, float speed) {
-    speed = util::clamp(speed, 0.f, 10.f);
-    sf::Vector2f start = position;
-    start.x += util::sign(dir.x) * (DUDE_SIZE / 1.f);
-    start.y -= DUDE_SIZE / 2.f;
-    dir = dir / util::len(dir) * speed;
-    world->add_entity(new EntityGrenade(start, dir));
+    if (shootCooldownTimer.getElapsedTime().asSeconds() > DUDE_SHOOT_COOLDOWN) {
+        speed = util::clamp(speed, 0.f, 10.f);
+        sf::Vector2f start = position;
+        start.x += util::sign(dir.x) * (DUDE_SIZE / 1.f);
+        start.y -= DUDE_SIZE / 2.f;
+        dir = dir / util::len(dir) * speed;
+        world->add_entity(new EntityGrenade(start, dir));
+        shootCooldownTimer.restart();
+    }
 }
 
 int EntityDude::get_number(){ return number; }

@@ -35,6 +35,17 @@ void Hud::draw(sf::RenderWindow &window) {
     bar.setSize(sf::Vector2f(128.f * ((float)hpAi.hp / (float)hpAi.maxHp), 32.f));
     bar.setPosition(sf::Vector2f((float)WINDOW_WIDTH - 128.f - 10.f, 10.f));
     window.draw(bar);
+
+    // draw cooldown bars
+    bar.setFillColor(sf::Color(0, 0, 255, 128));
+    // player
+    bar.setSize(sf::Vector2f(128.f * (cooldownPlayer / (float)DUDE_SHOOT_COOLDOWN), 16.f));
+    bar.setPosition(sf::Vector2f(10.f, 42.f));
+    window.draw(bar);
+    // ai
+    bar.setSize(sf::Vector2f(128.f * (cooldownAi / (float)DUDE_SHOOT_COOLDOWN), 16.f));
+    bar.setPosition(sf::Vector2f((float)WINDOW_WIDTH - 128.f - 10.f, 42.f));
+    window.draw(bar);
 }
 
 void Hud::on_notify(Event event, void *data) {
@@ -55,5 +66,12 @@ void Hud::on_notify(Event event, void *data) {
             hpAi.hp = dude->get_hp();
             hpAi.maxHp = dude->get_max_hp();
         }
+    }
+    if (event == EVENT_DUDE_COOLDOWN_CHANGE) {
+        EntityDude *dude = (EntityDude*)data;
+        if (dude->get_number() == PLAYER_NUMBER)
+            cooldownPlayer = util::clamp(dude->get_cooldown_time().asSeconds(), 0.f, (float)DUDE_SHOOT_COOLDOWN);
+        else if (dude->get_number() == AI_NUMBER)
+            cooldownAi = util::clamp(dude->get_cooldown_time().asSeconds(), 0.f, (float)DUDE_SHOOT_COOLDOWN);
     }
 }

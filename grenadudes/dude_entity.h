@@ -15,6 +15,8 @@
 #define PLAYER_NUMBER 1
 #define AI_NUMBER 2
 
+#define DUDE_SHOOT_COOLDOWN 2.f
+
 class EntityTerrain;
 
 struct DudeCollisionResponse {
@@ -47,6 +49,8 @@ public:
     int get_number();
     void set_number(int number);
 
+    sf::Time get_cooldown_time();
+
     // control
     void move(EntityDudeDirection dir);
     void jump();
@@ -64,6 +68,8 @@ private:
 
     bool isJumping;
     int number;
+
+    sf::Clock shootCooldownTimer;
 
     static sf::Texture txt;
     static bool textureLoaded;
