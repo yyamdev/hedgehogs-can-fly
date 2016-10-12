@@ -1,0 +1,6 @@
+grenadeudes todo list:
+
+-> generate random terrain
+-> enclose in game code with win/loss
+-> write ai
+-> menus or something

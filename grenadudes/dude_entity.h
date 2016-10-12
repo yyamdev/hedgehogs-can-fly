@@ -1,0 +1,75 @@
+#pragma once
+
+// a player or ai controllable character
+
+#include "entity.h"
+#include "dude_driver.h"
+#include <memory>
+#include "subject.h"
+#include "build_options.h"
+
+#define DUDE_SIZE 24.f
+#define DUDE_COLLISION_PAD 0.f
+#define DUDE_MAX_TERRAIN_CLIMB 6.f
+
+#define PLAYER_NUMBER 1
+#define AI_NUMBER 2
+
+class EntityTerrain;
+
+struct DudeCollisionResponse {
+    bool collision;
+    bool collisionUnder;
+    bool collisionAbove;
+    float lowestY;
+    float highestY;
+};
+
+class EntityDude : public Entity, public Observer {
+public:
+    EntityDude();
+    EntityDude(sf::Vector2f pos, int number);
+    ~EntityDude();
+
+    void set_driver(std::unique_ptr<DudeDriver> driver);
+
+    void event(sf::Event &e);
+    void tick(std::vector<Entity*> &entities);
+    void draw(sf::RenderWindow &window);
+
+    enum EntityDudeDirection {
+        DIRECTION_LEFT,
+        DIRECTION_RIGHT
+    };
+
+    bool is_jumping();
+
+    int get_number();
+    void set_number(int number);
+
+    // control
+    void move(EntityDudeDirection dir);
+    void jump();
+    void throw_grenade(sf::Vector2f dir, float speed);
+
+    void on_notify(Event event, void *data);
+
+private:
+    DudeCollisionResponse intersecting_terrain(EntityTerrain *terrain, sf::Vector2f position);
+    bool can_move(float xDelta, EntityTerrain *terrain);
+    float get_y_on_terrain(sf::Vector2f position);
+
+    std::unique_ptr<DudeDriver> driver;
+    EntityTerrain *terrain;
+
+    bool isJumping;
+    int number;
+
+    static sf::Texture txt;
+    static bool textureLoaded;
+    sf::Sprite spr;
+
+    // physics constants
+    static sf::Vector2f gravity;
+    static float terminalVelocity;
+};

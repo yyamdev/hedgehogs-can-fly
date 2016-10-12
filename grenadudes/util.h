@@ -1,0 +1,94 @@
+#pragma once
+
+// utility code
+
+#include <algorithm>
+#include <random>
+#include <string>
+#include <sstream>
+#include <math.h>
+
+namespace util {
+    // inclusive
+    inline int rnd(int min, int max) {
+        if (min > max)
+            return max;
+        std::random_device r;
+        std::default_random_engine e(r());
+        std::uniform_int_distribution<int> uniform_dist(min, max);
+        return uniform_dist(e);
+    }
+
+    // inclusive
+    inline float rnd(float min, float max) {
+        if (min > max)
+            return max;
+        std::random_device r;
+        std::mt19937 e(r());
+        std::uniform_real_distribution<float> uniform_dist(min, max);
+        return uniform_dist(e);
+    }
+
+    template <typename T>
+    inline const T& choose(const T &a, const T &b) {
+        int choice = rnd(0, 1);
+        return choice == 0 ? a : b;
+    }
+
+    // inclusive
+    template <typename T>
+    inline bool in_range(T x, T min, T max) {
+        return std::min(max, std::max(min, x)) == x;
+    }
+
+    template <typename T>
+    inline std::string to_string(T val) {
+        std::stringstream s;
+        s << val;
+        return s.str();
+    }
+
+    template <typename T>
+    inline typename std::vector<T>::iterator remove_from_vector(const T &element, std::vector<T> &vec) {
+        // find position of element
+        auto elm = vec.begin();
+        for (elm =vec.begin(); elm<vec.end(); ++elm) {
+            if (*elm == element)
+                break;
+        }
+        // remove
+        return vec.erase(elm);
+    }
+
+    // inclusive
+    template <typename T>
+    inline T clamp(const T &n, const T &lower, const T &upper) {
+        return std::max(lower, std::min(n, upper));
+    }
+
+    template <typename T>
+    inline T distance(T x1, T y1, T x2, T y2) {
+        return sqrtf(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+    }
+
+    template <typename T>
+    inline float len(T vec) {
+        return sqrtf(pow(vec.x, 2) + pow(vec.y, 2));
+    }
+
+    template <typename T>
+    inline int round(T x) {
+        return (int)(x + 0.5);
+    }
+
+    template <typename T>
+    inline T reduce(const T &value, float percentage) {
+        percentage = 1.f - percentage;
+        return sign(value) * fabs(value * percentage);
+    }
+
+    template <typename T>
+    inline T sign(const T &value) {
+        return (value > static_cast<T>(0.0)) ? static_cast<T>(1.0) : static_cast<T>(-1.0);
+    }
+}
