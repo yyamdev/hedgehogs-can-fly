@@ -30,13 +30,27 @@ void AiDriver::event(sf::Event &e) {
 }
 
 void AiDriver::tick(std::vector<Entity*> &entities) {
+    // find player
+    EntityDude *player = NULL;
+    for (auto &entity : entities) {
+        if (entity->get_tag() == "dude") {
+            EntityDude * entityDude = (EntityDude*)entity;
+            if (entityDude->get_number() == PLAYER_NUMBER)
+                player = entityDude;
+        }
+    }
+
     // decide what to do
     Entity *closestGrenade = get_cloeset_grenade(entities);
-    if (closestGrenade && util::len(dude->position - closestGrenade->position) < 128.f) {
+    if (closestGrenade && util::len(dude->position - closestGrenade->position) < 200.f) {
         state = AI_STATE_FLEE;
         grenade = closestGrenade;
     } else {
-        state = AI_STATE_IDLE;
+        // change to attack
+        if (state != AI_STATE_ATTACK) {
+            state = AI_STATE_ATTACK;
+            attackCooldownTimer.restart();
+        }
     }
 
     // flee grenade
@@ -44,8 +58,8 @@ void AiDriver::tick(std::vector<Entity*> &entities) {
         if (!grenade)
             state = AI_STATE_IDLE;
         else {
-            NavNode *nodeRight = get_closest_node(navGraph, grenade->position + sf::Vector2f(128.f, 0.f));
-            NavNode *nodeLeft = get_closest_node(navGraph, grenade->position - sf::Vector2f(128.f, 0.f));
+            NavNode *nodeRight = get_closest_node(navGraph, grenade->position + sf::Vector2f(200.f, 0.f));
+            NavNode *nodeLeft = get_closest_node(navGraph, grenade->position - sf::Vector2f(200.f, 0.f));
             NavNode *choice = NULL;
             // move in opposite direction to grenade velocity
             if (dude->position.x - grenade->position.x > 0.f)
@@ -53,6 +67,17 @@ void AiDriver::tick(std::vector<Entity*> &entities) {
             else
                 choice = nodeLeft;
             find_path(get_closest_node(navGraph, dude->position), choice, navGraph, &currentPath);
+        }
+    }
+
+    // attack player
+    if (state == AI_STATE_ATTACK) {
+        // if done 'aiming'
+        if (attackCooldownTimer.getElapsedTime().asSeconds() > 1.f && player) {
+            float xDif = player->position.x - dude->position.x;
+            dude->throw_grenade(sf::Vector2f(util::sign(xDif), -1.f), std::fabs(xDif) / 70.f);
+            std::cout << xDif / 70.f << std::endl;
+            state = AI_STATE_IDLE;
         }
     }
 

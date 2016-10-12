@@ -12,8 +12,10 @@
 class EntityTerrain;
 
 enum AiState {
-    AI_STATE_IDLE,
-    AI_STATE_FLEE
+    AI_STATE_IDLE,  // doing nothing
+    AI_STATE_FLEE,  // fleeing a nearby grenade
+    AI_STATE_SEEK,  // seeking a strategic position
+    AI_STATE_ATTACK // attacking player
 };
 
 class AiDriver : public DudeDriver, public Subject, public Observer {
@@ -46,4 +48,5 @@ private:
     AiState state;
     Entity *grenade;
     Entity* get_cloeset_grenade(std::vector<Entity*> &entities);
+    sf::Clock attackCooldownTimer;
 };
