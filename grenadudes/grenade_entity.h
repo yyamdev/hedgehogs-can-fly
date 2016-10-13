@@ -8,7 +8,7 @@
 class EntityGrenade : public Entity {
 public:
     EntityGrenade();
-    EntityGrenade(sf::Vector2f pos, sf::Vector2f vel);
+    EntityGrenade(sf::Vector2f pos, sf::Vector2f vel, bool sticky);
 
     void event(sf::Event &e);
     void tick(std::vector<Entity*> &entities);
@@ -17,6 +17,12 @@ private:
     // physics
     static sf::Vector2f gravity;
     static float terminalVelocity;
+
+    bool sticky;
+    bool stuck;
+    bool stuckToPlayer;
+    sf::Vector2f playerToGrenadeStuck;
+    Entity* stuckTo;
 
     float bounciness;
 

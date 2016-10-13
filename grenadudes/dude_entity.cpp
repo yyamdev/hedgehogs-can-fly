@@ -32,7 +32,7 @@ EntityDude::EntityDude(sf::Vector2f pos, int number) {
     number = 0;
     Subject::add_observer(this);
     if (!textureLoaded) {
-        txt.loadFromFile("dude.png");
+        txt.loadFromFile("data/dude.png");
         textureLoaded = true;
     }
 }
@@ -111,14 +111,6 @@ void EntityDude::draw(sf::RenderWindow &window) {
     spr.setOrigin(spr.getLocalBounds().width / 2.f, spr.getLocalBounds().height / 2.f);
     spr.setPosition(position);
     window.draw(spr);
-
-    /*
-    sf::CircleShape circle(collisionRadius);
-    circle.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
-    circle.setFillColor(sf::Color(255, 255, 255, 128));
-    circle.setPosition(position);
-    window.draw(circle);
-    */
 
     if(driver)
         driver->draw(window);
@@ -209,7 +201,7 @@ void EntityDude::throw_grenade(sf::Vector2f dir, float speed) {
         start.x += util::sign(dir.x) * (DUDE_SIZE / 1.f);
         start.y -= DUDE_SIZE / 2.f;
         dir = dir / util::len(dir) * speed;
-        world->add_entity(new EntityGrenade(start, dir));
+        world->add_entity(new EntityGrenade(start, dir, false));
         shootCooldownTimer.restart();
     }
 }

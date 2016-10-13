@@ -14,12 +14,15 @@ sf::Texture EntityGrenade::txt;
 bool EntityGrenade::textureLoaded = false;
 
 EntityGrenade::EntityGrenade() {
-    EntityGrenade(sf::Vector2f(0.f, 0.f), sf::Vector2f(0.f, 0.f));
+    EntityGrenade(sf::Vector2f(0.f, 0.f), sf::Vector2f(0.f, 0.f), false);
 }
 
-EntityGrenade::EntityGrenade(sf::Vector2f pos, sf::Vector2f vel) {
+EntityGrenade::EntityGrenade(sf::Vector2f pos, sf::Vector2f vel, bool sticky) {
     this->position = pos;
     this->velocity = vel;
+    this->sticky = sticky;
+    stuck = false;
+    stuckToPlayer = false;
     gravity = sf::Vector2f(0.f, GRAVITY);
     terminalVelocity = 6.f;
     tag = "grenade";
@@ -31,7 +34,7 @@ EntityGrenade::EntityGrenade(sf::Vector2f pos, sf::Vector2f vel) {
     invulnerable = false;
     hp = maxHp = START_HP_GRENADE;
     if (!textureLoaded) {
-        txt.loadFromFile("grenade.png");
+        txt.loadFromFile("data/grenade.png");
         textureLoaded = true;
     }
     angle = 0.f;
@@ -47,7 +50,8 @@ void EntityGrenade::tick(std::vector<Entity*> &entities) {
     if (velocity.y > terminalVelocity)
         velocity.y = terminalVelocity;
 
-    position += velocity; // move due to forces
+    if (!stuck)
+        position += velocity; // move due to forces
 
     // loop throuh all entities
     EntityTerrain *terrain = NULL;
@@ -56,12 +60,19 @@ void EntityGrenade::tick(std::vector<Entity*> &entities) {
             terrain = (EntityTerrain*)e;
         }
         if (e->get_tag() == "dude") {
-            if (intersects(*e)) { // react to collision with dude (bounce off)
+            if (stuckToPlayer && e == stuckTo) {
+                position = e->position + playerToGrenadeStuck;
+            }
+            if (intersects(*e) && !stuck) { // react to collision with dude (bounce off)
                 position -= velocity;
                 sf::Vector2f normal = position - e->position;
                 sf::Vector2f normalUnit = normal / util::len(normal);
                 velocity += normalUnit * (util::len(velocity) + bounciness);
                 collided = true;
+                stuck = true;
+                stuckToPlayer = true;
+                stuckTo = e;
+                playerToGrenadeStuck = position - e->position;
             }
         }
     }
@@ -93,10 +104,12 @@ void EntityGrenade::tick(std::vector<Entity*> &entities) {
         (unless entity is traveling way too fast, then neither of these methods will work)
     */
     for (auto &probe : probes) {
-        if (std::get<1>(probe)) { // collided at this probe point?
+        if (std::get<1>(probe) && !stuck) { // collided at this probe point?
             collided = true;
             sf::Vector2f contact = std::get<0>(probe);
             position -= velocity * 1.1f;
+            if (sticky)
+                stuck = true;
             if (!rest) {
                 float speed = util::distance(0.f, 0.f, velocity.x, velocity.y);
                 sf::Vector2f normal = terrain->get_normal(contact);
@@ -133,6 +146,6 @@ void EntityGrenade::draw(sf::RenderWindow &window) {
     spr.setPosition(position);
     spr.setRotation(angle);
     window.draw(spr);
-    angle += util::sign(velocity.x) * 3.f;
-
+    if (!stuck)
+        angle += util::sign(velocity.x) * 3.f;
 }

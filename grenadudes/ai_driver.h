@@ -10,7 +10,7 @@
 #include "nav_graph.h"
 
 #define AI_GRENADE_FLEE_DIST 150.f
-#define AI_SEEK_PLAYER_DIST 256.f
+#define AI_SEEK_PLAYER_DIST 300.f
 
 class EntityTerrain;
 
@@ -49,8 +49,10 @@ private:
     sf::Clock stuckTimer;
 
     // decisions
+    bool active;
+    void change_state(AiState newState);
     AiState state;
     Entity *grenade;
     Entity* get_cloeset_grenade(std::vector<Entity*> &entities);
-    sf::Clock recalcPlayerPath;
+    sf::Clock recalcPath;
 };

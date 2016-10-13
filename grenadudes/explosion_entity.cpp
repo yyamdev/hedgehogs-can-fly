@@ -25,7 +25,7 @@ void EntityExplosion::tick(std::vector<Entity*> &entities) {
                 terrain = (EntityTerrain*)e;
             }
         }
-        terrain->set_circle(position, collisionRadius, false);
+        terrain->set_circle(position, EXPLOSION_DEFORMATION_RADIUS, false);
     }
 
     for (Entity *e : entities) {

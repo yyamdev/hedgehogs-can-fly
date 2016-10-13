@@ -5,6 +5,7 @@
 #include "entity.h"
 #include <SFML/Graphics.hpp>
 
+#define EXPLOSION_DEFORMATION_RADIUS 32.f
 #define EXPLOSION_RADIUS 64.f
 #define EXPLOSION_MILLISECONDS_ALIVE 100
 

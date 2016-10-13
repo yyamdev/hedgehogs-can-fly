@@ -4,6 +4,7 @@
 
 #include "observer.h"
 #include <SFML/Graphics.hpp>
+#include "ai_driver.h"
 
 struct HpBar {
     int hp;
@@ -29,4 +30,8 @@ private:
     // cooldown indicators
     float cooldownPlayer;
     float cooldownAi;
+
+    // ai state
+    AiState aiState;
+    sf::Font fnt;
 };
