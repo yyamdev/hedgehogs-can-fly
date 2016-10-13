@@ -20,9 +20,10 @@ private:
 
     bool sticky;
     bool stuck;
-    bool stuckToPlayer;
-    sf::Vector2f playerToGrenadeStuck;
+    bool stuckToEntity;
     Entity* stuckTo;
+    sf::Vector2f stuckOffset;
+    
 
     float bounciness;
 

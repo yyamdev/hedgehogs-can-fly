@@ -9,7 +9,7 @@ AiDriver::AiDriver(EntityDude *dude, EntityTerrain *terrain) : terrainGrid(terra
     showGrid = false;
     state = AI_STATE_IDLE;
     Subject::add_observer(this);
-    active = false;
+    active = true; // ai on by default
 }
 
 AiDriver::~AiDriver() {
@@ -21,9 +21,12 @@ void AiDriver::event(sf::Event &e) {
         showGrid = !showGrid;
     if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::N)
         showNav = !showNav;
-    if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::P)
+    if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::P) {
         active = !active;
-    if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Middle) {
+        if (!active)
+            currentPath.clear();
+    }
+    if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Middle && !active) {
         sf::Vector2f mouse;
         mouse.x = (float)e.mouseButton.x;
         mouse.y = (float)e.mouseButton.y;
@@ -33,69 +36,8 @@ void AiDriver::event(sf::Event &e) {
 }
 
 void AiDriver::tick(std::vector<Entity*> &entities) {
-    if (!active)
-        return;
-
-    // find player
-    EntityDude *player = NULL;
-    for (auto &entity : entities) {
-        if (entity->get_tag() == "dude") {
-            EntityDude * entityDude = (EntityDude*)entity;
-            if (entityDude->get_number() == PLAYER_NUMBER)
-                player = entityDude;
-        }
-    }
-
-    // decide what to do
-    Entity *closestGrenade = get_cloeset_grenade(entities);
-    if (closestGrenade && util::len(dude->position - closestGrenade->position) < AI_GRENADE_FLEE_DIST) {
-        change_state(AI_STATE_FLEE);
-        grenade = closestGrenade;
-    } else
-        change_state(AI_STATE_SEEK_PLAYER);
-
-    // flee grenade
-    if (state == AI_STATE_FLEE) {
-        if (!grenade)
-            change_state(AI_STATE_IDLE);
-        else {
-            NavNode *nodeRight = get_closest_node(navGraph, grenade->position + sf::Vector2f(AI_GRENADE_FLEE_DIST + 32.f, 0.f));
-            NavNode *nodeLeft = get_closest_node(navGraph, grenade->position - sf::Vector2f(AI_GRENADE_FLEE_DIST + 32.f, 0.f));
-            NavNode *choice = NULL;
-            // move in opposite direction to grenade
-            if (dude->position.x - grenade->position.x > 0.f)
-                choice = nodeRight;
-            else
-                choice = nodeLeft;
-            if (recalcPath.getElapsedTime().asSeconds() > 1.f) {
-                find_path(get_closest_node(navGraph, dude->position), choice, navGraph, &currentPath);
-                recalcPath.restart();
-            }
-        }
-    }
-
-    // seek player
-    if (state == AI_STATE_SEEK_PLAYER && player) {
-        if (recalcPath.getElapsedTime().asSeconds() > 1.f) {
-            NavNode *nodePlayer = get_closest_node(navGraph, player->position);
-            find_path(get_closest_node(navGraph, dude->position), nodePlayer, navGraph, &currentPath);
-            recalcPath.restart();
-        }
-        if (util::len(player->position - dude->position) < AI_SEEK_PLAYER_DIST) {
-            change_state(AI_STATE_ATTACK);
-        }
-    }
-
-    // attack player
-    if (state == AI_STATE_ATTACK) {
-        if (player) {
-            float xDif = player->position.x - dude->position.x;
-            dude->throw_grenade(sf::Vector2f(util::sign(xDif), -1.f), std::fabs(xDif) / 60.f + util::rnd(0.f, 2.f));
-            change_state(AI_STATE_IDLE);
-        }
-    }
-
-    
+    if (active)
+        do_ai(entities);
 
     // recalculate terrain approximation & nav graph
     if (clockRecalcTerrainGrid.getElapsedTime().asSeconds() > 0.5f) {
@@ -179,4 +121,65 @@ void AiDriver::on_notify(Event event, void *data) {
 void AiDriver::change_state(AiState newState) {
     state = newState;
     notify(EVENT_AI_STATE_CHANGE, (void*)(&state));
+}
+
+void AiDriver::do_ai(std::vector<Entity*> &entities) {
+    // find player
+    EntityDude *player = NULL;
+    for (auto &entity : entities) {
+        if (entity->get_tag() == "dude") {
+            EntityDude * entityDude = (EntityDude*)entity;
+            if (entityDude->get_number() == PLAYER_NUMBER)
+                player = entityDude;
+        }
+    }
+
+    // decide what to do
+    Entity *closestGrenade = get_cloeset_grenade(entities);
+    if (closestGrenade && util::len(dude->position - closestGrenade->position) < AI_GRENADE_FLEE_DIST) {
+        change_state(AI_STATE_FLEE);
+        grenade = closestGrenade;
+    } else
+        change_state(AI_STATE_SEEK_PLAYER);
+
+    // flee grenade
+    if (state == AI_STATE_FLEE) {
+        if (!grenade)
+            change_state(AI_STATE_IDLE);
+        else {
+            NavNode *nodeRight = get_closest_node(navGraph, grenade->position + sf::Vector2f(AI_GRENADE_FLEE_DIST + 32.f, 0.f));
+            NavNode *nodeLeft = get_closest_node(navGraph, grenade->position - sf::Vector2f(AI_GRENADE_FLEE_DIST + 32.f, 0.f));
+            NavNode *choice = NULL;
+            // move in opposite direction to grenade
+            if (dude->position.x - grenade->position.x > 0.f)
+                choice = nodeRight;
+            else
+                choice = nodeLeft;
+            if (recalcPath.getElapsedTime().asSeconds() > 1.f) {
+                find_path(get_closest_node(navGraph, dude->position), choice, navGraph, &currentPath);
+                recalcPath.restart();
+            }
+        }
+    }
+
+    // seek player
+    if (state == AI_STATE_SEEK_PLAYER && player) {
+        if (recalcPath.getElapsedTime().asSeconds() > 1.f) {
+            NavNode *nodePlayer = get_closest_node(navGraph, player->position);
+            find_path(get_closest_node(navGraph, dude->position), nodePlayer, navGraph, &currentPath);
+            recalcPath.restart();
+        }
+        if (util::len(player->position - dude->position) <= AI_SEEK_PLAYER_DIST) {
+            change_state(AI_STATE_ATTACK);
+        }
+    }
+
+    // attack player
+    if (state == AI_STATE_ATTACK) {
+        if (player) {
+            float xDif = player->position.x - dude->position.x;
+            dude->throw_grenade(sf::Vector2f(util::sign(xDif), -1.f), std::fabs(xDif) / 60.f + util::rnd(0.f, 2.f));
+            change_state(AI_STATE_IDLE);
+        }
+    }
 }

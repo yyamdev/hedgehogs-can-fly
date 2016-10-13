@@ -54,8 +54,10 @@ void Entity::set_hp(int hp) {
     if (invulnerable) return;
     this->hp = util::clamp(hp, 0, maxHp);
     notify(EVENT_ENTITY_HP_CHANGE, (void*)(&(this->hp)));
-    if (this->hp == 0)
+    if (this->hp == 0) {
         remove = true;
+        notify(EVENT_ENTITY_DIE, (void*)this);
+    }
 }
 
 void Entity::damage(int dmg) {
@@ -64,6 +66,8 @@ void Entity::damage(int dmg) {
     clockDamageCooldown.restart();
     hp = util::clamp(hp - dmg, 0, maxHp);
     notify(EVENT_ENTITY_HP_CHANGE, (void*)(&hp));
-    if (this->hp == 0)
+    if (this->hp == 0) {
         remove = true;
+        notify(EVENT_ENTITY_DIE, (void*)this);
+    }
 }

@@ -31,6 +31,8 @@ public:
     void tick(std::vector<Entity*> &entities);
     void draw(sf::RenderWindow &window);
 
+    void do_ai(std::vector<Entity*> &entities);
+
     void AiDriver::on_notify(Event event, void *data);
 private:
     EntityTerrain *terrain;

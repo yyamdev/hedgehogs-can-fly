@@ -201,7 +201,7 @@ void EntityDude::throw_grenade(sf::Vector2f dir, float speed) {
         start.x += util::sign(dir.x) * (DUDE_SIZE / 1.f);
         start.y -= DUDE_SIZE / 2.f;
         dir = dir / util::len(dir) * speed;
-        world->add_entity(new EntityGrenade(start, dir, false));
+        world->add_entity(new EntityGrenade(start, dir, true));
         shootCooldownTimer.restart();
     }
 }
@@ -215,5 +215,8 @@ void EntityDude::set_number(int number) {
 void EntityDude::on_notify(Event event, void *data) {
     if (event == EVENT_ENTITY_HP_CHANGE) {
         notify(EVENT_DUDE_HP_CHANGE, (void*)this);
+    }
+    if (event == EVENT_ENTITY_DIE && this == (EntityDude*)data) {
+        notify(EVENT_DUDE_DIE, (void*)&number);
     }
 }

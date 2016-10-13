@@ -4,8 +4,11 @@
 
 #include "state.h"
 #include "hud.h"
+#include "observer.h"
 
-class StatePlay : public State {
+class EntityTerrain;
+
+class StatePlay : public State, public Observer {
 public:
     StatePlay(World *world);
 
@@ -14,6 +17,11 @@ public:
     void on_draw(sf::RenderWindow &window);
     void on_gain_focus();
     void on_lose_focus();
+
+    void on_notify(Event event, void *data);
+
 private:
     Hud hud; // hud renderer
+    EntityTerrain *terrain;
+    bool addPlayer, addAi;
 };

@@ -22,7 +22,7 @@ EntityGrenade::EntityGrenade(sf::Vector2f pos, sf::Vector2f vel, bool sticky) {
     this->velocity = vel;
     this->sticky = sticky;
     stuck = false;
-    stuckToPlayer = false;
+    stuckToEntity = false;
     gravity = sf::Vector2f(0.f, GRAVITY);
     terminalVelocity = 6.f;
     tag = "grenade";
@@ -60,8 +60,8 @@ void EntityGrenade::tick(std::vector<Entity*> &entities) {
             terrain = (EntityTerrain*)e;
         }
         if (e->get_tag() == "dude") {
-            if (stuckToPlayer && e == stuckTo) {
-                position = e->position + playerToGrenadeStuck;
+            if (stuckToEntity && e == stuckTo) {
+                position = e->position + stuckOffset;
             }
             if (intersects(*e) && !stuck) { // react to collision with dude (bounce off)
                 position -= velocity;
@@ -69,10 +69,12 @@ void EntityGrenade::tick(std::vector<Entity*> &entities) {
                 sf::Vector2f normalUnit = normal / util::len(normal);
                 velocity += normalUnit * (util::len(velocity) + bounciness);
                 collided = true;
-                stuck = true;
-                stuckToPlayer = true;
+                if (sticky) {
+                    stuck = true;
+                    stuckToEntity = true;
+                }
                 stuckTo = e;
-                playerToGrenadeStuck = position - e->position;
+                stuckOffset = position - e->position;
             }
         }
     }
