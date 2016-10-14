@@ -201,7 +201,7 @@ void EntityDude::throw_grenade(sf::Vector2f dir, float speed) {
         start.x += util::sign(dir.x) * (DUDE_SIZE / 1.f);
         start.y -= DUDE_SIZE / 2.f;
         dir = dir / util::len(dir) * speed;
-        world->add_entity(new EntityGrenade(start, dir, true));
+        world->add_entity(new EntityGrenade(start, dir, false));
         shootCooldownTimer.restart();
     }
 }
