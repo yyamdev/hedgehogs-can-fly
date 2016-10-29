@@ -109,6 +109,7 @@ void EntityGrenade::tick(std::vector<Entity*> &entities) {
         if (std::get<1>(probe) && !stuck) { // collided at this probe point?
             collided = true;
             sf::Vector2f contact = std::get<0>(probe);
+            contact -= velocity;
             position -= velocity * 1.1f;
             if (sticky)
                 stuck = true;
