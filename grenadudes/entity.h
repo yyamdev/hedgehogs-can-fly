@@ -10,6 +10,7 @@
 #define ENTITY_DAMAGE_COOLDOWN_MILLISECONDS 1000
 
 class World;
+class EntityTerrain;
 
 class Entity : public Subject {
 public:

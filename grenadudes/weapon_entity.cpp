@@ -1,4 +1,5 @@
 #include "weapon_entity.h"
+#include "build_options.h"
 
 EntityWeapon::EntityWeapon() {
     EntityWeapon(sf::Vector2f(0.f, 0.f), W_GRENADE);
@@ -8,12 +9,30 @@ EntityWeapon::EntityWeapon(sf::Vector2f pos, WeaponType weapon) : weapon(weapon)
     position = pos;
     tag = "weapon";
     collisionRadius = 16.f;
+    terrain = NULL;
 }
 
 void EntityWeapon::event(sf::Event &e) {
 }
 
 void EntityWeapon::tick(std::vector<Entity*> &entities) {
+    // find terrain entity
+    if (terrain == NULL) {
+        for (Entity *e : entities) {
+            if (e->get_tag() == "terrain") {
+                terrain = (EntityTerrain*)e;
+            }
+        }
+    }
+
+    position += velocity;
+
+    // gravity
+    sf::Vector2f gravity = sf::Vector2f(0.f, GRAVITY);
+    float terminalVelocity = 6.f;
+    velocity += gravity;
+    if (velocity.y > terminalVelocity)
+        velocity.y = terminalVelocity;
 }
 
 void EntityWeapon::draw(sf::RenderWindow &window) {

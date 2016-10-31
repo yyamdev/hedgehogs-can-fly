@@ -6,6 +6,8 @@
 #include <SFML/Graphics.hpp>
 #include "weapons.h"
 
+class EntityTerrain;
+
 class EntityWeapon : public Entity {
 public:
     EntityWeapon();
@@ -18,4 +20,5 @@ public:
     WeaponType get_weapon();
 private:
     WeaponType weapon;
+    EntityTerrain *terrain;
 };

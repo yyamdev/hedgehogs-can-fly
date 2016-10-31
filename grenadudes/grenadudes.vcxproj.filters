@@ -205,7 +205,5 @@
     <None Include="data\terrain.frag">
       <Filter>Source Files\game\world\terrain</Filter>
     </None>
-    <None Include="ClassDiagram.cd" />
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
 </Project>
