@@ -4,6 +4,7 @@
 #include "terrain_entity.h"
 #include "keyboard_driver.h"
 #include "ai_driver.h"
+#include "weapon_entity.h"
 
 StatePlay::StatePlay(World *world) : State(world) {
     Subject::add_observer(this);
@@ -19,6 +20,10 @@ StatePlay::StatePlay(World *world) : State(world) {
 }
 
 void StatePlay::on_event(sf::Event &event) {
+    if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right) {
+        sf::Vector2f mouse((float)event.mouseButton.x, (float)event.mouseButton.y);
+        world->add_entity(new EntityWeapon(mouse, W_STICKY_GRENADE));
+    }
 }
 
 void StatePlay::on_tick() {

@@ -14,7 +14,7 @@ Entity::Entity() {
     hp = maxHp = 100;
 }
 
-bool Entity::intersects(Entity &other) {
+bool Entity::intersects(const Entity &other) {
     float distance = sqrtf(pow(other.position.x - position.x, 2) + pow(other.position.y - position.y, 2));
     return distance < collisionRadius + other.collisionRadius;
 }

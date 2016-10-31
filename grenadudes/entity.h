@@ -20,7 +20,7 @@ public:
     virtual void tick(std::vector<Entity*> &entities) = 0;
     virtual void draw(sf::RenderWindow &window) = 0;
 
-    bool intersects(Entity &other);
+    bool intersects(const Entity &other);
 
     std::string get_tag();
 

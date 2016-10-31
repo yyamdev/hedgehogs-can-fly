@@ -144,6 +144,9 @@
     <ClInclude Include="weapons.h">
       <Filter>Header Files\game\state\play</Filter>
     </ClInclude>
+    <ClInclude Include="weapon_entity.h">
+      <Filter>Header Files\game\world</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -194,10 +197,15 @@
     <ClCompile Include="debug_draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="weapon_entity.cpp">
+      <Filter>Source Files\game\world</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\terrain.frag">
       <Filter>Source Files\game\world\terrain</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
 </Project>

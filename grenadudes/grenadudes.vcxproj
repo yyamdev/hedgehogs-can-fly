@@ -142,6 +142,7 @@
     <ClCompile Include="subject.cpp" />
     <ClCompile Include="terrain_entity.cpp" />
     <ClCompile Include="terrain_grid.cpp" />
+    <ClCompile Include="weapon_entity.cpp" />
     <ClCompile Include="world.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -165,9 +166,12 @@
     <ClInclude Include="terrain_grid.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="weapons.h" />
+    <ClInclude Include="weapon_entity.h" />
     <ClInclude Include="world.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="data\terrain.frag">
       <FileType>Text</FileType>
     </None>

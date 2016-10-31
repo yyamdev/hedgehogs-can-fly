@@ -5,6 +5,7 @@
 #include "util.h"
 #include "world.h"
 #include "grenade_entity.h"
+#include "weapon_entity.h"
 
 sf::Vector2f EntityDude::gravity;
 float EntityDude::terminalVelocity;
@@ -63,11 +64,13 @@ void EntityDude::tick(std::vector<Entity*> &entities) {
         velocity.y = terminalVelocity;
 
     // loop through entities
-    if (terrain == NULL) {
-        for (Entity *e : entities) {
-            if (e->get_tag() == "terrain") { // get terrain entity
-                terrain = (EntityTerrain*)e;
-            }
+    for (Entity *e : entities) {
+        if (e->get_tag() == "terrain") { // get terrain entity
+            terrain = (EntityTerrain*)e;
+        }
+        if (e->get_tag() == "weapon" && intersects(*e)) { // handle collision with weapon pickups
+            set_weapon(((EntityWeapon*)(e))->get_weapon());
+            e->remove = true;
         }
     }
 
