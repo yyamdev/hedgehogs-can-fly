@@ -8,7 +8,7 @@
 
 class EntityTerrain;
 
-class StatePlay : public State, public Observer {
+class StatePlay : public State, public Observer, public Subject {
 public:
     StatePlay(World *world);
 
@@ -24,4 +24,6 @@ private:
     Hud hud; // hud renderer
     EntityTerrain *terrain;
     bool addPlayer, addAi;
+
+    int playerLives, aiLives;
 };

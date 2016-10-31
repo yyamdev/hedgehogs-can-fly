@@ -12,5 +12,7 @@ enum Event {
     EVENT_DUDE_COOLDOWN_CHANGE, // EntityDude* pointer to dude
     EVENT_AI_STATE_CHANGE, // AiState* pointer to state
     EVENT_ENTITY_DIE, // Entity * pointer to entity
-    EVENT_DUDE_DIE // int* pointer to dude number
+    EVENT_DUDE_DIE, // int* pointer to dude number
+    EVENT_PLAYER_WINS, // NULL
+    EVENT_AI_WINS, // NULL
 };

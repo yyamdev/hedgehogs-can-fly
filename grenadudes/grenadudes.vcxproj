@@ -164,6 +164,7 @@
     <ClInclude Include="terrain_entity.h" />
     <ClInclude Include="terrain_grid.h" />
     <ClInclude Include="util.h" />
+    <ClInclude Include="weapons.h" />
     <ClInclude Include="world.h" />
   </ItemGroup>
   <ItemGroup>

@@ -141,6 +141,9 @@
     <ClInclude Include="nav_graph.h">
       <Filter>Header Files\game\world\dude\ai</Filter>
     </ClInclude>
+    <ClInclude Include="weapons.h">
+      <Filter>Header Files\game\state\play</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

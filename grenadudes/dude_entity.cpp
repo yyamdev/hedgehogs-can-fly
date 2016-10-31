@@ -30,6 +30,7 @@ EntityDude::EntityDude(sf::Vector2f pos, int number) {
     invulnerable = false; // use hp
     notify(EVENT_DUDE_HP_CHANGE, (void*)this);
     number = 0;
+    weapon = W_GRENADE;
     Subject::add_observer(this);
     if (!textureLoaded) {
         txt.loadFromFile("data/dude.png");
@@ -201,7 +202,8 @@ void EntityDude::throw_grenade(sf::Vector2f dir, float speed) {
         start.x += util::sign(dir.x) * (DUDE_SIZE / 1.f);
         start.y -= DUDE_SIZE / 2.f;
         dir = dir / util::len(dir) * speed;
-        world->add_entity(new EntityGrenade(start, dir, false));
+        bool sticky = (weapon == W_STICKY_GRENADE)? true : false;
+        world->add_entity(new EntityGrenade(start, dir, sticky));
         shootCooldownTimer.restart();
     }
 }
@@ -219,4 +221,12 @@ void EntityDude::on_notify(Event event, void *data) {
     if (event == EVENT_ENTITY_DIE && this == (EntityDude*)data) {
         notify(EVENT_DUDE_DIE, (void*)&number);
     }
+}
+
+WeaponType EntityDude::get_weapon() {
+    return weapon;
+}
+
+void EntityDude::set_weapon(WeaponType weapon) {
+    this->weapon = weapon;
 }

@@ -7,6 +7,7 @@
 #include <memory>
 #include "subject.h"
 #include "build_options.h"
+#include "weapons.h"
 
 #define DUDE_SIZE 24.f
 #define DUDE_COLLISION_PAD 0.f
@@ -49,6 +50,9 @@ public:
     int get_number();
     void set_number(int number);
 
+    WeaponType get_weapon();
+    void set_weapon(WeaponType weapon);
+
     sf::Time get_cooldown_time();
 
     // control
@@ -70,6 +74,8 @@ private:
     int number;
 
     sf::Clock shootCooldownTimer;
+
+    WeaponType weapon;
 
     static sf::Texture txt;
     static bool textureLoaded;

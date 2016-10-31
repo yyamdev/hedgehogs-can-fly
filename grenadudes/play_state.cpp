@@ -14,25 +14,33 @@ StatePlay::StatePlay(World *world) : State(world) {
 
     addPlayer = true;
     addAi = true;
+    playerLives = 3;
+    aiLives = 3;
 }
 
 void StatePlay::on_event(sf::Event &event) {
 }
 
 void StatePlay::on_tick() {
-    if (addPlayer) {
+    if (addPlayer && playerLives > 0) {
         EntityDude* dudePlayer = new EntityDude(sf::Vector2f(32.f, 0), PLAYER_NUMBER);
         dudePlayer->set_driver(std::make_unique<KeyboardDriver>(dudePlayer));
         world->add_entity(dudePlayer);
         addPlayer = false;
     }
 
-    if (addAi) {
+    if (addAi && aiLives > 0) {
         EntityDude* dudeAi = new EntityDude(sf::Vector2f(WINDOW_WIDTH - 32.f, 0), AI_NUMBER);
         dudeAi->set_driver(std::make_unique<AiDriver>(dudeAi, terrain));
         world->add_entity(dudeAi);
         addAi = false;
     }
+
+    if (playerLives <= 0)
+        notify(EVENT_AI_WINS, NULL);
+
+    if (aiLives <= 0)
+        notify(EVENT_AI_WINS, NULL);
 }
 
 void StatePlay::on_draw(sf::RenderWindow &window) {
@@ -47,9 +55,13 @@ void StatePlay::on_lose_focus() {
 
 void StatePlay::on_notify(Event event, void *data) {
     if (event == EVENT_DUDE_DIE) {
-        if (*((int*)data) == PLAYER_NUMBER)
+        if (*((int*)data) == PLAYER_NUMBER) {
             addPlayer = true;
-        if (*((int*)data) == AI_NUMBER)
+            playerLives --;
+        }
+        if (*((int*)data) == AI_NUMBER) {
             addAi = true;
+            aiLives --;
+        }
     }
 }
