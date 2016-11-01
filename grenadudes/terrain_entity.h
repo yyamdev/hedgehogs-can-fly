@@ -29,6 +29,9 @@ public:
     sf::Vector2f get_normal(sf::Vector2f pos); // get surface normal (unit)
     sf::Vector2f get_normal_ground(sf::Vector2f pos); // get surface normal (unit) at nearest downwards ground
 
+    // intersection tests
+    bool intersects_with_circle(sf::Vector2f pos, float rad);
+
     void event(sf::Event &e);
     void tick(std::vector<Entity*> &entities);
     void draw(sf::RenderWindow &window);

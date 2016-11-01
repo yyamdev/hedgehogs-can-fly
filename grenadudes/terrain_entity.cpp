@@ -5,6 +5,8 @@
 #include <random>
 #include <iostream>
 #include <time.h>
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 EntityTerrain::EntityTerrain(sf::Vector2u size, float scale) {
     tag = "terrain";
@@ -128,6 +130,19 @@ sf::Vector2f EntityTerrain::get_normal_ground(sf::Vector2f pos) {
         pos.y += 1;
     }
     return get_normal(pos);
+}
+
+bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, float rad) {
+    int divisions = 8; // number of probe points on the circle's edge
+    bool intersects = false;
+    float deltaAngle = (2.f * (float)M_PI) / (float)divisions;
+    for (int i=0; i<divisions; ++i) {
+        float angle = (float)i * deltaAngle;
+        sf::Vector2f probe(pos.x + rad * cos(angle), pos.y + rad * sin(angle));
+        if (get_solid(probe))
+            intersects = true;
+    }
+    return intersects;
 }
 
 void EntityTerrain::event(sf::Event &e) {

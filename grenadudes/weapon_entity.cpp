@@ -1,5 +1,7 @@
 #include "weapon_entity.h"
 #include "build_options.h"
+#include "terrain_entity.h"
+#include <iostream>
 
 EntityWeapon::EntityWeapon() {
     EntityWeapon(sf::Vector2f(0.f, 0.f), W_GRENADE);
@@ -16,6 +18,15 @@ void EntityWeapon::event(sf::Event &e) {
 }
 
 void EntityWeapon::tick(std::vector<Entity*> &entities) {
+    position += velocity;
+
+    // gravity
+    sf::Vector2f gravity = sf::Vector2f(0.f, GRAVITY);
+    float terminalVelocity = 6.f;
+    velocity += gravity;
+    if (velocity.y > terminalVelocity)
+        velocity.y = terminalVelocity;
+
     // find terrain entity
     if (terrain == NULL) {
         for (Entity *e : entities) {
@@ -25,14 +36,9 @@ void EntityWeapon::tick(std::vector<Entity*> &entities) {
         }
     }
 
-    position += velocity;
-
-    // gravity
-    sf::Vector2f gravity = sf::Vector2f(0.f, GRAVITY);
-    float terminalVelocity = 6.f;
-    velocity += gravity;
-    if (velocity.y > terminalVelocity)
-        velocity.y = terminalVelocity;
+    if (terrain->intersects_with_circle(position, collisionRadius)) {
+        std::cout << "ay\n";
+    }
 }
 
 void EntityWeapon::draw(sf::RenderWindow &window) {
