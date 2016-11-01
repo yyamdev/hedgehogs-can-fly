@@ -36,7 +36,7 @@ void EntityWeapon::tick(std::vector<Entity*> &entities) {
         }
     }
 
-    if (terrain->intersects_with_circle(position, collisionRadius)) {
+    if (terrain->intersects_with_circle(position, collisionRadius, NULL)) {
         std::cout << "ay\n";
     }
 }

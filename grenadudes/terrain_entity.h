@@ -30,7 +30,7 @@ public:
     sf::Vector2f get_normal_ground(sf::Vector2f pos); // get surface normal (unit) at nearest downwards ground
 
     // intersection tests
-    bool intersects_with_circle(sf::Vector2f pos, float rad);
+    bool intersects_with_circle(sf::Vector2f pos, float rad, sf::Vector2f *contact);
 
     void event(sf::Event &e);
     void tick(std::vector<Entity*> &entities);
