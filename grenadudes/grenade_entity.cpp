@@ -30,7 +30,7 @@ EntityGrenade::EntityGrenade(sf::Vector2f pos, sf::Vector2f vel, bool sticky) {
     rest = false;
     explodeTimer.restart();
     collided = false;
-    bounciness = 2.f;
+    bounciness = 0.f;
     invulnerable = false;
     hp = maxHp = START_HP_GRENADE;
     if (!textureLoaded) {
@@ -79,46 +79,18 @@ void EntityGrenade::tick(std::vector<Entity*> &entities) {
         }
     }
 
-    // detect collision with terrain
-    std::vector< std::tuple<sf::Vector2f, bool> > probes;
-    probes.push_back(std::tuple<sf::Vector2f, bool>(sf::Vector2f(position.x + collisionRadius, position.y), false));
-    probes.push_back(std::tuple<sf::Vector2f, bool>(sf::Vector2f(position.x - collisionRadius, position.y), false));
-    probes.push_back(std::tuple<sf::Vector2f, bool>(sf::Vector2f(position.x, position.y + collisionRadius), false));
-    probes.push_back(std::tuple<sf::Vector2f, bool>(sf::Vector2f(position.x, position.y - collisionRadius), false));
-    for (auto &probe : probes) {
-        if (terrain->get_solid(std::get<0>(probe))) {
-            std::get<1>(probe) = true;
-            break;
-        }
-    }
-
-    // react to collision with terrain
-    /*
-        todo -> possible improvement
-        currently, collision is detected and contact point recorded in world space
-        then entity is moved back to before collision, then normal is calculated at contact point.
-
-        if contact point is too far into terrain, normals won't be calculated correctly.
-
-        improvement: store contact point relative to the entity, then move the entity back to before collision.
-        then calculate normal based on the contact point now transformed into world space.
-        this way the contact point should mostly be next to the terrain edge more of the time.
-        (unless entity is traveling way too fast, then neither of these methods will work)
-    */
-    for (auto &probe : probes) {
-        if (std::get<1>(probe) && !stuck) { // collided at this probe point?
-            collided = true;
-            sf::Vector2f contact = std::get<0>(probe);
-            contact -= velocity;
-            position -= velocity * 1.1f;
-            if (sticky)
-                stuck = true;
-            if (!rest) {
-                float speed = util::distance(0.f, 0.f, velocity.x, velocity.y);
-                sf::Vector2f normal = terrain->get_normal(contact);
-                sf::Vector2f contactForce = normal * (speed + bounciness);
-                velocity += contactForce;
-            }
+    sf::Vector2f contact;
+    if (terrain->intersects_with_circle(position, collisionRadius, &contact, 16)) {
+        collided = true;
+        contact -= velocity;
+        position -= velocity * 1.1f;
+        if (sticky)
+            stuck = true;
+        if (!rest) {
+            float speed = util::distance(0.f, 0.f, velocity.x, velocity.y);
+            sf::Vector2f normal = terrain->get_normal(contact);
+            sf::Vector2f contactForce = normal * (speed + bounciness);
+            velocity += contactForce;
         }
     }
 
