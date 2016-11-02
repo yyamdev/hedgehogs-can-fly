@@ -31,6 +31,7 @@ public:
 
     // intersection tests
     bool intersects_with_circle(sf::Vector2f pos, float rad, sf::Vector2f *contact);
+    bool intersects_with_circle(sf::Vector2f pos, float rad, sf::Vector2f *contact, int divisions);
 
     void event(sf::Event &e);
     void tick(std::vector<Entity*> &entities);

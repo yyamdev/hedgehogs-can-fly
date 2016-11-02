@@ -132,8 +132,7 @@ sf::Vector2f EntityTerrain::get_normal_ground(sf::Vector2f pos) {
     return get_normal(pos);
 }
 
-bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, float rad, sf::Vector2f *contact) {
-    int divisions = 8; // number of probe points on the circle's edge
+bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, float rad, sf::Vector2f *contact, int divisions) {
     bool intersects = false;
     float deltaAngle = (2.f * (float)M_PI) / (float)divisions;
     for (int i=0; i<divisions; ++i) {
@@ -146,6 +145,10 @@ bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, float rad, sf::Vect
         }
     }
     return false;
+}
+
+bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, float rad, sf::Vector2f *contact) {
+    return intersects_with_circle(pos, rad, contact, 8);
 }
 
 void EntityTerrain::event(sf::Event &e) {
