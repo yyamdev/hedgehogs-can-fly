@@ -88,6 +88,7 @@ void EntityGrenade::tick(std::vector<Entity*> &entities) {
             stuck = true;
         if (!rest) {
             float speed = util::distance(0.f, 0.f, velocity.x, velocity.y);
+            float bounciness = speed * 0.2f; // model momentum
             sf::Vector2f normal = terrain->get_normal(contact);
             sf::Vector2f contactForce = normal * (speed + bounciness);
             velocity += contactForce;
