@@ -8,12 +8,7 @@ AiDriver::AiDriver(EntityDude *dude, EntityTerrain *terrain) : terrainGrid(terra
     quad = 0;
     showGrid = false;
     state = AI_STATE_IDLE;
-    Subject::add_observer(this);
     active = true; // ai on by default
-}
-
-AiDriver::~AiDriver() {
-    Subject::remove_observer(this);
 }
 
 void AiDriver::event(sf::Event &e) {

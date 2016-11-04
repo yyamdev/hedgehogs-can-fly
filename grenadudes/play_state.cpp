@@ -7,10 +7,10 @@
 #include "weapon_entity.h"
 
 StatePlay::StatePlay(World *world) : State(world) {
-    Subject::add_observer(this);
     // set up game
     terrain = new EntityTerrain(sf::Vector2u(WINDOW_WIDTH, WINDOW_HEIGHT), 2.f);
     terrain->generate_normal(500.f, 100.f);
+    // todo: world->clear();
     world->add_entity(terrain);
 
     addPlayer = true;

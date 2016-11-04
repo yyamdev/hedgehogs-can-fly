@@ -25,7 +25,6 @@ enum AiState {
 class AiDriver : public DudeDriver, public Subject, public Observer {
 public:
     AiDriver(EntityDude *dude, EntityTerrain *terrain);
-    ~AiDriver();
 
     void event(sf::Event &e);
     void tick(std::vector<Entity*> &entities);

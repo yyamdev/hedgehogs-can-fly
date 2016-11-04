@@ -6,6 +6,7 @@
 
 class Observer {
 public:
-    inline virtual ~Observer(){};
+    Observer();
+    virtual ~Observer();
     virtual void on_notify(Event event, void *data) = 0; // must not destroy the instance or add entities in this function
 };

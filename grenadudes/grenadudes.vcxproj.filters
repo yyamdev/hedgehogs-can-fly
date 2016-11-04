@@ -200,6 +200,9 @@
     <ClCompile Include="weapon_entity.cpp">
       <Filter>Source Files\game\world</Filter>
     </ClCompile>
+    <ClCompile Include="observer.cpp">
+      <Filter>Source Files\framework\events</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\terrain.frag">

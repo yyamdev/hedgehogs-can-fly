@@ -32,7 +32,6 @@ class EntityDude : public Entity, public Observer {
 public:
     EntityDude();
     EntityDude(sf::Vector2f pos, int number);
-    ~EntityDude();
 
     void set_driver(std::unique_ptr<DudeDriver> driver);
 

@@ -32,15 +32,10 @@ EntityDude::EntityDude(sf::Vector2f pos, int number) {
     notify(EVENT_DUDE_HP_CHANGE, (void*)this);
     number = 0;
     weapon = W_GRENADE;
-    Subject::add_observer(this);
     if (!textureLoaded) {
         txt.loadFromFile("data/dude.png");
         textureLoaded = true;
     }
-}
-
-EntityDude::~EntityDude() {
-    Subject::remove_observer(this);
 }
 
 void EntityDude::set_driver(std::unique_ptr<DudeDriver> driver) {

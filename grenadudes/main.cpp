@@ -6,6 +6,8 @@
 #include "play_state.h"
 #include "util.h"
 
+void print_debug_controls();
+
 int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), TITLE, sf::Style::Close);
     window.setFramerateLimit(60);
@@ -13,6 +15,8 @@ int main() {
     World world(window);
 
     State::change_state(new StatePlay(&world));
+
+    print_debug_controls();
 
     while (window.isOpen()) {
         sf::Event e;
@@ -23,6 +27,10 @@ int main() {
 
             if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::F1) {
                 window.capture().saveToFile(util::to_string(time(NULL)) + ".png");
+            }
+
+            if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::R) {
+                State::change_state(new StatePlay(&world));
             }
             
             world.event(e);
@@ -40,4 +48,15 @@ int main() {
 
     State::free_memory();
     return 0;
+}
+
+void print_debug_controls() {
+    std::cout << "debug controls:\n";
+    std::cout << "B - toggle pause\n";
+    std::cout << "P - toggle ai\n";
+    std::cout << "N - toggle show pathfinding nodes\n";
+    std::cout << "G - toggle show terrain grix approx.\n";
+    std::cout << "middle mouse - ai navigate\n";
+    std::cout << "F1 - screenshot\n";
+    std::cout << "R - restart game\n";
 }
