@@ -5,6 +5,7 @@
 
 World::World(sf::RenderWindow &window) {
     this->window = &window;
+    paused = false;
 }
 
 World::~World() {
@@ -26,6 +27,8 @@ void World::event(sf::Event &e) {
 }
 
 void World::tick() {
+    if (paused) return;
+
     size_t vectorLength = entities.size(); // size might change as we go through
     if (vectorLength > 0) {
         auto it = entities.begin();
@@ -76,6 +79,19 @@ int World::remove_entity(std::string tag) {
         }
     }
     return count;
+}
+
+void World::toggle_pause() {
+    paused = !paused;
+    if (paused) {
+        for (auto &entity : entities) {
+            entity->on_pause();
+        }
+    } else {
+        for (auto &entity : entities) {
+            entity->on_resume();
+        }
+    }
 }
 
 void World::on_notify(Event event, void *data) {

@@ -24,6 +24,9 @@ void StatePlay::on_event(sf::Event &event) {
         sf::Vector2f mouse((float)event.mouseButton.x, (float)event.mouseButton.y);
         world->add_entity(new EntityWeapon(mouse, W_STICKY_GRENADE));
     }
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::B) {
+        world->toggle_pause();
+    }
 }
 
 void StatePlay::on_tick() {

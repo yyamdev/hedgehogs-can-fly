@@ -21,6 +21,9 @@ public:
     virtual void tick(std::vector<Entity*> &entities) = 0;
     virtual void draw(sf::RenderWindow &window) = 0;
 
+    virtual void on_pause(){}
+    virtual void on_resume(){}
+
     bool intersects(const Entity &other);
 
     std::string get_tag();
