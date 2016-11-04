@@ -45,6 +45,9 @@ void EntityGrenade::tick(std::vector<Entity*> &entities) {
     if (velocity.y > terminalVelocity)
         velocity.y = terminalVelocity;
 
+    // apply wind
+    velocity += world->wind;
+
     if (!stuck)
         position += velocity; // move due to forces
 

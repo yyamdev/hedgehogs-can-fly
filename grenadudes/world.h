@@ -31,6 +31,7 @@ public:
     void toggle_pause();
 
     sf::Vector2f gravity;
+    sf::Vector2f wind;
 private:
     sf::RenderWindow *window;
     std::vector<Entity*> entities;
