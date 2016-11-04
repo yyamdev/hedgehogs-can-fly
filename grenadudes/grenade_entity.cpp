@@ -7,24 +7,19 @@
 #include "explosion_entity.h"
 #include "world.h"
 
-sf::Vector2f EntityGrenade::gravity;
-float EntityGrenade::terminalVelocity;
-
 sf::Texture EntityGrenade::txt;
 bool EntityGrenade::textureLoaded = false;
 
-EntityGrenade::EntityGrenade() {
+EntityGrenade::EntityGrenade() : terminalVelocity(GRENADE_TERM_VEL) {
     EntityGrenade(sf::Vector2f(0.f, 0.f), sf::Vector2f(0.f, 0.f), false);
 }
 
-EntityGrenade::EntityGrenade(sf::Vector2f pos, sf::Vector2f vel, bool sticky) {
+EntityGrenade::EntityGrenade(sf::Vector2f pos, sf::Vector2f vel, bool sticky) : terminalVelocity(GRENADE_TERM_VEL) {
     this->position = pos;
     this->velocity = vel;
     this->sticky = sticky;
     stuck = false;
     stuckToEntity = false;
-    gravity = sf::Vector2f(0.f, GRAVITY);
-    terminalVelocity = 6.f;
     tag = "grenade";
     collisionRadius = 8.f;
     rest = false;
@@ -46,7 +41,7 @@ void EntityGrenade::event(sf::Event &e) {
 void EntityGrenade::tick(std::vector<Entity*> &entities) {
     sf::Vector2f oldPos = position;
     // apply gravity
-    velocity += gravity;
+    velocity += world->gravity;
     if (velocity.y > terminalVelocity)
         velocity.y = terminalVelocity;
 

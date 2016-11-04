@@ -7,24 +7,19 @@
 #include "grenade_entity.h"
 #include "weapon_entity.h"
 
-sf::Vector2f EntityDude::gravity;
-float EntityDude::terminalVelocity;
-
 sf::Texture EntityDude::txt;
 bool EntityDude::textureLoaded = false;
 
-EntityDude::EntityDude() {
+EntityDude::EntityDude() : terminalVelocity(DUDE_TERM_VEL) {
     EntityDude(sf::Vector2f(0.f, 0.f), 0);
 }
 
-EntityDude::EntityDude(sf::Vector2f pos, int number) {
+EntityDude::EntityDude(sf::Vector2f pos, int number) : terminalVelocity(DUDE_TERM_VEL) {
     this->position = pos;
     set_number(number);
     collisionRadius = DUDE_SIZE / 2.f + DUDE_COLLISION_PAD;
     tag = "dude";
     driver = NULL;
-    gravity = sf::Vector2f(0.f, GRAVITY);
-    terminalVelocity = 6.f;
     terrain = NULL;
     isJumping = false;
     hp = maxHp = START_HP_DUDE;
@@ -54,7 +49,7 @@ void EntityDude::tick(std::vector<Entity*> &entities) {
     position += velocity;
 
     // gravity
-    velocity += gravity;
+    velocity += world->gravity;
     if (velocity.y > terminalVelocity)
         velocity.y = terminalVelocity;
 

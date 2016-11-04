@@ -18,6 +18,8 @@
 
 #define DUDE_SHOOT_COOLDOWN 2.f
 
+#define DUDE_TERM_VEL 6.f
+
 class EntityTerrain;
 
 struct DudeCollisionResponse {
@@ -81,6 +83,5 @@ private:
     sf::Sprite spr;
 
     // physics constants
-    static sf::Vector2f gravity;
-    static float terminalVelocity;
+    const float terminalVelocity;
 };

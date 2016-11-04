@@ -6,6 +6,8 @@
 #include <SFML/Graphics.hpp>
 #include "weapons.h"
 
+#define WEAPON_TERM_VEL 6.f
+
 class EntityTerrain;
 
 class EntityWeapon : public Entity {
@@ -21,4 +23,5 @@ public:
 private:
     WeaponType weapon;
     EntityTerrain *terrain;
+    const float terminalVelocity;
 };

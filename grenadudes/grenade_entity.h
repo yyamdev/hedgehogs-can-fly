@@ -5,6 +5,8 @@
 #include "entity.h"
 #include "subject.h"
 
+#define GRENADE_TERM_VEL 6.f
+
 class EntityGrenade : public Entity {
 public:
     EntityGrenade();
@@ -15,8 +17,7 @@ public:
     void draw(sf::RenderWindow &window);
 private:
     // physics
-    static sf::Vector2f gravity;
-    static float terminalVelocity;
+    const float terminalVelocity;
 
     bool sticky;
     bool stuck;
@@ -24,7 +25,6 @@ private:
     Entity* stuckTo;
     sf::Vector2f stuckOffset;
     
-
     float bounciness;
 
     bool rest;

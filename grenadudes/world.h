@@ -29,6 +29,8 @@ public:
     void add_entity(Entity *entity);
     int remove_entity(std::string tag); // returns number of entities removed
     void toggle_pause();
+
+    sf::Vector2f gravity;
 private:
     sf::RenderWindow *window;
     std::vector<Entity*> entities;

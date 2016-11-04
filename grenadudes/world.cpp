@@ -2,10 +2,12 @@
 #include <assert.h>
 #include <iostream>
 #include "subject.h"
+#include "build_options.h"
 
 World::World(sf::RenderWindow &window) {
     this->window = &window;
     paused = false;
+    gravity = sf::Vector2f(0.f, GRAVITY);
 }
 
 World::~World() {

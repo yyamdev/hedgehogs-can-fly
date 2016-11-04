@@ -2,12 +2,13 @@
 #include "build_options.h"
 #include "terrain_entity.h"
 #include <iostream>
+#include "world.h"
 
-EntityWeapon::EntityWeapon() {
+EntityWeapon::EntityWeapon() : terminalVelocity(WEAPON_TERM_VEL) {
     EntityWeapon(sf::Vector2f(0.f, 0.f), W_GRENADE);
 }
 
-EntityWeapon::EntityWeapon(sf::Vector2f pos, WeaponType weapon) : weapon(weapon) {
+EntityWeapon::EntityWeapon(sf::Vector2f pos, WeaponType weapon) : weapon(weapon), terminalVelocity(WEAPON_TERM_VEL) {
     position = pos;
     tag = "weapon";
     collisionRadius = 16.f;
@@ -21,9 +22,7 @@ void EntityWeapon::tick(std::vector<Entity*> &entities) {
     position += velocity;
 
     // gravity
-    sf::Vector2f gravity = sf::Vector2f(0.f, GRAVITY);
-    float terminalVelocity = 6.f;
-    velocity += gravity;
+    velocity += world->gravity;
     if (velocity.y > terminalVelocity)
         velocity.y = terminalVelocity;
 
