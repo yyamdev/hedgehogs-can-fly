@@ -9,6 +9,7 @@ World::World(sf::RenderWindow &window) {
     paused = false;
     gravity = sf::Vector2f(0.f, GRAVITY);
     wind = sf::Vector2f (0.f, 0.f);
+    notify(EVENT_WIND_CHANGE, (void*)&wind);
 }
 
 World::~World() {

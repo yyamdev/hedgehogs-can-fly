@@ -5,6 +5,8 @@
 #include "keyboard_driver.h"
 #include "ai_driver.h"
 #include "weapon_entity.h"
+#include "util.h"
+#include <iostream>
 
 StatePlay::StatePlay(World *world) : State(world) {
     // set up game
@@ -17,6 +19,8 @@ StatePlay::StatePlay(World *world) : State(world) {
     addAi = true;
     playerLives = 3;
     aiLives = 3;
+
+    windClock.restart();
 }
 
 void StatePlay::on_event(sf::Event &event) {
@@ -49,6 +53,13 @@ void StatePlay::on_tick() {
 
     if (aiLives <= 0)
         notify(EVENT_AI_WINS, NULL);
+
+    if (windClock.getElapsedTime().asSeconds() > 5.f) {
+        world->wind = sf::Vector2f(util::rnd(-0.06f, 0.06f), 0.f);
+        notify(EVENT_WIND_CHANGE, (void*)&world->wind);
+        std::cout << "wind change\n";
+        windClock.restart();
+    }
 }
 
 void StatePlay::on_draw(sf::RenderWindow &window) {

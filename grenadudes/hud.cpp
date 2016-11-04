@@ -59,6 +59,9 @@ void Hud::draw(sf::RenderWindow &window) {
     if (aiState == AI_STATE_SEEK_PLAYER) txt.setString("seek player");
     if (aiState == AI_STATE_FLEE) txt.setString("flee");
     window.draw(txt);
+
+    // wind
+    draw_vector(sf::Vector2f(WINDOW_WIDTH / 2.f, 64.f), currentWind, util::len(currentWind) * 600.f, sf::Color::Blue, window);
 }
 
 void Hud::on_notify(Event event, void *data) {
@@ -89,5 +92,8 @@ void Hud::on_notify(Event event, void *data) {
     }
     if (event == EVENT_AI_STATE_CHANGE) {
         aiState = *((AiState*)data);
+    }
+    if (event == EVENT_WIND_CHANGE) {
+        currentWind = *((sf::Vector2f*)data);
     }
 }

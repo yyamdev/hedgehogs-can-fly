@@ -15,4 +15,5 @@ enum Event {
     EVENT_DUDE_DIE, // int* pointer to dude number
     EVENT_PLAYER_WINS, // NULL
     EVENT_AI_WINS, // NULL
+    EVENT_WIND_CHANGE, // sf::Vector2f* pointer to wind vector
 };

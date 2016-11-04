@@ -26,4 +26,6 @@ private:
     bool addPlayer, addAi;
 
     int playerLives, aiLives;
+
+    sf::Clock windClock;
 };

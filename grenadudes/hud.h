@@ -34,4 +34,7 @@ private:
     // ai state
     AiState aiState;
     sf::Font fnt;
+
+    // wind
+    sf::Vector2f currentWind;
 };
