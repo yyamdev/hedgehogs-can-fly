@@ -11,6 +11,8 @@
 #include "events.h"
 #include "subject.h"
 
+#define ENTITY_TAG_ALL ""
+
 class World : public Observer, public Subject{
 public:
     World(sf::RenderWindow &window);

@@ -69,7 +69,7 @@ int World::remove_entity(std::string tag) {
     if (vectorLength > 0) {
         auto it = entities.begin();
         while (it != entities.end()) {
-            if ((*it)->get_tag() == tag) {
+            if ((*it)->get_tag() == tag || tag == "") {
                 Entity *ptr = (*it);
                 it = entities.erase(it);
                 delete ptr;
