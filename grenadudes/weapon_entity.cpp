@@ -36,8 +36,10 @@ void EntityWeapon::tick(std::vector<Entity*> &entities) {
         }
     }
 
+    // collide with terrain & resolve
     if (terrain->intersects_with_circle(position, collisionRadius, NULL)) {
-        std::cout << "ay\n";
+        position -= velocity;
+        velocity.y = 0.f;
     }
 }
 
