@@ -30,6 +30,7 @@ private:
     // cooldown indicators
     float cooldownPlayer;
     float cooldownAi;
+    float cooldownWeapon;
 
     // ai state
     AiState aiState;

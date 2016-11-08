@@ -57,6 +57,7 @@ public:
     void set_weapon(WeaponType weapon);
 
     sf::Time get_cooldown_time();
+    sf::Time get_weapon_cooldown_time();
 
     // control
     void move(EntityDudeDirection dir);

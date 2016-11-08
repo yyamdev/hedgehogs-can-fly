@@ -16,4 +16,5 @@ enum Event {
     EVENT_PLAYER_WINS, // NULL
     EVENT_AI_WINS, // NULL
     EVENT_WIND_CHANGE, // sf::Vector2f* pointer to wind vector
+    EVENT_DUDE_WEAPON_COOLDOWN_CHANGE, // EntityDude* pointer to dude
 };

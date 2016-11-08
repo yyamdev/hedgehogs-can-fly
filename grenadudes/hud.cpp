@@ -48,6 +48,10 @@ void Hud::draw(sf::RenderWindow &window) {
     bar.setSize(sf::Vector2f(128.f * (cooldownAi / (float)DUDE_SHOOT_COOLDOWN), 16.f));
     bar.setPosition(sf::Vector2f((float)WINDOW_WIDTH - 128.f - 10.f, 42.f));
     window.draw(bar);
+    // weapon
+    bar.setSize(sf::Vector2f(256.f * (1 - (cooldownWeapon / (float)DUDE_WEAPON_TIME)), 8.f));
+    bar.setPosition(sf::Vector2f(280.f, 16.f));
+    window.draw(bar);
 
     // ai state
     sf::Text txt;
@@ -89,6 +93,11 @@ void Hud::on_notify(Event event, void *data) {
             cooldownPlayer = util::clamp(dude->get_cooldown_time().asSeconds(), 0.f, (float)DUDE_SHOOT_COOLDOWN);
         else if (dude->get_number() == AI_NUMBER)
             cooldownAi = util::clamp(dude->get_cooldown_time().asSeconds(), 0.f, (float)DUDE_SHOOT_COOLDOWN);
+    }
+    if (event == EVENT_DUDE_WEAPON_COOLDOWN_CHANGE) {
+        EntityDude *dude = (EntityDude*)data;
+        if (dude->get_number() == PLAYER_NUMBER)
+            cooldownWeapon = util::clamp(dude->get_weapon_cooldown_time().asSeconds(), 0.f, (float)DUDE_WEAPON_TIME);
     }
     if (event == EVENT_AI_STATE_CHANGE) {
         aiState = *((AiState*)data);

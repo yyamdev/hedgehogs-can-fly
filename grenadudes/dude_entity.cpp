@@ -100,11 +100,11 @@ void EntityDude::tick(std::vector<Entity*> &entities) {
     if (weapon != W_GRENADE && weaponTimer.getElapsedTime().asSeconds() > DUDE_WEAPON_TIME) {
         // weapon time expired, reset to default
         weapon = W_GRENADE;
-        std::cout << "time expired.\n";
     }
 
-    // notify about cooldown change
+    // notify about cooldown changes
     notify(EVENT_DUDE_COOLDOWN_CHANGE, (void*)this);
+    notify(EVENT_DUDE_WEAPON_COOLDOWN_CHANGE, (void*)this);
 }
 
 void EntityDude::draw(sf::RenderWindow &window) {
@@ -152,6 +152,11 @@ DudeCollisionResponse EntityDude::intersecting_terrain(EntityTerrain *terrain, s
 bool EntityDude::is_jumping() { return isJumping; }
 
 sf::Time EntityDude::get_cooldown_time() { return shootCooldownTimer.getElapsedTime(); }
+sf::Time EntityDude::get_weapon_cooldown_time() {
+    if (weapon != W_GRENADE)
+        return weaponTimer.getElapsedTime();
+    return sf::seconds(DUDE_WEAPON_TIME);
+}
 
 float EntityDude::get_y_on_terrain(sf::Vector2f position) { // find the new y at a specific point
     if (!terrain) return -1.f;
