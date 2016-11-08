@@ -55,7 +55,7 @@ void StatePlay::on_tick() {
         notify(EVENT_AI_WINS, NULL);
 
     if (windClock.getElapsedTime().asSeconds() > 5.f) {
-        world->wind = sf::Vector2f(util::rnd(-0.06f, 0.06f), 0.f);
+        world->wind = sf::Vector2f(util::rnd(-0.03f, 0.03f), 0.f);
         notify(EVENT_WIND_CHANGE, (void*)&world->wind);
         std::cout << "wind change\n";
         windClock.restart();
