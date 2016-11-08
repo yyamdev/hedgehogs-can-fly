@@ -26,7 +26,7 @@ EntityDude::EntityDude(sf::Vector2f pos, int number) : terminalVelocity(DUDE_TER
     invulnerable = false; // use hp
     notify(EVENT_DUDE_HP_CHANGE, (void*)this);
     number = 0;
-    weapon = W_CLUSTER_GRENADE;
+    weapon = W_GRENADE;
     if (!textureLoaded) {
         txt.loadFromFile("data/dude.png");
         textureLoaded = true;
@@ -60,6 +60,7 @@ void EntityDude::tick(std::vector<Entity*> &entities) {
         }
         if (e->get_tag() == "weapon" && intersects(*e)) { // handle collision with weapon pickups
             set_weapon(((EntityWeapon*)(e))->get_weapon());
+            weaponTimer.restart();
             e->remove = true;
         }
     }
@@ -94,6 +95,12 @@ void EntityDude::tick(std::vector<Entity*> &entities) {
     // die if we fall out of the world
     if (position.y > (float)WINDOW_HEIGHT) {
         remove = true;
+    }
+
+    if (weapon != W_GRENADE && weaponTimer.getElapsedTime().asSeconds() > DUDE_WEAPON_TIME) {
+        // weapon time expired, reset to default
+        weapon = W_GRENADE;
+        std::cout << "time expired.\n";
     }
 
     // notify about cooldown change

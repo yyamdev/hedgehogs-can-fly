@@ -18,6 +18,8 @@
 
 #define DUDE_SHOOT_COOLDOWN 2.f
 
+#define DUDE_WEAPON_TIME 5.f
+
 #define DUDE_TERM_VEL 6.f
 
 class EntityTerrain;
@@ -77,6 +79,7 @@ private:
     sf::Clock shootCooldownTimer;
 
     WeaponType weapon;
+    sf::Clock weaponTimer;
 
     static sf::Texture txt;
     static bool textureLoaded;
