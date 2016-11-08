@@ -7,6 +7,7 @@
 #include "weapon_entity.h"
 #include "util.h"
 #include <iostream>
+#include "spawner_entity.h"
 
 StatePlay::StatePlay(World *world) : State(world) {
     // set up game
@@ -14,6 +15,7 @@ StatePlay::StatePlay(World *world) : State(world) {
     terrain->generate_normal(500.f, 100.f);
     world->remove_entity(ENTITY_TAG_ALL);
     world->add_entity(terrain);
+    world->add_entity(new EntitySpawner());
 
     addPlayer = true;
     addAi = true;
