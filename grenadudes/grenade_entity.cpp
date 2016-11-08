@@ -9,6 +9,7 @@
 
 sf::Texture EntityGrenade::txt;
 sf::Texture EntityGrenade::txtSticky;
+sf::Texture EntityGrenade::txtCluster;
 bool EntityGrenade::textureLoaded = false;
 
 EntityGrenade::EntityGrenade() : terminalVelocity(GRENADE_TERM_VEL) {
@@ -33,6 +34,7 @@ EntityGrenade::EntityGrenade(sf::Vector2f pos, sf::Vector2f vel, bool sticky, bo
     if (!textureLoaded) {
         txt.loadFromFile("data/grenade.png");
         txtSticky.loadFromFile("data/sticky.png");
+        txtCluster.loadFromFile("data/cluster.png");
         textureLoaded = true;
     }
     angle = 0.f;
@@ -125,6 +127,7 @@ void EntityGrenade::tick(std::vector<Entity*> &entities) {
 
 sf::Texture& EntityGrenade::get_texture() {
     if (sticky) return txtSticky;
+    if (cluster) return txtCluster;
     return txt;
 }
 
