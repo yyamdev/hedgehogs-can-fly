@@ -10,7 +10,7 @@
 class EntityGrenade : public Entity {
 public:
     EntityGrenade();
-    EntityGrenade(sf::Vector2f pos, sf::Vector2f vel, bool sticky);
+    EntityGrenade(sf::Vector2f pos, sf::Vector2f vel, bool sticky, bool cluster);
 
     void event(sf::Event &e);
     void tick(std::vector<Entity*> &entities);
@@ -24,6 +24,8 @@ private:
     bool stuckToEntity;
     Entity* stuckTo;
     sf::Vector2f stuckOffset;
+
+    bool cluster;
     
     float bounciness;
 

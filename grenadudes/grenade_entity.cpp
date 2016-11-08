@@ -11,13 +11,14 @@ sf::Texture EntityGrenade::txt;
 bool EntityGrenade::textureLoaded = false;
 
 EntityGrenade::EntityGrenade() : terminalVelocity(GRENADE_TERM_VEL) {
-    EntityGrenade(sf::Vector2f(0.f, 0.f), sf::Vector2f(0.f, 0.f), false);
+    EntityGrenade(sf::Vector2f(0.f, 0.f), sf::Vector2f(0.f, 0.f), false, false);
 }
 
-EntityGrenade::EntityGrenade(sf::Vector2f pos, sf::Vector2f vel, bool sticky) : terminalVelocity(GRENADE_TERM_VEL) {
+EntityGrenade::EntityGrenade(sf::Vector2f pos, sf::Vector2f vel, bool sticky, bool cluster) : terminalVelocity(GRENADE_TERM_VEL) {
     this->position = pos;
     this->velocity = vel;
     this->sticky = sticky;
+    this->cluster = cluster;
     stuck = false;
     stuckToEntity = false;
     tag = "grenade";
@@ -108,6 +109,9 @@ void EntityGrenade::tick(std::vector<Entity*> &entities) {
     }
 
     if (remove) { // explode!
+        if (cluster) {
+            world->add_entity(new EntityGrenade(position + sf::Vector2f(0.f, -32.f), sf::Vector2f(0.f, -4.f), false, false));
+        }
         world->add_entity(new EntityExplosion(position));
         notify(EVENT_GRENADE_EXPLODE, (void*)this);
     }
