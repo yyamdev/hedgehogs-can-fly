@@ -20,7 +20,7 @@ void EntitySpawner::event(sf::Event &e) {
 
 void EntitySpawner::tick(std::vector<Entity*> &entities) {
     if (spawnTimer.getElapsedTime().asSeconds() > nextSpawn) {
-        WeaponType w = (WeaponType)util::rnd(0, NUM_WEAPONS);
+        WeaponType w = (WeaponType)util::rnd(1, NUM_WEAPONS - 1);
         sf::Vector2f pos = sf::Vector2f(util::rnd(32.f, (float)WINDOW_WIDTH - 32.f), -64.f);
         world->add_entity(new EntityWeapon(pos, w));
         nextSpawn = get_next_spawn_time();
