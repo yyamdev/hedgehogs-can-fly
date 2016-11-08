@@ -28,7 +28,7 @@ StatePlay::StatePlay(World *world) : State(world) {
 void StatePlay::on_event(sf::Event &event) {
     if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right) {
         sf::Vector2f mouse((float)event.mouseButton.x, (float)event.mouseButton.y);
-        world->add_entity(new EntityWeapon(mouse, W_STICKY_GRENADE));
+        world->add_entity(new EntityWeapon(mouse, W_CLUSTER_GRENADE));
     }
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::B) {
         world->toggle_pause();
