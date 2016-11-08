@@ -8,6 +8,7 @@
 #include "world.h"
 
 sf::Texture EntityGrenade::txt;
+sf::Texture EntityGrenade::txtSticky;
 bool EntityGrenade::textureLoaded = false;
 
 EntityGrenade::EntityGrenade() : terminalVelocity(GRENADE_TERM_VEL) {
@@ -31,6 +32,7 @@ EntityGrenade::EntityGrenade(sf::Vector2f pos, sf::Vector2f vel, bool sticky, bo
     hp = maxHp = START_HP_GRENADE;
     if (!textureLoaded) {
         txt.loadFromFile("data/grenade.png");
+        txtSticky.loadFromFile("data/sticky.png");
         textureLoaded = true;
     }
     angle = 0.f;
@@ -121,8 +123,13 @@ void EntityGrenade::tick(std::vector<Entity*> &entities) {
     
 }
 
+sf::Texture& EntityGrenade::get_texture() {
+    if (sticky) return txtSticky;
+    return txt;
+}
+
 void EntityGrenade::draw(sf::RenderWindow &window) {
-    spr.setTexture(txt);
+    spr.setTexture(get_texture());
     spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
     spr.setPosition(position);
     spr.setRotation(angle);

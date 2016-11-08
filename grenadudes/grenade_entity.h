@@ -35,7 +35,9 @@ private:
     bool collided;
 
     static sf::Texture txt;
+    static sf::Texture txtSticky;
     static bool textureLoaded;
+    sf::Texture& get_texture();
     sf::Sprite spr;
     float angle;
 };
