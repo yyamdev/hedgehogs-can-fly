@@ -110,7 +110,9 @@ void EntityGrenade::tick(std::vector<Entity*> &entities) {
 
     if (remove) { // explode!
         if (cluster) {
+            world->add_entity(new EntityGrenade(position + sf::Vector2f(0.f, -32.f), sf::Vector2f(-2.f, -4.f), false, false));
             world->add_entity(new EntityGrenade(position + sf::Vector2f(0.f, -32.f), sf::Vector2f(0.f, -4.f), false, false));
+            world->add_entity(new EntityGrenade(position + sf::Vector2f(0.f, -32.f), sf::Vector2f(2.f, -4.f), false, false));
         }
         world->add_entity(new EntityExplosion(position));
         notify(EVENT_GRENADE_EXPLODE, (void*)this);
