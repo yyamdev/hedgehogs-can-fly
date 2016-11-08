@@ -10,7 +10,7 @@ To Playtest:
 
  > art
    > weapon pickup art
-   > different grenade art
+   / different grenade art
 
  > basic menu screen w/ "Start" button
  > basic win/loss screen
