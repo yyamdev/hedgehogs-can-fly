@@ -1,6 +1,15 @@
-grenadeudes todo list:
+To Playtest:
 
--> generate random terrain
--> enclose in game code with win/loss
--> write ai
--> menus or something
+ > proper AI
+   > finish pathfinding
+   > redo navgraph generation
+   > better decision making
+
+ > art
+   > weapon pickup art
+   > different grenade art
+
+ > basic menu screen w/ "Start" button
+ > basic win/loss screen
+
+ > hud lives incidator
