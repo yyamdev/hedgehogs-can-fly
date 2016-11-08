@@ -18,7 +18,7 @@
 
 #define DUDE_SHOOT_COOLDOWN 2.f
 
-#define DUDE_WEAPON_TIME 5.f
+#define DUDE_WEAPON_TIME 10.f
 
 #define DUDE_TERM_VEL 6.f
 
