@@ -38,6 +38,13 @@ void World::tick() {
         auto it = entities.begin();
         while (it != entities.end()) {
             (*it)->tick(entities);
+            float rad = 200.f;
+            if ((*it)->position.x < -rad || (*it)->position.x > (float)WINDOW_WIDTH  + rad ||
+                (*it)->position.y < -rad || (*it)->position.y > (float)WINDOW_HEIGHT + rad)
+            {
+                // remove entity if too far off screen
+                (*it)->remove = true;
+            }
             if ((*it)->remove) {
                 Entity *ptr = (*it);
                 it = entities.erase(it);
