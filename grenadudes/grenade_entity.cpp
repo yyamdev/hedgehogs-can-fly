@@ -127,5 +127,5 @@ void EntityGrenade::draw(sf::RenderWindow &window) {
     spr.setRotation(angle);
     window.draw(spr);
     if (!stuck)
-        angle += util::sign(velocity.x) * 3.f;
+        angle += velocity.x * 3.f;
 }
