@@ -8,8 +8,8 @@ To Playtest:
    > redo navgraph generation
    > better decision making
 
- > art
-   > weapon pickup art
+ / art
+   / weapon pickup art
    / different grenade art
 
  > basic menu screen w/ "Start" button
