@@ -4,6 +4,10 @@
 #include <iostream>
 #include "world.h"
 
+sf::Texture EntityWeapon::txtSticky;
+sf::Texture EntityWeapon::txtCluster;
+bool EntityWeapon::texturesLoaded = false;
+
 EntityWeapon::EntityWeapon() : terminalVelocity(WEAPON_TERM_VEL) {
     EntityWeapon(sf::Vector2f(0.f, 0.f), W_GRENADE);
 }
@@ -13,6 +17,11 @@ EntityWeapon::EntityWeapon(sf::Vector2f pos, WeaponType weapon) : weapon(weapon)
     tag = "weapon";
     collisionRadius = 16.f;
     terrain = NULL;
+    if (!texturesLoaded) {
+        txtSticky.loadFromFile("data/sticky_pickup.png");
+        txtCluster.loadFromFile("data/cluster_pickup.png");
+        texturesLoaded = true;
+    }
 }
 
 void EntityWeapon::event(sf::Event &e) {
@@ -43,10 +52,16 @@ void EntityWeapon::tick(std::vector<Entity*> &entities) {
 }
 
 void EntityWeapon::draw(sf::RenderWindow &window) {
-    sf::CircleShape circle(collisionRadius);
-    circle.setOrigin(collisionRadius, collisionRadius);
-    circle.setPosition(position);
-    window.draw(circle);
+    sf::Sprite spr(get_texture());
+    spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
+    spr.setPosition(position);
+    window.draw(spr);
+}
+
+sf::Texture& EntityWeapon::get_texture() {
+    if (weapon == W_STICKY_GRENADE) return txtSticky;
+    if (weapon == W_CLUSTER_GRENADE) return txtCluster;
+    return txtSticky; // todo -> return error texture (shouldn't get here)
 }
 
 WeaponType EntityWeapon::get_weapon() {

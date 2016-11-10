@@ -21,6 +21,11 @@ public:
 
     WeaponType get_weapon();
 private:
+    static sf::Texture txtSticky;
+    static sf::Texture txtCluster;
+    static bool texturesLoaded;
+    sf::Texture& get_texture();
+
     WeaponType weapon;
     EntityTerrain *terrain;
     const float terminalVelocity;
