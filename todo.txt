@@ -15,4 +15,4 @@ To Playtest:
  > basic menu screen w/ "Start" button
  > basic win/loss screen
 
- > hud lives incidator
+ / hud lives incidator
