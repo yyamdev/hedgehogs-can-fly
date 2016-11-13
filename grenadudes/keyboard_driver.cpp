@@ -26,9 +26,6 @@ void KeyboardDriver::event(sf::Event &e) {
             notify(EVENT_PLAYER_END_DRAG, NULL);
         }
     }
-    if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::P) {
-        dude->damage(10);
-    }
 }
 
 void KeyboardDriver::tick(std::vector<Entity*> &entities) {

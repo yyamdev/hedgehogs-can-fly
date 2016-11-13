@@ -13,6 +13,8 @@ Hud::Hud() {
     hpPlayer.maxHp = 1;
     hpAi.hp = 0;
     hpAi.maxHp = 1;
+    livesPlayer = -1;
+    livesAi = -1;
     fnt.loadFromFile("data/VCR_OSD_MONO.ttf");
     aiState = AI_STATE_IDLE;
 }
@@ -64,6 +66,19 @@ void Hud::draw(sf::RenderWindow &window) {
     if (aiState == AI_STATE_FLEE) txt.setString("flee");
     window.draw(txt);
 
+    // lives indicators
+    // player
+    sf::Text lives;
+    lives.setFont(fnt);
+    lives.setPosition(sf::Vector2f(150.f, 10.f));
+    lives.setString("x" + util::to_string(livesPlayer));
+    lives.setColor(sf::Color::Black);
+    window.draw(lives);
+    // ai
+    lives.setPosition(sf::Vector2f((float)WINDOW_WIDTH - 128.f - 10.f - 50.f, 10.f));
+    lives.setString("x" + util::to_string(livesAi));
+    window.draw(lives);
+
     // wind
     draw_vector(sf::Vector2f(WINDOW_WIDTH / 2.f, 64.f), currentWind, util::len(currentWind) * 600.f, sf::Color::Blue, window);
 }
@@ -104,5 +119,11 @@ void Hud::on_notify(Event event, void *data) {
     }
     if (event == EVENT_WIND_CHANGE) {
         currentWind = *((sf::Vector2f*)data);
+    }
+    if (event == EVENT_LIVES_CHANGE) {
+        int num   = *((int*)data);
+        int lives = *((int*)data + 1);
+        if (num == PLAYER_NUMBER) livesPlayer = lives;
+        if (num == AI_NUMBER) livesAi = lives;
     }
 }

@@ -21,6 +21,10 @@ StatePlay::StatePlay(World *world) : State(world) {
     addAi = true;
     playerLives = 3;
     aiLives = 3;
+    int eventPlayer[2] = {PLAYER_NUMBER, playerLives};
+    int eventAi[2] = {AI_NUMBER, aiLives};
+    notify(EVENT_LIVES_CHANGE, &eventPlayer);
+    notify(EVENT_LIVES_CHANGE, &eventAi);
 
     windClock.restart();
 }
@@ -79,10 +83,14 @@ void StatePlay::on_notify(Event event, void *data) {
         if (*((int*)data) == PLAYER_NUMBER) {
             addPlayer = true;
             playerLives --;
+            int event[2] = {PLAYER_NUMBER, playerLives};
+            notify(EVENT_LIVES_CHANGE, &event);
         }
         if (*((int*)data) == AI_NUMBER) {
             addAi = true;
             aiLives --;
+            int event[2] = {AI_NUMBER, aiLives};
+            notify(EVENT_LIVES_CHANGE, &event);
         }
     }
 }

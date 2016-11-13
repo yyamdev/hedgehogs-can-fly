@@ -32,6 +32,10 @@ private:
     float cooldownAi;
     float cooldownWeapon;
 
+    // lives indicator
+    int livesPlayer;
+    int livesAi;
+
     // ai state
     AiState aiState;
     sf::Font fnt;
