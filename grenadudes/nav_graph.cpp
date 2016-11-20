@@ -103,7 +103,7 @@ std::vector<NavNode> generate_nav_graph(TerrainGrid &grid) {
                 gradient >= 0.f &&
                 dy <= jh)
             {
-                // check path is clear
+                // check there is no terrain in the way
                 sf::Vector2i start((int)util::round(node.worldPosition.x / grid.get_cell_size()), (int)util::round(node.worldPosition.y / grid.get_cell_size()));
                 sf::Vector2i end((int)util::round(other.worldPosition.x / grid.get_cell_size()), (int)util::round(other.worldPosition.y / grid.get_cell_size()));
                 start.y -= 2;
@@ -115,7 +115,7 @@ std::vector<NavNode> generate_nav_graph(TerrainGrid &grid) {
                         clear = false;
                     }
                 }
-                if (clear) { // add edge
+                if (clear) {
                     node.jumpingEdge.push_back(&other);
                     continue;
                 }
