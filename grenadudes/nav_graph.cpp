@@ -245,3 +245,26 @@ bool _find_path(NavNode *start, NavNode *current, NavNode *goal, std::vector<sf:
     else
         return _find_path(start, next, goal, path);
 }
+
+std::vector<sf::Vector2i> get_line(sf::Vector2i start, sf::Vector2i end) {
+    std::vector<sf::Vector2i> line;
+    line.push_back(start);
+    // DDA
+    int dx = end.x - start.x;
+    int dy = end.y - start.y;
+    int steps = -1;
+    if (std::abs(dx) > std::abs(dy))
+        steps = abs(dx);
+    else
+        steps = abs(dy);
+    float incX = dx / (float)steps;
+    float incY = dy / (float)steps;
+    float x = (float)start.x;
+    float y = (float)start.y;
+    for (int s=0; s<steps; ++s) {
+        x += incX;
+        y += incY;
+        line.push_back(sf::Vector2i(util::round(x), util::round(y)));
+    }
+    return line;
+}
