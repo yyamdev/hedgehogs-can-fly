@@ -4,6 +4,7 @@
 #include "util.h"
 #include <iostream>
 #include <set>
+#include <algorithm>
 
 NavNode::NavNode() {
     NavNode(sf::Vector2f(0.f, 0.f));
@@ -123,11 +124,26 @@ std::vector<NavNode> generate_nav_graph(TerrainGrid &grid) {
 
             
             // add falling (walking) edge
-            /*
-            if (gradient < 0.f && gradient >= -3.f && std::fabs(dx) < jw) {
-                node.walkingEdge.push_back(&other);
+            if (std::fabs(dx) <= jw &&
+                gradient <= 0.f)
+            {
+                // check there is no terrain in the way
+                sf::Vector2i start((int)util::round(node.worldPosition.x / grid.get_cell_size()), (int)util::round(node.worldPosition.y / grid.get_cell_size()));
+                sf::Vector2i end((int)util::round(other.worldPosition.x / grid.get_cell_size()), (int)util::round(other.worldPosition.y / grid.get_cell_size()));
+                start.y -= 2;
+                end.y -= 2;
+                auto line = get_line(start, end);
+                int clear = 1;
+                for (auto &point : line) {
+                    if (grid.is_solid(grid.get_index(sf::Vector2u((unsigned int)point.x, (unsigned int)point.y)))) {
+                        clear--;
+                    }
+                }
+                if (clear >= 0) {
+                    node.walkingEdge.push_back(&other);
+                    continue;
+                }
             }
-            */
         }
     }
     return graph;
