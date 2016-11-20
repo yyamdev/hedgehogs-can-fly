@@ -18,6 +18,7 @@ NavNode::NavNode(sf::Vector2f worldPosition) {
     jump = false;
 }
 
+/*
 std::vector<NavNode> generate_nav_graph(TerrainGrid &grid) {
     std::vector<NavNode> graph;
     graph.reserve(1000); // so pointers to nodes work (stop reallocation)
@@ -56,6 +57,67 @@ std::vector<NavNode> generate_nav_graph(TerrainGrid &grid) {
     }
     return graph;
 }
+*/
+
+std::vector<NavNode> generate_nav_graph(TerrainGrid &grid) {
+    std::vector<NavNode> graph;
+    graph.reserve(1000); // so pointers to nodes work (stop reallocation)
+    float cellSize = (float)grid.get_cell_size();
+
+    // add nodes
+    for (unsigned int y = 0; y<grid.get_grid_height(); ++y) {
+        for (unsigned int x = 0; x<grid.get_grid_width(); ++x) {
+            sf::Vector2u gridPos(x, y);
+            sf::Vector2f worldPos((float)(x * grid.get_cell_size()), (float)(y * grid.get_cell_size()));
+            if (grid.is_solid(grid.get_index(gridPos))) {
+                sf::Vector2u aboveOne(gridPos.x, gridPos.y - 1);
+                sf::Vector2u aboveTwo(gridPos.x, gridPos.y - 2);
+                if (!grid.is_solid(grid.get_index(aboveOne)) && !grid.is_solid(grid.get_index(aboveTwo))) {
+                    NavNode node = NavNode(sf::Vector2f(worldPos.x + cellSize / 2.f, worldPos.y - cellSize / 2.f));
+                    graph.push_back(node);
+                }
+            }
+        }
+    }
+
+    // add edges
+    for (auto &node : graph) {
+        for (auto &other : graph) {
+            // add walking edge for adjacent nodes
+            if (std::fabs(node.worldPosition.x - other.worldPosition.x) == cellSize) {
+                if (std::fabs(node.worldPosition.y - other.worldPosition.y) == cellSize || node.worldPosition.y - other.worldPosition.y == 0.f) {
+                    node.walkingEdge.push_back(&other);
+                    continue;
+                }
+            }
+
+            float dx = std::fabs((other.worldPosition.x - node.worldPosition.x) / (float)grid.get_cell_size());
+            float dy = (other.worldPosition.y - node.worldPosition.y) / (float)grid.get_cell_size();
+            float gradient = dy / dx;
+            float jw = 5.f; // max jump width
+            float jh = 3.f; // max jump height
+
+            // add jumping edge
+            if (std::fabs(dx) <= jw &&
+                gradient <= 3.f &&
+                gradient >= 0.f &&
+                dy <= jh)
+            {
+                node.jumpingEdge.push_back(&other);
+                continue;
+            }
+
+            
+            // add falling (walking) edge
+            /*
+            if (gradient < 0.f && gradient >= -3.f && std::fabs(dx) < jw) {
+                node.walkingEdge.push_back(&other);
+            }
+            */
+        }
+    }
+    return graph;
+}
 
 void draw_nav_graph(sf::RenderWindow &window, std::vector<NavNode> &navGraph) {
     for (auto &node : navGraph) {
@@ -70,13 +132,13 @@ void draw_nav_graph(sf::RenderWindow &window, std::vector<NavNode> &navGraph) {
         window.draw(circle);
         float size = 12.f;
         for (auto &walk : node.walkingEdge) {
-            draw_vector(node.worldPosition, walk->worldPosition - node.worldPosition, size, sf::Color::Blue, window);
+            draw_vector(node.worldPosition, walk->worldPosition - node.worldPosition, util::len(walk->worldPosition - node.worldPosition), sf::Color::Blue, window);
         }
         for (auto &jump : node.jumpingEdge) {
-            draw_vector(node.worldPosition, jump->worldPosition - node.worldPosition, size, sf::Color::Yellow, window);
+            draw_vector(node.worldPosition, jump->worldPosition - node.worldPosition, util::len(jump->worldPosition - node.worldPosition), sf::Color::Yellow, window);
         }
         for (auto &fall : node.fallingEdge) {
-            draw_vector(node.worldPosition, fall->worldPosition - node.worldPosition, size, sf::Color::Red, window);
+            draw_vector(node.worldPosition, fall->worldPosition - node.worldPosition, util::len(fall->worldPosition - node.worldPosition), sf::Color::Red, window);
         }
     }
 }
