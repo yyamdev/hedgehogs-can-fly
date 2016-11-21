@@ -140,7 +140,7 @@ std::vector<NavNode> generate_nav_graph(TerrainGrid &grid) {
                     }
                 }
                 if (clear >= 0) {
-                    node.walkingEdge.push_back(&other);
+                    //node.walkingEdge.push_back(&other);
                     continue;
                 }
             }
@@ -186,7 +186,7 @@ NavNode *get_closest_node(NavGraph &navGraph, sf::Vector2f position) {
     return closestNode;
 }
 
-bool find_path(NavNode *start, NavNode *goal, NavGraph &navGraph, std::vector<sf::Vector3f> *path) {
+bool find_path(NavNode *start, NavNode *goal, NavGraph navGraph, std::vector<sf::Vector3f> *path) {
     for (auto &node : navGraph) {
         node.visited = false;
         node.flag = false;
@@ -197,9 +197,9 @@ bool find_path(NavNode *start, NavNode *goal, NavGraph &navGraph, std::vector<sf
 bool _find_path(NavNode *start, NavNode *current, NavNode *goal, std::vector<sf::Vector3f> *path) { // A*
     static std::set<NavNode*> open;
     static std::set<NavNode*> visited;
-    const int G_WALK = 10;
-    const int G_JUMP = 15;
-    const int G_FALL = 20;
+    const int G_WALK = 1;
+    const int G_JUMP = 100;
+    const int G_FALL = 0;
 
     // cleanup
     if (start == current) { // only run at the start
@@ -225,8 +225,11 @@ bool _find_path(NavNode *start, NavNode *current, NavNode *goal, std::vector<sf:
     // add all walkable nodes to open list
     for (auto &walk : current->walkingEdge) {
         if (visited.find(walk) == visited.end()) { // if node hasn't been visited
-            walk->g = G_WALK;
-            walk->h = 0; // todo -> add better heuristic
+            if (walk->parent)
+                walk->g = G_WALK + walk->parent->g;
+            else
+                walk->g = G_WALK;
+            walk->h = (int)util::len(walk->worldPosition - goal->worldPosition); // todo -> add better heuristic
             walk->parent = current;
             if (open.find(walk) == open.end())
                 open.insert(walk);
@@ -236,8 +239,11 @@ bool _find_path(NavNode *start, NavNode *current, NavNode *goal, std::vector<sf:
     // add all jumpable nodes to open list
     for (auto &jump : current->jumpingEdge) {
         if (visited.find(jump) == visited.end()) { // if node hasn't been visited
-            jump->g = G_JUMP;
-            jump->h = 0; // todo -> add better heuristic
+            if (jump->parent)
+                jump->g = G_JUMP + jump->parent->g;
+            else
+                jump->g = G_JUMP;
+            jump->h = (int)util::len(jump->worldPosition - goal->worldPosition); // todo -> add better heuristic
             jump->parent = current;
             jump->jump = true;
             if (open.find(jump) == open.end())
@@ -248,8 +254,11 @@ bool _find_path(NavNode *start, NavNode *current, NavNode *goal, std::vector<sf:
     // add all fallable nodes to open list
     for (auto &fall : current->fallingEdge) {
         if (visited.find(fall) == visited.end()) { // if node hasn't been visited
-            fall->g = G_FALL;
-            fall->h = 0; // todo -> add better heuristic
+            if (fall->parent)
+                fall->g = G_FALL + fall->parent->g;
+            else
+                fall->g = G_FALL;
+            fall->h = (int)util::len(fall->worldPosition - goal->worldPosition); // todo -> add better heuristic
             fall->parent = current;
             if (open.find(fall) == open.end())
                 open.insert(fall);
@@ -262,7 +271,7 @@ bool _find_path(NavNode *start, NavNode *current, NavNode *goal, std::vector<sf:
     visited.insert(current);
 
     // chose next node with lowest f cost
-    int lowestF = 1000;
+    int lowestF = 0xFFFF;
     NavNode *next = NULL;
     for (auto &node : open) {
         if (node->g + node->h < lowestF) {

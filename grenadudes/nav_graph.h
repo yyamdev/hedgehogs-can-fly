@@ -33,6 +33,6 @@ typedef std::vector<NavNode> NavGraph;
 NavGraph generate_nav_graph(TerrainGrid &grid);
 void draw_nav_graph(sf::RenderWindow &window, NavGraph &navGraph);
 NavNode *get_closest_node(NavGraph &navGraph, sf::Vector2f position);
-bool find_path(NavNode *start, NavNode *goal, NavGraph &navGraph, std::vector<sf::Vector3f> *path); // marks nodes
+bool find_path(NavNode *start, NavNode *goal, NavGraph navGraph, std::vector<sf::Vector3f> *path); // marks nodes
 bool _find_path(NavNode *satrt, NavNode *current, NavNode *goal, std::vector<sf::Vector3f> *path);
 std::vector<sf::Vector2i> get_line(sf::Vector2i start, sf::Vector2i end);

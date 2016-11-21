@@ -77,6 +77,11 @@ namespace util {
     }
 
     template <typename T>
+    inline float len2(T vec) {
+        return pow(vec.x, 2) + pow(vec.y, 2);
+    }
+
+    template <typename T>
     inline int round(T x) {
         return (int)(x + 0.5);
     }
