@@ -5,11 +5,10 @@
 
 AiDriver::AiDriver(EntityDude *dude, EntityTerrain *terrain) : terrainGrid(terrain, 16), DudeDriver(dude) {
     this->terrain = terrain;
-    quad = 0;
     showGrid = false;
     state = AI_STATE_IDLE;
     active = true; // ai on by default
-    recalcNavGraph = true;
+    terrainChanged = true;
 }
 
 void AiDriver::event(sf::Event &e) {
@@ -41,39 +40,20 @@ void AiDriver::tick(std::vector<Entity*> &entities) {
     if (active)
         do_ai(entities);
 
-    // recalculate terrain approximation & nav graph
-    /*
-    if (clockRecalcTerrainGrid.getElapsedTime().asSeconds() > 0.5f) {
-        unsigned int halfWidth = terrainGrid.get_grid_width() / 2;
-        unsigned int halfHeight = terrainGrid.get_grid_height() / 2;
-        //terrainGrid.recalc_all();
-        switch (quad) {
-        case 0:
-            terrainGrid.recalc_rect(sf::Rect<unsigned int>(0, 0, halfWidth, halfHeight));
-            break;
-        case 1:
-            terrainGrid.recalc_rect(sf::Rect<unsigned int>(halfWidth, 0, halfWidth, halfHeight));
-            break;
-        case 2:
-            terrainGrid.recalc_rect(sf::Rect<unsigned int>(0, halfHeight, halfWidth, halfHeight));
-            break;
-        case 3:
-            terrainGrid.recalc_rect(sf::Rect<unsigned int>(halfWidth, halfHeight, halfWidth, halfHeight));
-            break;
-        }
-        quad = (quad + 1) % 4;
-        //navGraph = generate_nav_graph(terrainGrid);
-        clockRecalcTerrainGrid.restart();
-    }
-    */
-
-    if (recalcNavGraph && clockRecalcNavGraph.getElapsedTime().asSeconds() > 1.f) {
+    if (terrainChanged && recalcGridAndNodesTimer.getElapsedTime().asSeconds() > 1.f) {
+        // recalc.
         terrainGrid.recalc_all();
         navGraph = generate_nav_graph_nodes(terrainGrid);
+        std::cout << "recalc\n";
+
+        // reset
+        terrainChanged = false;
+        recalcGridAndNodesTimer.restart();
+    }
+
+    if (recalcEdgesTimer.getElapsedTime().asSeconds() > 2.f) {
         generate_nav_graph_edges(navGraph, terrainGrid);
-        clockRecalcNavGraph.restart();
-        std::cout << "calc\n";
-        recalcNavGraph = false;
+        recalcEdgesTimer.restart();
     }
 
     // follow path
@@ -131,8 +111,8 @@ void AiDriver::on_notify(Event event, void *data) {
         }
     }
     if (event == EVENT_TERRAIN_CHANGE) {
-        recalcNavGraph = true;
-        clockRecalcNavGraph.restart();
+        terrainChanged = true;
+        recalcGridAndNodesTimer.restart();
     }
 }
 

@@ -38,18 +38,21 @@ private:
 
     // terrain grid approximation
     TerrainGrid terrainGrid;
-    sf::Clock clockRecalcTerrainGrid;
-    sf::Clock clockRecalcNavGraph;
-    bool recalcNavGraph;
-    int quad; // which quadrant to update
     bool showGrid;
 
     // nav graph
     NavGraph navGraph;
     bool showNav;
+
+    // pathfinding
     std::vector<sf::Vector3f> currentPath;
     sf::Vector2f prevPosition;
     sf::Clock stuckTimer;
+
+    // recalculating approximations
+    sf::Clock recalcGridAndNodesTimer;
+    sf::Clock recalcEdgesTimer;
+    bool terrainChanged;
 
     // decisions
     bool active;

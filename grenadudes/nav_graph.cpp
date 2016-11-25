@@ -87,6 +87,14 @@ std::vector<NavNode> generate_nav_graph_nodes(TerrainGrid &grid) {
 
 void generate_nav_graph_edges(NavGraph &graph, TerrainGrid &grid) {
     float cellSize = (float)grid.get_cell_size();
+
+    // remove old edges
+    for (auto &node : graph) {
+        node.walkingEdge.clear();
+        node.fallingEdge.clear();
+        node.jumpingEdge.clear();
+    }
+
     // add edges
     for (auto &node : graph) {
         for (auto &other : graph) {
@@ -99,7 +107,7 @@ void generate_nav_graph_edges(NavGraph &graph, TerrainGrid &grid) {
             }
 
             float dx = std::fabs((other.worldPosition.x - node.worldPosition.x) / (float)grid.get_cell_size());
-            float dy = (other.worldPosition.y - node.worldPosition.y) / (float)grid.get_cell_size();
+            float dy = (node.worldPosition.y - other.worldPosition.y) / (float)grid.get_cell_size();
             float gradient = dy / dx;
             float jw = 5.f; // max jump width
             float jh = 3.f; // max jump height
@@ -111,8 +119,8 @@ void generate_nav_graph_edges(NavGraph &graph, TerrainGrid &grid) {
                 dy <= jh)
             {
                 // check there is no terrain in the way
-                sf::Vector2i start((int)util::round(node.worldPosition.x / grid.get_cell_size()), (int)util::round(node.worldPosition.y / grid.get_cell_size()));
-                sf::Vector2i end((int)util::round(other.worldPosition.x / grid.get_cell_size()), (int)util::round(other.worldPosition.y / grid.get_cell_size()));
+                sf::Vector2i start((int)util::round(std::floorf(node.worldPosition.x / grid.get_cell_size())), (int)util::round(std::floorf(node.worldPosition.y / grid.get_cell_size())));
+                sf::Vector2i end((int)util::round(std::floorf(other.worldPosition.x / grid.get_cell_size())), (int)util::round(std::floorf(other.worldPosition.y / grid.get_cell_size())));
                 start.y -= 2;
                 end.y -= 2;
                 auto line = get_line(start, end);
