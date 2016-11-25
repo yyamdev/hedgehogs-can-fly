@@ -159,7 +159,7 @@ bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, float rad, sf::Vect
 
 void EntityTerrain::event(sf::Event &e) {
     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Right && !sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
-        set_circle(sf::Vector2f((float)e.mouseButton.x, (float)e.mouseButton.y), 15, false);
+        set_circle(sf::Vector2f((float)e.mouseButton.x, (float)e.mouseButton.y), 35, false);
         //set_rectangle(sf::FloatRect((float)e.mouseButton.x, (float)e.mouseButton.y, 256.f, 64.f), false);
     }
     if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::T)

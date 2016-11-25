@@ -177,11 +177,11 @@ void draw_nav_graph(sf::RenderWindow &window, std::vector<NavNode> &navGraph) {
             circle.setFillColor(sf::Color::Red);
         window.draw(circle);
         float size = 12.f;
-        for (auto &walk : node.walkingEdge) {
-            draw_vector(node.worldPosition, walk->worldPosition - node.worldPosition, util::len(walk->worldPosition - node.worldPosition), sf::Color::Blue, window);
-        }
         for (auto &jump : node.jumpingEdge) {
             draw_vector(node.worldPosition, jump->worldPosition - node.worldPosition, util::len(jump->worldPosition - node.worldPosition), sf::Color::Yellow, window);
+        }
+        for (auto &walk : node.walkingEdge) {
+            draw_vector(node.worldPosition, walk->worldPosition - node.worldPosition, util::len(walk->worldPosition - node.worldPosition), sf::Color::Blue, window);
         }
         for (auto &fall : node.fallingEdge) {
             draw_vector(node.worldPosition, fall->worldPosition - node.worldPosition, util::len(fall->worldPosition - node.worldPosition), sf::Color::Red, window);
