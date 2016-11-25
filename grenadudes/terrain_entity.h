@@ -3,8 +3,9 @@
 // destructable level
 
 #include "entity.h"
+#include "subject.h"
 
-class EntityTerrain : public Entity {
+class EntityTerrain : public Entity, public Subject {
 public:
     EntityTerrain(sf::Vector2u size, float scale);
     ~EntityTerrain(); // free all memory

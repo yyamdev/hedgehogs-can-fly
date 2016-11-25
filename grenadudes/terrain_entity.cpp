@@ -24,6 +24,7 @@ EntityTerrain::EntityTerrain(sf::Vector2u size, float scale) {
     // load terrain fragment shader
     shdTerrain.loadFromFile("data/terrain.frag", sf::Shader::Fragment);
     render = true;
+    notify(EVENT_TERRAIN_CHANGE, NULL);
 }
 
 EntityTerrain::~EntityTerrain() {
@@ -52,6 +53,7 @@ void EntityTerrain::set_solid(sf::Vector2f pos, bool solid) {
         terrain[base + 2] = 0;
         terrain[base + 3] = 255;
     }
+    notify(EVENT_TERRAIN_CHANGE, NULL);
 }
 
 bool EntityTerrain::get_solid(sf::Vector2f pos) {
@@ -71,6 +73,7 @@ void EntityTerrain::set_solid() {
         terrain[i + 2] = 255;
         terrain[i + 3] = 255;
     }
+    notify(EVENT_TERRAIN_CHANGE, NULL);
 }
 
 void EntityTerrain::set_empty() {
@@ -81,6 +84,7 @@ void EntityTerrain::set_empty() {
         terrain[i + 2] = 0;
         terrain[i + 3] = 255;
     }
+    notify(EVENT_TERRAIN_CHANGE, NULL);
 }
 
 void EntityTerrain::set_rectangle(sf::FloatRect rect, bool solid) {
@@ -89,6 +93,7 @@ void EntityTerrain::set_rectangle(sf::FloatRect rect, bool solid) {
             set_solid(sf::Vector2f(x, y), solid);
         }
     }
+    notify(EVENT_TERRAIN_CHANGE, NULL);
 }
 
 void EntityTerrain::set_circle(sf::Vector2f center, float rad, bool solid) {
@@ -101,6 +106,7 @@ void EntityTerrain::set_circle(sf::Vector2f center, float rad, bool solid) {
                 set_solid(sf::Vector2f(x, y), solid);
         }
     }
+    notify(EVENT_TERRAIN_CHANGE, NULL);
 }
 
 sf::Vector2f EntityTerrain::get_normal(sf::Vector2f pos) {
@@ -181,6 +187,7 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
 void EntityTerrain::generate_flat() {
     set_solid();
     set_rectangle(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f((float)WINDOW_WIDTH, 128.f)), false);
+    notify(EVENT_TERRAIN_CHANGE, NULL);
 }
 
 void EntityTerrain::generate_normal(float yMax, float yMin) {
@@ -207,4 +214,6 @@ void EntityTerrain::generate_normal(float yMax, float yMin) {
         set_rectangle(sf::FloatRect((float)x, (float)WINDOW_HEIGHT - height[x], 1.f, (float)WINDOW_HEIGHT), true);
         //std::cout << height[x] << std::endl;
     }
+
+    notify(EVENT_TERRAIN_CHANGE, NULL);
 }
