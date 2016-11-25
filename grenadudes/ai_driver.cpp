@@ -28,6 +28,12 @@ void AiDriver::event(sf::Event &e) {
         NavNode *dest = get_closest_node(navGraph, mouse);
         find_path(get_closest_node(navGraph, dude->position), dest, navGraph, &currentPath);
     }
+    if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Right && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+        // toggle mark nearest node
+        sf::Vector2f mouseF = sf::Vector2f((float)e.mouseButton.x, (float)e.mouseButton.y);
+        NavNode* node = get_closest_node(navGraph, mouseF);
+        node->marked = !node->marked;
+    }
 }
 
 void AiDriver::tick(std::vector<Entity*> &entities) {

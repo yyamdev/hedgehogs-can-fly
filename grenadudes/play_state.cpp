@@ -12,7 +12,8 @@
 StatePlay::StatePlay(World *world) : State(world) {
     // set up game
     terrain = new EntityTerrain(sf::Vector2u(WINDOW_WIDTH, WINDOW_HEIGHT), 2.f);
-    terrain->generate_normal(500.f, 100.f);
+    //terrain->generate_normal(500.f, 100.f);
+    terrain->generate_flat();
     world->remove_entity(ENTITY_TAG_ALL);
     world->add_entity(terrain);
     world->add_entity(new EntitySpawner());

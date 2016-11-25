@@ -17,6 +17,7 @@ NavNode::NavNode(sf::Vector2f worldPosition) {
     parent = NULL;
     visited = false;
     jump = false;
+    marked = false;
 }
 
 /*
@@ -159,6 +160,8 @@ void draw_nav_graph(sf::RenderWindow &window, std::vector<NavNode> &navGraph) {
             circle.setFillColor(sf::Color(255, 0, 255, 128));
         else
             circle.setFillColor(sf::Color(0, 0, 255, 128));
+        if (node.marked)
+            circle.setFillColor(sf::Color::Red);
         window.draw(circle);
         float size = 12.f;
         for (auto &walk : node.walkingEdge) {

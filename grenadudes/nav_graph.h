@@ -24,6 +24,9 @@ public:
     NavNode *parent;
     bool jump;
     int g, h;
+    
+    // debug
+    bool marked;
 private:
 };
 
