@@ -9,7 +9,6 @@ AiDriver::AiDriver(EntityDude *dude, EntityTerrain *terrain) : terrainGrid(terra
     showGrid = false;
     state = AI_STATE_IDLE;
     active = true; // ai on by default
-    navGraph = generate_nav_graph(terrainGrid);
     recalcNavGraph = true;
 }
 
@@ -70,7 +69,8 @@ void AiDriver::tick(std::vector<Entity*> &entities) {
 
     if (recalcNavGraph && clockRecalcNavGraph.getElapsedTime().asSeconds() > 1.f) {
         terrainGrid.recalc_all();
-        navGraph = generate_nav_graph(terrainGrid);
+        navGraph = generate_nav_graph_nodes(terrainGrid);
+        generate_nav_graph_edges(navGraph, terrainGrid);
         clockRecalcNavGraph.restart();
         std::cout << "calc\n";
         recalcNavGraph = false;

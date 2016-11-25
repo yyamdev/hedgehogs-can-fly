@@ -61,7 +61,7 @@ std::vector<NavNode> generate_nav_graph(TerrainGrid &grid) {
 }
 */
 
-std::vector<NavNode> generate_nav_graph(TerrainGrid &grid) {
+std::vector<NavNode> generate_nav_graph_nodes(TerrainGrid &grid) {
     std::vector<NavNode> graph;
     graph.reserve(1000); // so pointers to nodes work (stop reallocation)
     float cellSize = (float)grid.get_cell_size();
@@ -82,6 +82,11 @@ std::vector<NavNode> generate_nav_graph(TerrainGrid &grid) {
         }
     }
 
+    return graph;
+}
+
+void generate_nav_graph_edges(NavGraph &graph, TerrainGrid &grid) {
+    float cellSize = (float)grid.get_cell_size();
     // add edges
     for (auto &node : graph) {
         for (auto &other : graph) {
@@ -147,7 +152,6 @@ std::vector<NavNode> generate_nav_graph(TerrainGrid &grid) {
             }
         }
     }
-    return graph;
 }
 
 void draw_nav_graph(sf::RenderWindow &window, std::vector<NavNode> &navGraph) {

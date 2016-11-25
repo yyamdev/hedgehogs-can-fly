@@ -5,7 +5,7 @@
 #include "entity.h"
 #include "subject.h"
 
-class EntityTerrain : public Entity, public Subject {
+class EntityTerrain : public Entity {
 public:
     EntityTerrain(sf::Vector2u size, float scale);
     ~EntityTerrain(); // free all memory
