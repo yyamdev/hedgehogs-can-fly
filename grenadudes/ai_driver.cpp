@@ -10,7 +10,7 @@ AiDriver::AiDriver(EntityDude *dude, EntityTerrain *terrain) : terrainGrid(terra
     state = AI_STATE_IDLE;
     active = true; // ai on by default
     navGraph = generate_nav_graph(terrainGrid);
-    recalcNavGraph = false;
+    recalcNavGraph = true;
 }
 
 void AiDriver::event(sf::Event &e) {
