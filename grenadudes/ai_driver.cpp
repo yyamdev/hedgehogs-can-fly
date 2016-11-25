@@ -43,9 +43,11 @@ void AiDriver::tick(std::vector<Entity*> &entities) {
         do_ai(entities);
 
     // recalculate terrain approximation & nav graph
+    /*
     if (clockRecalcTerrainGrid.getElapsedTime().asSeconds() > 0.5f) {
         unsigned int halfWidth = terrainGrid.get_grid_width() / 2;
         unsigned int halfHeight = terrainGrid.get_grid_height() / 2;
+        //terrainGrid.recalc_all();
         switch (quad) {
         case 0:
             terrainGrid.recalc_rect(sf::Rect<unsigned int>(0, 0, halfWidth, halfHeight));
@@ -64,8 +66,10 @@ void AiDriver::tick(std::vector<Entity*> &entities) {
         //navGraph = generate_nav_graph(terrainGrid);
         clockRecalcTerrainGrid.restart();
     }
+    */
 
     if (recalcNavGraph && clockRecalcNavGraph.getElapsedTime().asSeconds() > 1.f) {
+        terrainGrid.recalc_all();
         navGraph = generate_nav_graph(terrainGrid);
         clockRecalcNavGraph.restart();
         std::cout << "calc\n";
