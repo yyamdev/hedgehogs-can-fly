@@ -9,6 +9,7 @@ AiDriver::AiDriver(EntityDude *dude, EntityTerrain *terrain) : terrainGrid(terra
     state = AI_STATE_IDLE;
     active = true; // ai on by default
     terrainChanged = true;
+    recalcEdges = false;
 }
 
 void AiDriver::event(sf::Event &e) {
@@ -46,14 +47,16 @@ void AiDriver::tick(std::vector<Entity*> &entities) {
         navGraph = generate_nav_graph_nodes(terrainGrid);
         std::cout << "recalc\n";
 
-        // reset
+        // reset & trigger edge gen
         terrainChanged = false;
         recalcGridAndNodesTimer.restart();
+        recalcEdges = true;
+        recalcEdgesTimer.restart();
     }
 
-    if (recalcEdgesTimer.getElapsedTime().asSeconds() > 2.f) {
-        generate_nav_graph_edges(navGraph, terrainGrid);
-        recalcEdgesTimer.restart();
+    if (recalcEdges && recalcEdgesTimer.getElapsedTime().asSeconds() > 1.f) {
+        generate_nav_graph_edges(navGraph, terrainGrid, false);
+        recalcEdges = false;
     }
 
     // follow path

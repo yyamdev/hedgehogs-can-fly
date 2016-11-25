@@ -34,7 +34,7 @@ private:
 // actually maybe a class would have been good..
 typedef std::vector<NavNode> NavGraph;
 NavGraph generate_nav_graph_nodes(TerrainGrid &grid);
-void generate_nav_graph_edges(NavGraph &graph, TerrainGrid &grid);
+void generate_nav_graph_edges(NavGraph &graph, TerrainGrid &grid, bool deleteOld);
 void draw_nav_graph(sf::RenderWindow &window, NavGraph &navGraph);
 NavNode *get_closest_node(NavGraph &navGraph, sf::Vector2f position);
 bool find_path(NavNode *start, NavNode *goal, NavGraph navGraph, std::vector<sf::Vector3f> *path); // marks nodes

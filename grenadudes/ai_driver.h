@@ -53,6 +53,7 @@ private:
     sf::Clock recalcGridAndNodesTimer;
     sf::Clock recalcEdgesTimer;
     bool terrainChanged;
+    bool recalcEdges;
 
     // decisions
     bool active;

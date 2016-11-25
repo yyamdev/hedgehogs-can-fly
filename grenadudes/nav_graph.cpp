@@ -85,14 +85,15 @@ std::vector<NavNode> generate_nav_graph_nodes(TerrainGrid &grid) {
     return graph;
 }
 
-void generate_nav_graph_edges(NavGraph &graph, TerrainGrid &grid) {
+void generate_nav_graph_edges(NavGraph &graph, TerrainGrid &grid, bool deleteOld) {
     float cellSize = (float)grid.get_cell_size();
 
-    // remove old edges
-    for (auto &node : graph) {
-        node.walkingEdge.clear();
-        node.fallingEdge.clear();
-        node.jumpingEdge.clear();
+    if (deleteOld) { // remove old edges
+        for (auto &node : graph) {
+            node.walkingEdge.clear();
+            node.fallingEdge.clear();
+            node.jumpingEdge.clear();
+        }
     }
 
     // add edges
@@ -180,7 +181,7 @@ void draw_nav_graph(sf::RenderWindow &window, std::vector<NavNode> &navGraph) {
             draw_vector(node.worldPosition, walk->worldPosition - node.worldPosition, util::len(walk->worldPosition - node.worldPosition), sf::Color::Blue, window);
         }
         for (auto &jump : node.jumpingEdge) {
-            //draw_vector(node.worldPosition, jump->worldPosition - node.worldPosition, util::len(jump->worldPosition - node.worldPosition), sf::Color::Yellow, window);
+            draw_vector(node.worldPosition, jump->worldPosition - node.worldPosition, util::len(jump->worldPosition - node.worldPosition), sf::Color::Yellow, window);
         }
         for (auto &fall : node.fallingEdge) {
             draw_vector(node.worldPosition, fall->worldPosition - node.worldPosition, util::len(fall->worldPosition - node.worldPosition), sf::Color::Red, window);
