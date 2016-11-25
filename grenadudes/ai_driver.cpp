@@ -9,6 +9,8 @@ AiDriver::AiDriver(EntityDude *dude, EntityTerrain *terrain) : terrainGrid(terra
     showGrid = false;
     state = AI_STATE_IDLE;
     active = true; // ai on by default
+    navGraph = generate_nav_graph(terrainGrid);
+    recalcNavGraph = false;
 }
 
 void AiDriver::event(sf::Event &e) {
@@ -59,8 +61,15 @@ void AiDriver::tick(std::vector<Entity*> &entities) {
             break;
         }
         quad = (quad + 1) % 4;
-        navGraph = generate_nav_graph(terrainGrid);
+        //navGraph = generate_nav_graph(terrainGrid);
         clockRecalcTerrainGrid.restart();
+    }
+
+    if (recalcNavGraph && clockRecalcNavGraph.getElapsedTime().asSeconds() > 1.f) {
+        navGraph = generate_nav_graph(terrainGrid);
+        clockRecalcNavGraph.restart();
+        std::cout << "calc\n";
+        recalcNavGraph = false;
     }
 
     // follow path
@@ -116,6 +125,10 @@ void AiDriver::on_notify(Event event, void *data) {
             if (gren == grenade)
                 grenade = NULL;
         }
+    }
+    if (event == EVENT_TERRAIN_CHANGE) {
+        recalcNavGraph = true;
+        clockRecalcNavGraph.restart();
     }
 }
 

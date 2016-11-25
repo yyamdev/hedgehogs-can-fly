@@ -39,6 +39,8 @@ private:
     // terrain grid approximation
     TerrainGrid terrainGrid;
     sf::Clock clockRecalcTerrainGrid;
+    sf::Clock clockRecalcNavGraph;
+    bool recalcNavGraph;
     int quad; // which quadrant to update
     bool showGrid;
 
