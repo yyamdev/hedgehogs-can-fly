@@ -107,16 +107,17 @@ void generate_nav_graph_edges(NavGraph &graph, TerrainGrid &grid) {
             }
 
             float dx = std::fabs((other.worldPosition.x - node.worldPosition.x) / (float)grid.get_cell_size());
-            float dy = (node.worldPosition.y - other.worldPosition.y) / (float)grid.get_cell_size();
+            float dy = (other.worldPosition.y - node.worldPosition.y) / (float)grid.get_cell_size();
             float gradient = dy / dx;
-            float jw = 5.f; // max jump width
-            float jh = 3.f; // max jump height
+            float jw = 5.f; // max jump width (abs)
+            float jh = -3.f; // max jump height
 
             // add jumping edge
-            if (std::fabs(dx) <= jw &&
-                gradient <= 3.f &&
-                gradient >= 0.f &&
-                dy <= jh)
+            if (dx <= jw &&
+                gradient >= -3.f &&
+                gradient <= 0.f &&
+                dy >= jh &&
+                dy <= 0.f)
             {
                 // check there is no terrain in the way
                 sf::Vector2i start((int)util::round(std::floorf(node.worldPosition.x / grid.get_cell_size())), (int)util::round(std::floorf(node.worldPosition.y / grid.get_cell_size())));
@@ -135,26 +136,25 @@ void generate_nav_graph_edges(NavGraph &graph, TerrainGrid &grid) {
                     continue;
                 }
             }
-
             
             // add falling (walking) edge
-            if (std::fabs(dx) <= jw &&
-                gradient <= 0.f)
+            if (dx <= jw &&
+                gradient >= 0.f)
             {
                 // check there is no terrain in the way
-                sf::Vector2i start((int)util::round(node.worldPosition.x / grid.get_cell_size()), (int)util::round(node.worldPosition.y / grid.get_cell_size()));
-                sf::Vector2i end((int)util::round(other.worldPosition.x / grid.get_cell_size()), (int)util::round(other.worldPosition.y / grid.get_cell_size()));
+                sf::Vector2i start((int)util::round(std::floorf(node.worldPosition.x / grid.get_cell_size())), (int)util::round(std::floorf(node.worldPosition.y / grid.get_cell_size())));
+                sf::Vector2i end((int)util::round(std::floorf(other.worldPosition.x / grid.get_cell_size())), (int)util::round(std::floorf(other.worldPosition.y / grid.get_cell_size())));
                 start.y -= 2;
                 end.y -= 2;
                 auto line = get_line(start, end);
-                int clear = 1;
+                bool clear = true;
                 for (auto &point : line) {
                     if (grid.is_solid(grid.get_index(sf::Vector2u((unsigned int)point.x, (unsigned int)point.y)))) {
-                        clear--;
+                        clear = false;
                     }
                 }
-                if (clear >= 0) {
-                    //node.walkingEdge.push_back(&other);
+                if (clear) {
+                    node.walkingEdge.push_back(&other);
                     continue;
                 }
             }
@@ -180,7 +180,7 @@ void draw_nav_graph(sf::RenderWindow &window, std::vector<NavNode> &navGraph) {
             draw_vector(node.worldPosition, walk->worldPosition - node.worldPosition, util::len(walk->worldPosition - node.worldPosition), sf::Color::Blue, window);
         }
         for (auto &jump : node.jumpingEdge) {
-            draw_vector(node.worldPosition, jump->worldPosition - node.worldPosition, util::len(jump->worldPosition - node.worldPosition), sf::Color::Yellow, window);
+            //draw_vector(node.worldPosition, jump->worldPosition - node.worldPosition, util::len(jump->worldPosition - node.worldPosition), sf::Color::Yellow, window);
         }
         for (auto &fall : node.fallingEdge) {
             draw_vector(node.worldPosition, fall->worldPosition - node.worldPosition, util::len(fall->worldPosition - node.worldPosition), sf::Color::Red, window);
