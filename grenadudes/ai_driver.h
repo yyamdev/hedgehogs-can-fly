@@ -48,6 +48,9 @@ private:
     std::vector<sf::Vector3f> currentPath;
     sf::Vector2f prevPosition;
     sf::Clock stuckTimer;
+    sf::Clock jumpTimer;
+    float jumpTimerTrigger;
+    bool moveHor;
 
     // recalculating approximations
     sf::Clock recalcGridAndNodesTimer;

@@ -10,6 +10,7 @@ AiDriver::AiDriver(EntityDude *dude, EntityTerrain *terrain) : terrainGrid(terra
     active = true; // ai on by default
     terrainChanged = true;
     recalcEdges = false;
+    jumpTimerTrigger = -1.f;
 }
 
 void AiDriver::event(sf::Event &e) {
@@ -61,16 +62,31 @@ void AiDriver::tick(std::vector<Entity*> &entities) {
 
     // follow path
     if (currentPath.size() != 0) {
-        if (std::fabs(dude->position.x - currentPath.back().x) < 8.f)
-            currentPath.pop_back();
-        else {
-            if (dude->position.x - currentPath.back().x > 0.f)
-                dude->move(EntityDude::DIRECTION_LEFT);
-            else
-                dude->move(EntityDude::DIRECTION_RIGHT);
-            if (currentPath.back().z == 1.f)
-                dude->jump();
+        if (std::fabs(dude->position.x - currentPath.back().x) < 8.f) {
+            moveHor = false;
+            if (std::fabs(dude->position.y - currentPath.back().y) < 16.f)
+                currentPath.pop_back();
         }
+        else {
+            if (moveHor) {
+                if (dude->position.x - currentPath.back().x > 0.f)
+                    dude->move(EntityDude::DIRECTION_LEFT);
+                else
+                    dude->move(EntityDude::DIRECTION_RIGHT);
+            }
+            if (currentPath.back().z == 1.f) {
+                dude->jump();
+                // 1 second per square
+                jumpTimer.restart();
+                jumpTimerTrigger = 1.f * ((dude->position.y - currentPath.back().y) / (float)terrainGrid.get_cell_size());
+                moveHor = false;
+            } else
+                moveHor = true;
+        }
+    }
+
+    if (jumpTimer.getElapsedTime().asSeconds() > jumpTimerTrigger) {
+        moveHor = true;
     }
 
     if (dude->position != prevPosition)
