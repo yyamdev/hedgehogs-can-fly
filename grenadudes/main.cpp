@@ -25,13 +25,17 @@ int main() {
                 window.close();
             }
 
-            if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::F1) {
+            if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::F1)
                 window.capture().saveToFile(util::to_string(time(NULL)) + ".png");
-            }
 
-            if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::R) {
+            if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::R)
                 State::change_state(new StatePlay(&world));
-            }
+
+            if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::H)
+                print_debug_controls();
+
+            if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::C)
+                system("cls");
             
             world.event(e);
             State::event_current(e);
@@ -59,4 +63,6 @@ void print_debug_controls() {
     std::cout << "middle mouse - ai navigate\n";
     std::cout << "F1 - screenshot\n";
     std::cout << "R - restart game\n";
+    std::cout << "H - print this message\n";
+    std::cout << "C - clear console\n";
 }

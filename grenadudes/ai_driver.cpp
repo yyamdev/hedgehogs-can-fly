@@ -46,7 +46,6 @@ void AiDriver::tick(std::vector<Entity*> &entities) {
         // recalc.
         terrainGrid.recalc_all();
         navGraph = generate_nav_graph_nodes(terrainGrid);
-        std::cout << "recalc\n";
 
         // reset & trigger edge gen
         terrainChanged = false;
@@ -61,6 +60,7 @@ void AiDriver::tick(std::vector<Entity*> &entities) {
     }
 
     // follow path
+    /*
     if (currentPath.size() != 0) {
         if (std::fabs(dude->position.x - currentPath.back().x) < 8.f) {
             moveHor = false;
@@ -87,6 +87,35 @@ void AiDriver::tick(std::vector<Entity*> &entities) {
 
     if (jumpTimer.getElapsedTime().asSeconds() > jumpTimerTrigger) {
         moveHor = true;
+    }
+    */
+    
+    // follow path
+    if (currentPath.size() != 0) {
+        if (currentPath.back().z == 0.f) { // move along walkable edge
+            if (dude->position.x - currentPath.back().x > 0.f)
+                dude->move(EntityDude::DIRECTION_LEFT);
+            else
+                dude->move(EntityDude::DIRECTION_RIGHT);
+        }
+
+        if (currentPath.back().z == 1.f) { // move along jumpable edge
+            if (dude->position.x - currentPath.back().x > 0.f)
+                dude->move(EntityDude::DIRECTION_LEFT);
+            else
+                dude->move(EntityDude::DIRECTION_RIGHT);
+        }
+
+        if (std::fabs(dude->position.x - currentPath.back().x) < 4.f /*&& 
+            std::fabs(dude->position.y - currentPath.back().y) < 16.f*/) {
+            // reached a target node
+            std::cout << "next\n";
+            currentPath.pop_back(); // change target to next node
+            if (currentPath.size() > 0 && currentPath.back().z == 1.f) { // if next node needs to be jumped to
+                std::cout << "jump\n";
+                dude->jump();
+            }
+        }
     }
 
     if (dude->position != prevPosition)
