@@ -53,12 +53,6 @@ void EntityGrenade::tick(std::vector<Entity*> &entities) {
     // apply wind
     velocity += world->wind;
 
-    // enforce max velocity
-    float maxSpeed = 10.f;
-    if (util::len(velocity) > maxSpeed) {
-        velocity = (velocity / util::len(velocity)) * maxSpeed;
-    }
-
     if (!stuck)
         position += velocity; // move due to forces
 
@@ -75,14 +69,8 @@ void EntityGrenade::tick(std::vector<Entity*> &entities) {
             if (intersects(*e) && !stuck) { // react to collision with dude (bounce off)
                 position -= velocity;
                 sf::Vector2f normal = position - e->position;
-                sf::Vector2f normalUnit;
-                if (util::len(normal) == 0.f)
-                    normalUnit = sf::Vector2f(0.f, -1.f);
-                else
-                    normalUnit = normal / util::len(normal);
-                //velocity += normalUnit * (util::len(velocity) + bounciness);
-                velocity += normalUnit * util::len(velocity); // set grenade direction to bounce off dude
-                position += normalUnit * util::len(velocity); // move towards bouncing velocity
+                sf::Vector2f normalUnit = normal / util::len(normal);
+                velocity += normalUnit * (util::len(velocity) + bounciness);
                 collided = true;
                 if (sticky) {
                     stuck = true;
@@ -107,7 +95,6 @@ void EntityGrenade::tick(std::vector<Entity*> &entities) {
             sf::Vector2f normal = terrain->get_normal(contact);
             sf::Vector2f contactForce = normal * (speed + bounciness);
             velocity += contactForce;
-            position += normal * 2.f; // move towards bouncing velocity
         }
     }
 
