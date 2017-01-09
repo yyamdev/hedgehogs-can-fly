@@ -100,6 +100,7 @@ void AiDriver::tick(std::vector<Entity*> &entities) {
         }
 
         if (currentPath.back().z == 1.f) { // move along jumpable edge
+            dude->jump();
             if (dude->position.x - currentPath.back().x > 0.f)
                 dude->move(EntityDude::DIRECTION_LEFT);
             else
@@ -112,8 +113,8 @@ void AiDriver::tick(std::vector<Entity*> &entities) {
             std::cout << "next\n";
             currentPath.pop_back(); // change target to next node
             if (currentPath.size() > 0 && currentPath.back().z == 1.f) { // if next node needs to be jumped to
-                std::cout << "jump\n";
-                dude->jump();
+                //std::cout << "jump\n";
+                //dude->jump();
             }
         }
     }

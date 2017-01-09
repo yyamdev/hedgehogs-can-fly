@@ -213,8 +213,8 @@ bool find_path(NavNode *start, NavNode *goal, NavGraph navGraph, std::vector<sf:
 bool _find_path(NavNode *start, NavNode *current, NavNode *goal, std::vector<sf::Vector3f> *path) { // A*
     static std::set<NavNode*> open;
     static std::set<NavNode*> visited;
-    const int G_WALK = 1;
-    const int G_JUMP = 100;
+    const int G_WALK = -1;
+    const int G_JUMP = 0xFFF;
     const int G_FALL = 0;
 
     // cleanup
