@@ -24,7 +24,7 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
         textureLoaded = true;
     }
     terrain = NULL;
-    velocityAngular = 0.f;
+    velocityAngular = 1.f;
 }
 
 void EntityBall::event(sf::Event &e) {
@@ -34,6 +34,7 @@ void EntityBall::draw(sf::RenderWindow &window) {
     spr.setTexture(txt);
     spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
     spr.setPosition(position);
+    spr.setRotation(spr.getRotation() + velocityAngular);
     window.draw(spr);
 }
 
@@ -67,8 +68,8 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     velocity += world->gravity;
 
     // cap y speed
-    if (fabs(velocity.y) > BALL_TERM_VEL)
-        velocity.y = BALL_TERM_VEL * util::sign(velocity.y);
+    if (velocity.y > BALL_TERM_VEL)
+        velocity.y = BALL_TERM_VEL;
 
     // find terrain
     if (!terrain) {
@@ -91,12 +92,19 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             sf::Vector2f normal = terrain->get_normal(contact);
             sf::Vector2f slide = get_slide_down(velocity, normal, world->gravity);
             sf::Vector2f bounce = sf::Vector2f();
-            if (impactSpeed > 1.5f) // bounce
-                bounce = util::normalize(velocity + (2.f * normal)) * util::len(velocity) * .8f; // vector reflection, lose some speed due to energy loss
-            float slideAmmount = util::dot(util::normalize(world->gravity), slide);
-            if (slideAmmount < .3f) slideAmmount = 0.f; // friction
+            if (impactSpeed > 1.0f) { // bounce a little
+                //bounce = util::normalize(velocity + (2.f * normal)) * util::len(velocity) * .4f; // vector reflection, lose some speed due to energy loss
+                bounce = normal * util::len(velocity) * .4f;
+            }
+            if (impactSpeed > 2.0f) { // bounce a lot
+                //bounce = util::normalize(velocity + (2.f * normal)) * util::len(velocity) * .8f; // ""
+                bounce = normal * util::len(velocity) * .6f;
+            }
+            float slideAmmount = util::dot(util::normalize(velocity), slide);
+            if (slideAmmount < .2f) slideAmmount = 0.f; // friction
 
-            velocity = slide * slideAmmount;
+            velocity = bounce + (slide * slideAmmount);
+            //velocity = bounce;
         }
     }
 }
