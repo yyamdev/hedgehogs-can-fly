@@ -124,10 +124,12 @@ sf::Vector2f EntityTerrain::get_normal(sf::Vector2f pos) {
     for (auto &p : positions) {
         av += p;
     }
-    av /= (float)positions.size();
+    if (positions.size() != 0)
+        av /= (float)positions.size();
 
     sf::Vector2f normal = sf::Vector2f(pos.x, pos.y) - av;
     float normalSize = util::distance(0.f, 0.f, normal.x, normal.y);
+    if (normalSize == 0.f) normalSize = 1.f;
     return (normal / normalSize);
 }
 

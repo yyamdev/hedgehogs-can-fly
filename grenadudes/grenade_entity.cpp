@@ -6,6 +6,7 @@
 #include "build_options.h"
 #include "explosion_entity.h"
 #include "world.h"
+#include <iostream>
 
 sf::Texture EntityGrenade::txt;
 sf::Texture EntityGrenade::txtSticky;
@@ -53,6 +54,7 @@ void EntityGrenade::tick(std::vector<Entity*> &entities) {
     // apply wind
     velocity += world->wind;
 
+    std::cout << "v = (" << velocity.x << ", " << velocity.y << ")\n";
     if (!stuck)
         position += velocity; // move due to forces
 
@@ -85,6 +87,28 @@ void EntityGrenade::tick(std::vector<Entity*> &entities) {
     sf::Vector2f contact;
     if (terrain->intersects_with_circle(position, collisionRadius, &contact, 16)) {
         collided = true;
+        contact -= velocity; // move contact point from inside terrain to near edge
+        position -= velocity * 1.0f; // move grenade out of collision
+        if (sticky)
+            stuck = true;
+        if (!rest) {
+            float speed = util::distance(0.f, 0.f, velocity.x, velocity.y);
+            sf::Vector2f direction = velocity;
+            if (speed != 0)
+                direction /= speed;
+            float newSpeed = .8f * speed;
+            float bounce = speed * .6f;
+            if (bounce <= .05f) {
+                newSpeed = 0.f;
+                bounce = .0f;
+            }
+            velocity += -direction * bounce;
+            sf::Vector2f normal = terrain->get_normal(contact);
+            velocity += normal * newSpeed;
+            //velocity += world->gravity;
+        }
+        /*
+        collided = true;
         contact -= velocity;
         position -= velocity * 1.1f;
         if (sticky)
@@ -96,6 +120,7 @@ void EntityGrenade::tick(std::vector<Entity*> &entities) {
             sf::Vector2f contactForce = normal * (speed + bounciness);
             velocity += contactForce;
         }
+        */
     }
 
     if (position == oldPos) {
@@ -135,7 +160,7 @@ void EntityGrenade::draw(sf::RenderWindow &window) {
     spr.setTexture(get_texture());
     spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
     spr.setPosition(position);
-    spr.setRotation(angle);
+    //spr.setRotation(angle);
     window.draw(spr);
     if (!stuck)
         angle += velocity.x * 3.f;

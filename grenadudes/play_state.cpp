@@ -16,7 +16,7 @@ StatePlay::StatePlay(World *world) : State(world) {
     //terrain->generate_flat();
     world->remove_entity(ENTITY_TAG_ALL);
     world->add_entity(terrain);
-    world->add_entity(new EntitySpawner());
+    //world->add_entity(new EntitySpawner());
 
     addPlayer = true;
     addAi = true;
