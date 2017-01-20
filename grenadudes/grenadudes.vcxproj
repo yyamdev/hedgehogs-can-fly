@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ai_driver.cpp" />
+    <ClCompile Include="ball_entity.cpp" />
     <ClCompile Include="debug_draw.cpp" />
     <ClCompile Include="dude_entity.cpp" />
     <ClCompile Include="explosion_entity.cpp" />
@@ -149,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ai_driver.h" />
+    <ClInclude Include="ball_entity.h" />
     <ClInclude Include="build_options.h" />
     <ClInclude Include="debug_draw.h" />
     <ClInclude Include="dude_driver.h" />

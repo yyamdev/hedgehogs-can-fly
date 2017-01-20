@@ -19,13 +19,13 @@ StatePlay::StatePlay(World *world) : State(world) {
     //world->add_entity(new EntitySpawner());
 
     addPlayer = true;
-    addAi = true;
+    addAi = false;
     playerLives = 3;
     aiLives = 3;
     int eventPlayer[2] = {PLAYER_NUMBER, playerLives};
     int eventAi[2] = {AI_NUMBER, aiLives};
     notify(EVENT_LIVES_CHANGE, &eventPlayer);
-    notify(EVENT_LIVES_CHANGE, &eventAi);
+    //notify(EVENT_LIVES_CHANGE, &eventAi);
 
     windClock.restart();
 }

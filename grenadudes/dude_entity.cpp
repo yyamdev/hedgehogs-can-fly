@@ -6,6 +6,7 @@
 #include "world.h"
 #include "grenade_entity.h"
 #include "weapon_entity.h"
+#include "ball_entity.h"
 
 sf::Texture EntityDude::txt;
 bool EntityDude::textureLoaded = false;
@@ -209,7 +210,9 @@ void EntityDude::throw_grenade(sf::Vector2f dir, float speed) {
         dir = dir / util::len(dir) * speed;
         bool sticky = (weapon == W_STICKY_GRENADE)? true : false;
         bool cluster = (weapon == W_CLUSTER_GRENADE)? true : false;
-        world->add_entity(new EntityGrenade(start, dir, sticky, cluster));
+        // add ball instead of grenade
+        //world->add_entity(new EntityGrenade(start, dir, sticky, cluster));
+        world->add_entity(new EntityBall(start, dir));
         shootCooldownTimer.restart();
     }
 }

@@ -77,7 +77,41 @@ namespace util {
     }
 
     template <typename T>
-    inline float len2(T vec) {
+    inline float len3(T vec) {
+        return sqrtf(pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2));
+    }
+
+    template <typename T>
+    inline T cross(T a, T b) {
+        T cvec;
+        cvec.x = a.y * b.z - a.z * b.y;
+        cvec.y = a.z * b.x - a.x * b.z;
+        cvec.z = a.x * b.y - a.y * b.x;
+        return cvec;
+    }
+
+    template <typename T>
+    inline float dot3(T a, T b) {
+        return a.x * b.x + a.y * b.y + a.z * b.z;
+    }
+
+    template <typename T>
+    inline float dot(T a, T b) {
+        return a.x * b.x + a.y * b.y;
+    }
+
+    template <typename T>
+    inline T normalize(T vec) {
+        return vec / len(vec);
+    }
+
+    template <typename T>
+    inline T normalize3(T vec) {
+        return vec / len3(vec);
+    }
+
+    template <typename T>
+    inline float len_squared(T vec) {
         return pow(vec.x, 2) + pow(vec.y, 2);
     }
 

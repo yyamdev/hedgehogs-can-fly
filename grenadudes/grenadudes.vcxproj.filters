@@ -150,6 +150,9 @@
     <ClInclude Include="spawner_entity.h">
       <Filter>Header Files\game\world</Filter>
     </ClInclude>
+    <ClInclude Include="ball_entity.h">
+      <Filter>Header Files\game\world</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -207,6 +210,9 @@
       <Filter>Source Files\framework\events</Filter>
     </ClCompile>
     <ClCompile Include="spawner_entity.cpp">
+      <Filter>Source Files\game\world</Filter>
+    </ClCompile>
+    <ClCompile Include="ball_entity.cpp">
       <Filter>Source Files\game\world</Filter>
     </ClCompile>
   </ItemGroup>
