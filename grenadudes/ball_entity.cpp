@@ -24,7 +24,7 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
         textureLoaded = true;
     }
     terrain = NULL;
-    velocityAngular = 1.f;
+    velocityAngular = 0.f;
 }
 
 void EntityBall::event(sf::Event &e) {
@@ -81,13 +81,15 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         }
     }
 
+    // dampen angular velocity
+    velocityAngular *= .995f;
+
     if (terrain) {
         sf::Vector2f contact;
         if (terrain->intersects_with_circle(position, collisionRadius, &contact, 16)) { // collision with terrain
             float impactSpeed = util::len(velocity);
-            position -= velocity * 1.1f; // move out of collision
             contact -= velocity; // move contact point to terrain edge
-
+            position -= velocity * 1.1f; // move out of collision
             // calculate vectors
             sf::Vector2f normal = terrain->get_normal(contact);
             sf::Vector2f slide = get_slide_down(velocity, normal, world->gravity);
@@ -103,8 +105,25 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             float slideAmmount = util::dot(util::normalize(velocity), slide);
             if (slideAmmount < .2f) slideAmmount = 0.f; // friction
 
-            velocity = bounce + (slide * slideAmmount);
-            //velocity = bounce;
+            // angular velocity
+            float newVelocityAngular = 0.f;
+            if (normal.y > 0.f)
+                newVelocityAngular += -util::sign(slide.x) * impactSpeed;
+            else
+                newVelocityAngular += util::sign(slide.x) * impactSpeed;
+            if (fabs(util::len_squared(position - oldPos)) < 0.08f)
+                newVelocityAngular = 0.f;
+            if (util::sign(newVelocityAngular) == util::sign(velocityAngular))
+                velocityAngular += newVelocityAngular;
+            else
+                velocityAngular = newVelocityAngular;
+
+            // torque
+            sf::Vector2f torque;
+            torque *= 0.1f;
+
+            velocity = bounce + (slide * slideAmmount) + torque;
+            
         }
     }
 }
