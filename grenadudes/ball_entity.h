@@ -28,4 +28,7 @@ private:
     float velocityAngular; // degrees per frame
     // returns normalized vector pointing down along the slope defined by a normal
     static sf::Vector2f get_slide_down(sf::Vector2f indicence, sf::Vector2f normal, sf::Vector2f gravity);
+
+    bool dragging; // is user dragging the mouse to select grenade direction & speed?
+    sf::Vector2f dragStart;
 };

@@ -4,6 +4,7 @@
 #include "build_options.h"
 #include "world.h"
 #include <iostream>
+#include "util.h"
 
 sf::Texture EntityBall::txt;
 bool EntityBall::textureLoaded = false;
@@ -25,9 +26,37 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
     }
     terrain = NULL;
     velocityAngular = 0.f;
+    dragging = false;
 }
 
 void EntityBall::event(sf::Event &e) {
+    if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
+        if (!dragging) {
+            dragging = true;
+            dragStart.x = (float)e.mouseButton.x;
+            dragStart.y = (float)e.mouseButton.y;
+            notify(EVENT_PLAYER_START_DRAG, (void*)(&dragStart));
+        }
+    }
+    if (e.type == sf::Event::MouseButtonReleased && e.mouseButton.button == sf::Mouse::Left) {
+        if (dragging) {
+            dragging = false;
+            sf::Vector2f mouse;
+            mouse.x = (float)e.mouseButton.x;
+            mouse.y = (float)e.mouseButton.y;
+            sf::Vector2f dir = dragStart - mouse;
+            float speed = util::len(dragStart - mouse) / 15.f;
+
+            speed = util::clamp(speed, 0.f, 10.f);
+            sf::Vector2f start = position;
+            dir = dir / util::len(dir) * speed;
+
+            //world->add_entity(new EntityBall(start, dir));
+            velocity = dir;
+            //dude->throw_grenade(dragStart - mouse, util::len(dragStart - mouse) / 15.f);
+            notify(EVENT_PLAYER_END_DRAG, NULL);
+        }
+    }
 }
 
 void EntityBall::draw(sf::RenderWindow &window) {
@@ -72,57 +101,59 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         velocity.y = BALL_TERM_VEL;
 
     // find terrain
-    if (!terrain) {
-        for (Entity *e : entities) {
-            if (e->get_tag() == "terrain") { // get terrain entity
-                terrain = (EntityTerrain*)e;
-                break;
-            }
+    for (Entity *e : entities) {
+        if (!terrain && e->get_tag() == "terrain") { // get terrain entity
+            terrain = (EntityTerrain*)e;
+            break;
+        }
+        if (e->get_tag() == "ball" && e != this && intersects(*e)) {
+            float impactSpeed = util::len(velocity);
+            impactSpeed += 0.1f;
+            //if (impactSpeed < 0.62f) impactSpeed = 0.f;
+            sf::Vector2f impactDirection = util::normalize(velocity);
+            position -= velocity * 1.1f;
+            sf::Vector2f normal = util::normalize(position - e->position);
+            sf::Vector2f reflect = impactDirection - 2.f * normal * (util::dot(impactDirection, normal));
+            velocity = reflect * impactSpeed * .6f;
         }
     }
 
     // dampen angular velocity
-    velocityAngular *= .995f;
+    //velocityAngular *= .999f;
+    //velocityAngular = velocity.x;
 
     if (terrain) {
         sf::Vector2f contact;
         if (terrain->intersects_with_circle(position, collisionRadius, &contact, 16)) { // collision with terrain
             float impactSpeed = util::len(velocity);
+            if (impactSpeed < 0.62f) impactSpeed = 0.f;
+            sf::Vector2f impactDirection = util::normalize(velocity);
             contact -= velocity; // move contact point to terrain edge
             position -= velocity * 1.1f; // move out of collision
             // calculate vectors
-            sf::Vector2f normal = terrain->get_normal(contact);
-            sf::Vector2f slide = get_slide_down(velocity, normal, world->gravity);
+            sf::Vector2f normal = util::normalize(terrain->get_normal(contact));
+            sf::Vector2f slideDirection = get_slide_down(velocity, normal, world->gravity);
+            sf::Vector2f reflect = impactDirection - 2.f * normal * (util::dot(impactDirection, normal));
             sf::Vector2f bounce = sf::Vector2f();
-            if (impactSpeed > 1.0f) { // bounce a little
-                //bounce = util::normalize(velocity + (2.f * normal)) * util::len(velocity) * .4f; // vector reflection, lose some speed due to energy loss
-                bounce = normal * util::len(velocity) * .4f;
+            if (impactSpeed > 0.2f && impactSpeed < 3.1f) { // bounce a little
+                bounce = reflect * impactSpeed * .6f;
+                //std::cout << impactSpeed << " small\n";
             }
-            if (impactSpeed > 2.0f) { // bounce a lot
-                //bounce = util::normalize(velocity + (2.f * normal)) * util::len(velocity) * .8f; // ""
-                bounce = normal * util::len(velocity) * .6f;
+            else if (impactSpeed >= 3.1f) { // bounce a lot
+                bounce = reflect * impactSpeed * .6f;
+                //std::cout << impactSpeed << " big\n";
             }
-            float slideAmmount = util::dot(util::normalize(velocity), slide);
-            if (slideAmmount < .2f) slideAmmount = 0.f; // friction
 
-            // angular velocity
-            float newVelocityAngular = 0.f;
-            if (normal.y > 0.f)
-                newVelocityAngular += -util::sign(slide.x) * impactSpeed;
-            else
-                newVelocityAngular += util::sign(slide.x) * impactSpeed;
-            if (fabs(util::len_squared(position - oldPos)) < 0.08f)
-                newVelocityAngular = 0.f;
-            if (util::sign(newVelocityAngular) == util::sign(velocityAngular))
-                velocityAngular += newVelocityAngular;
-            else
-                velocityAngular = newVelocityAngular;
+            if (util::len(bounce) < .5f)
+                bounce = sf::Vector2f();
 
-            // torque
-            sf::Vector2f torque;
-            torque *= 0.1f;
+            float slideAmmount = util::dot(util::normalize(velocity), slideDirection);
+            if (slideAmmount < .4f) { // friction
+                slideAmmount = 0.f;
+            }
 
-            velocity = bounce + (slide * slideAmmount) + torque;
+            //velocity = bounce + (slideDirection * slideAmmount);
+            velocity = bounce;
             
         }
     }

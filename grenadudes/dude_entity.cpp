@@ -211,8 +211,8 @@ void EntityDude::throw_grenade(sf::Vector2f dir, float speed) {
         bool sticky = (weapon == W_STICKY_GRENADE)? true : false;
         bool cluster = (weapon == W_CLUSTER_GRENADE)? true : false;
         // add ball instead of grenade
-        //world->add_entity(new EntityGrenade(start, dir, sticky, cluster));
-        world->add_entity(new EntityBall(start, dir));
+        world->add_entity(new EntityGrenade(start, dir, sticky, cluster));
+        //world->add_entity(new EntityBall(start, dir));
         shootCooldownTimer.restart();
     }
 }

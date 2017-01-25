@@ -1,6 +1,7 @@
 #pragma once
 
 // compilation options
+#define PI_F 3.1415927f
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600

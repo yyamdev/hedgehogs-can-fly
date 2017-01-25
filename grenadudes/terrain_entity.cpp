@@ -13,9 +13,12 @@ EntityTerrain::EntityTerrain(sf::Vector2u size, float scale) {
     // store shit
     this->size = size;
     this->scale = scale;
-    // allocate terrain data memory
+    // allocate terrain data memory & load map
+    sf::Image imgMap;
+    imgMap.loadFromFile("data/map.png");
     terrain = new sf::Uint8[size.x * size.y * 4]; // each color component
-    set_solid();
+    // load map into grid
+    memcpy((void*)terrain, (void*)imgMap.getPixelsPtr(), (size_t)(size.x * size.y * 4));
     // create empty terrain data texture
     txtTerrainData.create(size.x, size.y);
     // load terrain image texture
@@ -111,7 +114,7 @@ void EntityTerrain::set_circle(sf::Vector2f center, float rad, bool solid) {
 
 sf::Vector2f EntityTerrain::get_normal(sf::Vector2f pos) {
     std::vector<sf::Vector2f> positions;
-    float sampleRadius = 5;
+    float sampleRadius = 4;
     for (float y=-sampleRadius; y<sampleRadius + 1; ++y) {
         for (float x=-sampleRadius; x<sampleRadius + 1; ++x) {
             sf::Vector2f p(pos.x + x, pos.y + y);
@@ -161,7 +164,7 @@ bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, float rad, sf::Vect
 
 void EntityTerrain::event(sf::Event &e) {
     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Right && !sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
-        set_circle(sf::Vector2f((float)e.mouseButton.x, (float)e.mouseButton.y), 70, false);
+        set_circle(sf::Vector2f((float)e.mouseButton.x, (float)e.mouseButton.y), 25, true);
         //set_rectangle(sf::FloatRect((float)e.mouseButton.x, (float)e.mouseButton.y, 256.f, 64.f), false);
     }
     if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::T)

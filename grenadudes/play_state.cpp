@@ -8,24 +8,27 @@
 #include "util.h"
 #include <iostream>
 #include "spawner_entity.h"
+#include "ball_entity.h"
+#include "debug_draw.h"
 
 StatePlay::StatePlay(World *world) : State(world) {
     // set up game
     terrain = new EntityTerrain(sf::Vector2u(WINDOW_WIDTH, WINDOW_HEIGHT), 2.f);
-    terrain->generate_normal(500.f, 100.f);
+    //terrain->generate_normal(500.f, 100.f);
     //terrain->generate_flat();
     world->remove_entity(ENTITY_TAG_ALL);
     world->add_entity(terrain);
     //world->add_entity(new EntitySpawner());
+    world->add_entity(new EntityBall(sf::Vector2f(200.f, 200.f), sf::Vector2f()));
 
-    addPlayer = true;
+    addPlayer = false;
     addAi = false;
     playerLives = 3;
     aiLives = 3;
     int eventPlayer[2] = {PLAYER_NUMBER, playerLives};
     int eventAi[2] = {AI_NUMBER, aiLives};
     notify(EVENT_LIVES_CHANGE, &eventPlayer);
-    //notify(EVENT_LIVES_CHANGE, &eventAi);
+    notify(EVENT_LIVES_CHANGE, &eventAi);
 
     windClock.restart();
 }
@@ -37,6 +40,9 @@ void StatePlay::on_event(sf::Event &event) {
     }
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::B) {
         world->toggle_pause();
+    }
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::L) {
+        world->add_entity(new EntityBall(sf::Vector2f(200.f, 200.f), sf::Vector2f()));
     }
 }
 
@@ -70,6 +76,12 @@ void StatePlay::on_tick() {
 
 void StatePlay::on_draw(sf::RenderWindow &window) {
     hud.draw(window);
+    sf::Vector2i mouseI = sf::Mouse::getPosition(window);
+    sf::Vector2f mouse;
+    mouse.x = (float)mouseI.x;
+    mouse.y = (float)mouseI.y;
+    sf::Vector2f normal = terrain->get_normal(mouse);
+    draw_vector(mouse, normal, 50.f, sf::Color::Yellow, window);
 }
 
 void StatePlay::on_gain_focus() {
