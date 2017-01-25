@@ -4,10 +4,11 @@
 
 #include "entity.h"
 #include "subject.h"
+#include <string>
 
 class EntityTerrain : public Entity {
 public:
-    EntityTerrain(sf::Vector2u size, float scale);
+    EntityTerrain(sf::Vector2u size, float scale, std::string filename);
     ~EntityTerrain(); // free all memory
 
     template <typename T>
@@ -37,10 +38,6 @@ public:
     void event(sf::Event &e);
     void tick(std::vector<Entity*> &entities);
     void draw(sf::RenderWindow &window);
-    
-    // generation
-    void generate_flat();
-    void generate_normal(float yMax, float yMin);
 
 private:
     sf::Vector2u size; // terrain texture size

@@ -14,7 +14,7 @@ int main() {
 
     World world(window);
 
-    State::change_state(new StatePlay(&world));
+    State::change_state(new StatePlay(&world, "data/map.png"));
 
     print_debug_controls();
 

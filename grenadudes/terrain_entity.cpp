@@ -8,25 +8,24 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-EntityTerrain::EntityTerrain(sf::Vector2u size, float scale) {
-    tag = "terrain";
-    // store shit
+EntityTerrain::EntityTerrain(sf::Vector2u size, float scale, std::string filename) {
+    // properties
     this->size = size;
     this->scale = scale;
-    // allocate terrain data memory & load map
+    tag = "terrain";
+    render = true;
+    // allocate terrain data memory & load map into it
     sf::Image imgMap;
-    imgMap.loadFromFile("data/map.png");
-    terrain = new sf::Uint8[size.x * size.y * 4]; // each color component
-    // load map into grid
+    imgMap.loadFromFile(filename);
+    terrain = new sf::Uint8[size.x * size.y * 4]; // 4 x 8 bit colour components for each pixel
     memcpy((void*)terrain, (void*)imgMap.getPixelsPtr(), (size_t)(size.x * size.y * 4));
-    // create empty terrain data texture
-    txtTerrainData.create(size.x, size.y);
-    // load terrain image texture
+    txtTerrainData.create(size.x, size.y); // for sfml rendering (passed to shader)
+    // load front-end texture
     txtImage.loadFromFile("data/terrain.png");
     txtImage.setRepeated(true);
-    // load terrain fragment shader
+    // load fragment shader
     shdTerrain.loadFromFile("data/terrain.frag", sf::Shader::Fragment);
-    render = true;
+    // notify
     notify(EVENT_TERRAIN_CHANGE, NULL);
 }
 
@@ -43,14 +42,12 @@ void EntityTerrain::set_solid(sf::Vector2f pos, bool solid) {
     if (!pos_in_bounds(pos))
         return;
     unsigned int base = (unsigned int)(((unsigned int)pos.y * size.x + (unsigned int)pos.x) * 4);
-    if (solid) {
-        // set to white (solid)
+    if (solid) { // set to white (solid)
         terrain[base + 0] = 255;
         terrain[base + 1] = 255;
         terrain[base + 2] = 255;
         terrain[base + 3] = 255;
-    } else {
-        // set to black (empty)
+    } else { // set to black (empty)
         terrain[base + 0] = 0;
         terrain[base + 1] = 0;
         terrain[base + 2] = 0;
@@ -165,7 +162,6 @@ bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, float rad, sf::Vect
 void EntityTerrain::event(sf::Event &e) {
     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Right && !sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
         set_circle(sf::Vector2f((float)e.mouseButton.x, (float)e.mouseButton.y), 25, true);
-        //set_rectangle(sf::FloatRect((float)e.mouseButton.x, (float)e.mouseButton.y, 256.f, 64.f), false);
     }
     if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::T)
         render = !render;
@@ -187,38 +183,4 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
     shdTerrain.setParameter("sizeY", (float)size.y);
     shdTerrain.setParameter("screenHeight", (float)WINDOW_HEIGHT);
     window.draw(sprTerrain, &shdTerrain); // draw
-}
-
-void EntityTerrain::generate_flat() {
-    set_solid();
-    set_rectangle(sf::FloatRect(sf::Vector2f(0.f, 0.f), sf::Vector2f((float)WINDOW_WIDTH, 128.f)), false);
-    notify(EVENT_TERRAIN_CHANGE, NULL);
-}
-
-void EntityTerrain::generate_normal(float yMax, float yMin) {
-    set_empty();
-
-    float yLast = (yMax + yMin) / 2.f;
-    std::vector<float> height;
-    std::default_random_engine generator;
-    generator.seed((unsigned int)time(NULL));
-    std::normal_distribution<float> distribution(0.f, 0.7f);
-    int directionCount = 1;
-    int directionCountMax = 16;
-    float delta = distribution(generator);
-    for (unsigned int x=0; x<size.x; ++x) {
-        height.push_back(yLast);
-        yLast += delta;
-        yLast = util::clamp(yLast, yMin, yMax);
-        directionCount = (directionCount + 1) % directionCountMax;
-        if (directionCount == 0)
-            delta = distribution(generator);
-    }
-
-    for (unsigned int x=0; x<size.x; ++x) {
-        set_rectangle(sf::FloatRect((float)x, (float)WINDOW_HEIGHT - height[x], 1.f, (float)WINDOW_HEIGHT), true);
-        //std::cout << height[x] << std::endl;
-    }
-
-    notify(EVENT_TERRAIN_CHANGE, NULL);
 }

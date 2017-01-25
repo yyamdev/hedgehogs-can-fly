@@ -1,16 +1,17 @@
 #pragma once
 
-// a round of gameplay between a player and an ai
+// gameplay state
 
 #include "state.h"
 #include "hud.h"
 #include "observer.h"
+#include <string>
 
 class EntityTerrain;
 
 class StatePlay : public State, public Observer, public Subject {
 public:
-    StatePlay(World *world);
+    StatePlay(World *world, std::string filename);
 
     void on_event(sf::Event &event);
     void on_tick();
@@ -23,9 +24,5 @@ public:
 private:
     Hud hud; // hud renderer
     EntityTerrain *terrain;
-    bool addPlayer, addAi;
-
-    int playerLives, aiLives;
-
     sf::Clock windClock;
 };
