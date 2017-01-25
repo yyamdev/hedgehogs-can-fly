@@ -4,12 +4,6 @@
 
 #include "observer.h"
 #include <SFML/Graphics.hpp>
-#include "ai_driver.h"
-
-struct HpBar {
-    int hp;
-    int maxHp;
-};
 
 class Hud : public Observer{
 public:
@@ -22,23 +16,6 @@ private:
     // mouse dragging for throwing grenade
     bool dragging;
     sf::Vector2f mouseDragStart;
-
-    // hp indicators
-    HpBar hpPlayer;
-    HpBar hpAi;
-
-    // cooldown indicators
-    float cooldownPlayer;
-    float cooldownAi;
-    float cooldownWeapon;
-
-    // lives indicator
-    int livesPlayer;
-    int livesAi;
-
-    // ai state
-    AiState aiState;
-    sf::Font fnt;
 
     // wind
     sf::Vector2f currentWind;

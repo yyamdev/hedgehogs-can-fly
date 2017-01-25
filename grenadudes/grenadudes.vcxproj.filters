@@ -46,20 +46,11 @@
     <Filter Include="Header Files\game\world">
       <UniqueIdentifier>{7d6475ad-6b8c-441b-890f-f5eaf6f9135f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\game\world\terrain">
-      <UniqueIdentifier>{67c906ff-3836-4ee6-be77-31444d438031}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\game\world">
       <UniqueIdentifier>{69749dde-53e8-47f3-a8dc-f0eb3d5b0765}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\game\world\terrain">
       <UniqueIdentifier>{58dcb314-c86f-4c8d-a26f-7f58cf399ac8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\game\world\dude">
-      <UniqueIdentifier>{52d00d77-491b-4017-9d14-fd573b64afc9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\game\world\dude">
-      <UniqueIdentifier>{292bd0a9-bf20-4512-beb7-aa591567c168}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\game\state">
       <UniqueIdentifier>{9e6396c3-85ed-4664-a339-960b9d3911ad}</UniqueIdentifier>
@@ -72,12 +63,6 @@
     </Filter>
     <Filter Include="Source Files\game\state\play">
       <UniqueIdentifier>{11debbbe-53fe-4104-a1a9-6def65660b8d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\game\world\dude\ai">
-      <UniqueIdentifier>{934befe7-0f76-46ab-a2d2-f5aea9276d96}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\game\world\dude\ai">
-      <UniqueIdentifier>{89fd7d07-3791-4bb7-97bf-bb316dd9391c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -102,62 +87,26 @@
     <ClInclude Include="state.h">
       <Filter>Header Files\framework\state</Filter>
     </ClInclude>
-    <ClInclude Include="terrain_entity.h">
-      <Filter>Header Files\game\world\terrain</Filter>
-    </ClInclude>
     <ClInclude Include="util.h">
       <Filter>Header Files\framework</Filter>
     </ClInclude>
     <ClInclude Include="debug_draw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="grenade_entity.h">
-      <Filter>Header Files\game\world</Filter>
-    </ClInclude>
-    <ClInclude Include="dude_entity.h">
-      <Filter>Header Files\game\world\dude</Filter>
-    </ClInclude>
-    <ClInclude Include="dude_driver.h">
-      <Filter>Header Files\game\world\dude</Filter>
-    </ClInclude>
-    <ClInclude Include="keyboard_driver.h">
-      <Filter>Header Files\game\world\dude</Filter>
-    </ClInclude>
     <ClInclude Include="hud.h">
       <Filter>Header Files\game\state\play</Filter>
-    </ClInclude>
-    <ClInclude Include="explosion_entity.h">
-      <Filter>Header Files\game\world</Filter>
     </ClInclude>
     <ClInclude Include="play_state.h">
       <Filter>Header Files\game\state\play</Filter>
     </ClInclude>
-    <ClInclude Include="ai_driver.h">
-      <Filter>Header Files\game\world\dude\ai</Filter>
-    </ClInclude>
-    <ClInclude Include="terrain_grid.h">
-      <Filter>Header Files\game\world\dude\ai</Filter>
-    </ClInclude>
-    <ClInclude Include="nav_graph.h">
-      <Filter>Header Files\game\world\dude\ai</Filter>
-    </ClInclude>
-    <ClInclude Include="weapons.h">
-      <Filter>Header Files\game\state\play</Filter>
-    </ClInclude>
-    <ClInclude Include="weapon_entity.h">
-      <Filter>Header Files\game\world</Filter>
-    </ClInclude>
-    <ClInclude Include="spawner_entity.h">
-      <Filter>Header Files\game\world</Filter>
-    </ClInclude>
     <ClInclude Include="ball_entity.h">
+      <Filter>Header Files\game\world</Filter>
+    </ClInclude>
+    <ClInclude Include="terrain_entity.h">
       <Filter>Header Files\game\world</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files\game</Filter>
-    </ClCompile>
     <ClCompile Include="subject.cpp">
       <Filter>Source Files\framework\events</Filter>
     </ClCompile>
@@ -173,47 +122,23 @@
     <ClCompile Include="terrain_entity.cpp">
       <Filter>Source Files\game\world\terrain</Filter>
     </ClCompile>
-    <ClCompile Include="grenade_entity.cpp">
-      <Filter>Source Files\game\world</Filter>
-    </ClCompile>
-    <ClCompile Include="dude_entity.cpp">
-      <Filter>Source Files\game\world\dude</Filter>
-    </ClCompile>
-    <ClCompile Include="keyboard_driver.cpp">
-      <Filter>Source Files\game\world\dude</Filter>
-    </ClCompile>
     <ClCompile Include="hud.cpp">
       <Filter>Source Files\game\state\play</Filter>
-    </ClCompile>
-    <ClCompile Include="explosion_entity.cpp">
-      <Filter>Source Files\game\world</Filter>
     </ClCompile>
     <ClCompile Include="play_state.cpp">
       <Filter>Source Files\game\state\play</Filter>
     </ClCompile>
-    <ClCompile Include="ai_driver.cpp">
-      <Filter>Source Files\game\world\dude\ai</Filter>
-    </ClCompile>
-    <ClCompile Include="terrain_grid.cpp">
-      <Filter>Source Files\game\world\dude\ai</Filter>
-    </ClCompile>
-    <ClCompile Include="nav_graph.cpp">
-      <Filter>Source Files\game\world\dude\ai</Filter>
-    </ClCompile>
     <ClCompile Include="debug_draw.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="weapon_entity.cpp">
-      <Filter>Source Files\game\world</Filter>
     </ClCompile>
     <ClCompile Include="observer.cpp">
       <Filter>Source Files\framework\events</Filter>
     </ClCompile>
-    <ClCompile Include="spawner_entity.cpp">
-      <Filter>Source Files\game\world</Filter>
-    </ClCompile>
     <ClCompile Include="ball_entity.cpp">
       <Filter>Source Files\game\world</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

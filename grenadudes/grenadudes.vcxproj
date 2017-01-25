@@ -127,51 +127,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ai_driver.cpp" />
     <ClCompile Include="ball_entity.cpp" />
     <ClCompile Include="debug_draw.cpp" />
-    <ClCompile Include="dude_entity.cpp" />
-    <ClCompile Include="explosion_entity.cpp" />
-    <ClCompile Include="grenade_entity.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="hud.cpp" />
-    <ClCompile Include="keyboard_driver.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="nav_graph.cpp" />
     <ClCompile Include="observer.cpp" />
     <ClCompile Include="play_state.cpp" />
-    <ClCompile Include="spawner_entity.cpp" />
     <ClCompile Include="state.cpp" />
     <ClCompile Include="subject.cpp" />
     <ClCompile Include="terrain_entity.cpp" />
-    <ClCompile Include="terrain_grid.cpp" />
-    <ClCompile Include="weapon_entity.cpp" />
     <ClCompile Include="world.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ai_driver.h" />
     <ClInclude Include="ball_entity.h" />
     <ClInclude Include="build_options.h" />
     <ClInclude Include="debug_draw.h" />
-    <ClInclude Include="dude_driver.h" />
-    <ClInclude Include="dude_entity.h" />
-    <ClInclude Include="explosion_entity.h" />
-    <ClInclude Include="grenade_entity.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="events.h" />
     <ClInclude Include="hud.h" />
-    <ClInclude Include="keyboard_driver.h" />
-    <ClInclude Include="nav_graph.h" />
     <ClInclude Include="observer.h" />
     <ClInclude Include="play_state.h" />
-    <ClInclude Include="spawner_entity.h" />
     <ClInclude Include="state.h" />
     <ClInclude Include="subject.h" />
     <ClInclude Include="terrain_entity.h" />
-    <ClInclude Include="terrain_grid.h" />
     <ClInclude Include="util.h" />
-    <ClInclude Include="weapons.h" />
-    <ClInclude Include="weapon_entity.h" />
     <ClInclude Include="world.h" />
   </ItemGroup>
   <ItemGroup>
