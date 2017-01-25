@@ -6,6 +6,7 @@
 #include "hud.h"
 #include "observer.h"
 #include <string>
+#include "subject.h"
 
 class EntityTerrain;
 

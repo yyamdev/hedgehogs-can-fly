@@ -29,7 +29,7 @@ int main() {
                 window.capture().saveToFile(util::to_string(time(NULL)) + ".png");
 
             if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::R)
-                State::change_state(new StatePlay(&world));
+                State::change_state(new StatePlay(&world, "data/map.png"));
 
             if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::H)
                 print_debug_controls();

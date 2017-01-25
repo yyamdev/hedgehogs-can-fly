@@ -5,6 +5,7 @@
 #include <iostream>
 #include "ball_entity.h"
 #include "debug_draw.h"
+#include "build_options.h"
 
 StatePlay::StatePlay(World *world, std::string filename) : State(world) {
     // remove all entities in world
