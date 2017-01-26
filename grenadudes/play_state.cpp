@@ -38,12 +38,14 @@ void StatePlay::on_tick() {
 
 void StatePlay::on_draw(sf::RenderWindow &window) {
     hud.draw(window);
-    sf::Vector2i mouseI = sf::Mouse::getPosition(window);
-    sf::Vector2f mouse;
-    mouse.x = (float)mouseI.x;
-    mouse.y = (float)mouseI.y;
-    sf::Vector2f normal = terrain->get_normal(mouse);
-    draw_vector(mouse, normal, 50.f, sf::Color::Yellow, window);
+    if (DRAW_TERRAIN_NORMALS) {
+        sf::Vector2i mouseI = sf::Mouse::getPosition(window);
+        sf::Vector2f mouse;
+        mouse.x = (float)mouseI.x;
+        mouse.y = (float)mouseI.y;
+        sf::Vector2f normal = terrain->get_normal(mouse);
+        draw_vector(mouse, normal, 50.f, sf::Color::Yellow, window);
+    }
 }
 
 void StatePlay::on_gain_focus() {

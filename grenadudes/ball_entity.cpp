@@ -5,6 +5,7 @@
 #include "world.h"
 #include <iostream>
 #include "util.h"
+#include "debug_draw.h"
 
 sf::Texture EntityBall::txt;
 sf::Texture EntityBall::txtPoint;
@@ -43,6 +44,8 @@ void EntityBall::event(sf::Event &e) {
     if (e.type == sf::Event::MouseButtonReleased && e.mouseButton.button == sf::Mouse::Left) {
         if (dragging) {
             dragging = false;
+            notify(EVENT_PLAYER_END_DRAG, NULL);
+
             sf::Vector2f mouse;
             mouse.x = (float)e.mouseButton.x;
             mouse.y = (float)e.mouseButton.y;
@@ -53,10 +56,7 @@ void EntityBall::event(sf::Event &e) {
             sf::Vector2f start = position;
             dir = dir / util::len(dir) * speed;
 
-            //world->add_entity(new EntityBall(start, dir));
             velocity = dir;
-            //dude->throw_grenade(dragStart - mouse, util::len(dragStart - mouse) / 15.f);
-            notify(EVENT_PLAYER_END_DRAG, NULL);
         }
     }
 }
@@ -66,11 +66,6 @@ void EntityBall::draw(sf::RenderWindow &window) {
     spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
     spr.setPosition(position);
     window.draw(spr);
-
-    sprPoint.setTexture(txtPoint);
-    sprPoint.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
-    sprPoint.setPosition(contactPoint);
-    window.draw(sprPoint);
 }
 
 void EntityBall::tick(std::vector<Entity*> &entities) {
@@ -94,7 +89,6 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         if (e->get_tag() == "ball" && e != this && intersects(*e)) {
             float impactSpeed = util::len(velocity);
             impactSpeed += 0.1f;
-            //if (impactSpeed < 0.62f) impactSpeed = 0.f;
             sf::Vector2f impactDirection = util::normalize(velocity);
             position -= velocity * 1.1f;
             sf::Vector2f normal = util::normalize(position - e->position);
@@ -106,13 +100,9 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     if (terrain) {
         sf::Vector2f contact;
         if (terrain->intersects_with_circle(position, velocity, collisionRadius, &contact)) { // collision with terrain
-            //disable = true;
-            contactPoint = contact;
-            
             float impactSpeed = util::len(velocity);
             if (impactSpeed < 0.62f) impactSpeed = 0.f;
             sf::Vector2f impactDirection = util::normalize(velocity);
-            //contact -= velocity; // move contact point to terrain edge
             position -= velocity * 1.1f; // move out of collision
             // calculate vectors
             sf::Vector2f normal = util::normalize(terrain->get_normal(contact));
@@ -120,20 +110,15 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             sf::Vector2f bounce = sf::Vector2f();
             if (impactSpeed > 0.2f && impactSpeed < 3.1f) { // bounce a little
                 bounce = reflect * impactSpeed * .6f;
-                //std::cout << impactSpeed << " small\n";
             }
             else if (impactSpeed >= 3.1f) { // bounce a lot
                 bounce = reflect * impactSpeed * .6f;
-                //std::cout << impactSpeed << " big\n";
             }
 
             if (util::len(bounce) < .5f)
                 bounce = sf::Vector2f();
 
-            //velocity = bounce + (slideDirection * slideAmmount);
             velocity = bounce;
-            
-            
         }
     }
 }

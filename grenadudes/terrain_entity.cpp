@@ -158,10 +158,11 @@ bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, sf::Vector2f vel, f
     if (!intersects) return false;
     else { // narrow phase (find contact point)
         sf::Vector2f normalBroad = get_normal(contactBroad);
+        if (util::dot(vel, normalBroad) > 0.f) normalBroad = -normalBroad;
         sf::Vector2f contactNarrow = pos + util::normalize(-normalBroad) * rad;
         sf::Vector2f normal = get_normal(contactNarrow);
-        // step along until not in terrain
-        while (get_solid(contactNarrow)) contactNarrow += normal;
+        if (util::dot(vel, normal) > 0.f) normal = -normal;
+        while (get_solid(contactNarrow)) contactNarrow += normal;// step along until not in terrain
         *contact = contactNarrow;
         return true;
     }

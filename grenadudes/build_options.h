@@ -13,6 +13,8 @@
 
 #define GRAVITY 0.15f
 
+#define DRAW_TERRAIN_NORMALS false
+
 // balancing
 // hp
 #define START_HP_DUDE 110
