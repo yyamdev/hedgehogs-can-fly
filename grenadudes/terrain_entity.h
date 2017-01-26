@@ -8,7 +8,7 @@
 
 class EntityTerrain : public Entity {
 public:
-    EntityTerrain(sf::Vector2u size, float scale, std::string filename);
+    EntityTerrain(float scale, std::string filename);
     ~EntityTerrain(); // free all memory
 
     template <typename T>

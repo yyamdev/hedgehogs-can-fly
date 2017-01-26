@@ -12,7 +12,7 @@ StatePlay::StatePlay(World *world, std::string filename) : State(world) {
     world->remove_entity(ENTITY_TAG_ALL);
     
     // create terrain
-    terrain = new EntityTerrain(sf::Vector2u(WINDOW_WIDTH, WINDOW_HEIGHT), 2.f, filename);
+    terrain = new EntityTerrain(2.f, filename);
     world->add_entity(terrain);
     
     // add ball
@@ -34,8 +34,8 @@ void StatePlay::on_tick() {
         notify(EVENT_WIND_CHANGE, (void*)&world->wind);
         windClock.restart();
     }
-    world->camera.x += 0.5f;
-    world->camera.y -= 0.5f;
+    world->camera.x += 0.4f;
+    world->camera.y += 0.4f;
 }
 
 void StatePlay::on_draw(sf::RenderWindow &window) {

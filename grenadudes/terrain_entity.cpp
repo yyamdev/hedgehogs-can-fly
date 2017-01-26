@@ -9,15 +9,16 @@
 #include <math.h>
 #include "world.h"
 
-EntityTerrain::EntityTerrain(sf::Vector2u size, float scale, std::string filename) {
+EntityTerrain::EntityTerrain(float scale, std::string filename) {
+    // load map image
+    sf::Image imgMap;
+    imgMap.loadFromFile(filename);
     // properties
-    this->size = size;
+    size = imgMap.getSize();
     this->scale = scale;
     tag = "terrain";
     render = true;
     // allocate terrain data memory & load map into it
-    sf::Image imgMap;
-    imgMap.loadFromFile(filename);
     terrain = new sf::Uint8[size.x * size.y * 4]; // 4 x 8 bit colour components for each pixel
     memcpy((void*)terrain, (void*)imgMap.getPixelsPtr(), (size_t)(size.x * size.y * 4));
     txtTerrainData.create(size.x, size.y); // for sfml rendering (passed to shader)

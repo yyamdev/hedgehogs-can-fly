@@ -73,6 +73,9 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     sf::Vector2f oldPos = position;
     position += velocity;
 
+    // centre camera
+
+
     // apply gravity
     velocity += world->gravity;
 
