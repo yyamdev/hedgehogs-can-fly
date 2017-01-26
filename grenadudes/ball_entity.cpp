@@ -71,9 +71,11 @@ void EntityBall::draw(sf::RenderWindow &window) {
 
 void EntityBall::tick(std::vector<Entity*> &entities) {
     // centre camera
-    sf::Vector2f screenSize((float)WINDOW_WIDTH, (float)WINDOW_HEIGHT);
-    sf::Vector2f delta = (position - screenSize / 2.f) - world->camera;
-    world->camera += delta * 0.05f;
+    if (!world->is_paused()) {
+        sf::Vector2f screenSize((float)WINDOW_WIDTH, (float)WINDOW_HEIGHT);
+        sf::Vector2f delta = (position - screenSize / 2.f) - world->camera;
+        world->camera += delta * 0.05f;
+    }
 
     // move
     sf::Vector2f oldPos = position;
@@ -109,11 +111,11 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             float impactSpeed = util::len(velocity);
             if (impactSpeed < 0.62f) impactSpeed = 0.f;
             sf::Vector2f impactDirection = util::normalize(velocity);
-            position -= velocity * 1.1f; // move out of collision
             // calculate vectors
             sf::Vector2f normal = util::normalize(terrain->get_normal(contact));
             sf::Vector2f reflect = impactDirection - 2.f * normal * (util::dot(impactDirection, normal));
             sf::Vector2f bounce = sf::Vector2f();
+            position += normal * (collisionRadius - util::len(position - contact)); // move out of collision
             if (impactSpeed > 0.2f && impactSpeed < 3.1f) { // bounce a little
                 bounce = reflect * impactSpeed * .6f;
             }

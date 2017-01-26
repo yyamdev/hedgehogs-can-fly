@@ -33,6 +33,7 @@ public:
     sf::Vector2f gravity;
     sf::Vector2f wind;
     sf::Vector2f camera;
+    bool is_paused();
 private:
     sf::RenderWindow *window;
     std::vector<Entity*> entities;

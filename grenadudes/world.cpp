@@ -107,3 +107,7 @@ void World::toggle_pause() {
 
 void World::on_notify(Event event, void *data) {
 }
+
+bool World::is_paused() {
+    return paused;
+}

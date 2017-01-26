@@ -145,7 +145,7 @@ sf::Vector2f EntityTerrain::get_normal_ground(sf::Vector2f pos) {
 bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, sf::Vector2f vel, float rad, sf::Vector2f *contact) {
     // broad phase
     bool intersects = false;
-    int divisions = 8;
+    int divisions = 16;
     sf::Vector2f contactBroad;
     float deltaAngle = (2.f * (float)M_PI) / (float)divisions;
     for (int i=0; i<divisions; ++i) {

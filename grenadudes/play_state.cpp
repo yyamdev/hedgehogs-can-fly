@@ -34,8 +34,6 @@ void StatePlay::on_tick() {
         notify(EVENT_WIND_CHANGE, (void*)&world->wind);
         windClock.restart();
     }
-    world->camera.x += 0.4f;
-    world->camera.y += 0.4f;
 }
 
 void StatePlay::on_draw(sf::RenderWindow &window) {
@@ -45,7 +43,7 @@ void StatePlay::on_draw(sf::RenderWindow &window) {
         sf::Vector2f mouse;
         mouse.x = (float)mouseI.x;
         mouse.y = (float)mouseI.y;
-        sf::Vector2f normal = terrain->get_normal(mouse);
+        sf::Vector2f normal = terrain->get_normal(mouse + world->camera);
         draw_vector(mouse, normal, 50.f, sf::Color::Yellow, window);
     }
 }
