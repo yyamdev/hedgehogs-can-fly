@@ -7,6 +7,7 @@
 #include "util.h"
 
 sf::Texture EntityBall::txt;
+sf::Texture EntityBall::txtPoint;
 bool EntityBall::textureLoaded = false;
 
 EntityBall::EntityBall() {
@@ -22,11 +23,12 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
     hp = maxHp = 10;
     if (!textureLoaded) {
         txt.loadFromFile("data/ball.png");
+        txtPoint.loadFromFile("data/point.png");
         textureLoaded = true;
     }
     terrain = NULL;
-    velocityAngular = 0.f;
     dragging = false;
+    disable = false;
 }
 
 void EntityBall::event(sf::Event &e) {
@@ -63,33 +65,16 @@ void EntityBall::draw(sf::RenderWindow &window) {
     spr.setTexture(txt);
     spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
     spr.setPosition(position);
-    spr.setRotation(spr.getRotation() + velocityAngular);
     window.draw(spr);
-}
 
-sf::Vector2f EntityBall::get_slide_down(sf::Vector2f incidence, sf::Vector2f normal, sf::Vector2f gravity) {
-    incidence = util::normalize(incidence);
-    normal = util::normalize(normal);
-    gravity = util::normalize(gravity);
-    // convert to homogenous
-    sf::Vector3f incidenceH = sf::Vector3f(incidence.x, incidence.y, 1.f);
-    sf::Vector3f normalH = sf::Vector3f(normal.x, normal.y, 1.f);
-    sf::Vector3f gravityH = sf::Vector3f(gravity.x, gravity.y, 1.f);
-    // get slide up or down
-    sf::Vector3f outH = sf::Vector3f(0.f, 0.f, -1.f);
-    sf::Vector3f slideH = util::cross(outH, normalH);
-    // reverse slide direction if needed
-    if (util::dot3(slideH, gravityH) < 0.f)
-        slideH = -slideH;
-    else if (util::dot3(slideH, gravityH) == 0.f) {
-        if (util::dot3(slideH, incidenceH) < 0.f)
-            slideH = -slideH;
-    }
-    // convert to regular 2d
-    return sf::Vector2f(slideH.x, slideH.y);
+    sprPoint.setTexture(txtPoint);
+    sprPoint.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
+    sprPoint.setPosition(contactPoint);
+    window.draw(sprPoint);
 }
 
 void EntityBall::tick(std::vector<Entity*> &entities) {
+    if (disable) return;
     sf::Vector2f oldPos = position;
     position += velocity;
 
@@ -118,21 +103,19 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         }
     }
 
-    // dampen angular velocity
-    //velocityAngular *= .999f;
-    //velocityAngular = velocity.x;
-
     if (terrain) {
         sf::Vector2f contact;
-        if (terrain->intersects_with_circle(position, collisionRadius, &contact, 16)) { // collision with terrain
+        if (terrain->intersects_with_circle(position, velocity, collisionRadius, &contact)) { // collision with terrain
+            //disable = true;
+            contactPoint = contact;
+            
             float impactSpeed = util::len(velocity);
             if (impactSpeed < 0.62f) impactSpeed = 0.f;
             sf::Vector2f impactDirection = util::normalize(velocity);
-            contact -= velocity; // move contact point to terrain edge
+            //contact -= velocity; // move contact point to terrain edge
             position -= velocity * 1.1f; // move out of collision
             // calculate vectors
             sf::Vector2f normal = util::normalize(terrain->get_normal(contact));
-            sf::Vector2f slideDirection = get_slide_down(velocity, normal, world->gravity);
             sf::Vector2f reflect = impactDirection - 2.f * normal * (util::dot(impactDirection, normal));
             sf::Vector2f bounce = sf::Vector2f();
             if (impactSpeed > 0.2f && impactSpeed < 3.1f) { // bounce a little
@@ -147,13 +130,9 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             if (util::len(bounce) < .5f)
                 bounce = sf::Vector2f();
 
-            float slideAmmount = util::dot(util::normalize(velocity), slideDirection);
-            if (slideAmmount < .4f) { // friction
-                slideAmmount = 0.f;
-            }
-
             //velocity = bounce + (slideDirection * slideAmmount);
             velocity = bounce;
+            
             
         }
     }

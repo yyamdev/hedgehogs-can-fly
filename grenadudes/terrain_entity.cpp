@@ -140,23 +140,31 @@ sf::Vector2f EntityTerrain::get_normal_ground(sf::Vector2f pos) {
     return get_normal(pos);
 }
 
-bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, float rad, sf::Vector2f *contact, int divisions) {
+bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, sf::Vector2f vel, float rad, sf::Vector2f *contact) {
+    // broad phase
     bool intersects = false;
+    int divisions = 8;
+    sf::Vector2f contactBroad;
     float deltaAngle = (2.f * (float)M_PI) / (float)divisions;
     for (int i=0; i<divisions; ++i) {
         float angle = (float)i * deltaAngle;
         sf::Vector2f probe(pos.x + rad * cos(angle), pos.y + rad * sin(angle));
         if (get_solid(probe)) {
-            if (contact)
-                *contact = probe;
-            return true;
+            intersects = true;
+            contactBroad = probe;
+            break; // circle definitely intersects
         }
     }
-    return false;
-}
-
-bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, float rad, sf::Vector2f *contact) {
-    return intersects_with_circle(pos, rad, contact, 8);
+    if (!intersects) return false;
+    else { // narrow phase (find contact point)
+        sf::Vector2f normalBroad = get_normal(contactBroad);
+        sf::Vector2f contactNarrow = pos + util::normalize(-normalBroad) * rad;
+        sf::Vector2f normal = get_normal(contactNarrow);
+        // step along until not in terrain
+        while (get_solid(contactNarrow)) contactNarrow += normal;
+        *contact = contactNarrow;
+        return true;
+    }
 }
 
 void EntityTerrain::event(sf::Event &e) {
