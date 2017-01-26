@@ -30,6 +30,7 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
     terrain = NULL;
     dragging = false;
     disable = false;
+    cameraPan = 0;
 }
 
 void EntityBall::event(sf::Event &e) {
@@ -69,12 +70,14 @@ void EntityBall::draw(sf::RenderWindow &window) {
 }
 
 void EntityBall::tick(std::vector<Entity*> &entities) {
-    if (disable) return;
+    // centre camera
+    sf::Vector2f screenSize((float)WINDOW_WIDTH, (float)WINDOW_HEIGHT);
+    sf::Vector2f delta = (position - screenSize / 2.f) - world->camera;
+    world->camera += delta * 0.05f;
+
+    // move
     sf::Vector2f oldPos = position;
     position += velocity;
-
-    // centre camera
-
 
     // apply gravity
     velocity += world->gravity;

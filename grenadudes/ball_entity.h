@@ -31,4 +31,6 @@ private:
 
     bool dragging; // is user dragging the mouse to select grenade direction & speed?
     sf::Vector2f dragStart;
+
+    int cameraPan;
 };
