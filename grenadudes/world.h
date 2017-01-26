@@ -32,6 +32,7 @@ public:
 
     sf::Vector2f gravity;
     sf::Vector2f wind;
+    sf::Vector2f camera;
 private:
     sf::RenderWindow *window;
     std::vector<Entity*> entities;

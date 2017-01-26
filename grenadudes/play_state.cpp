@@ -34,6 +34,8 @@ void StatePlay::on_tick() {
         notify(EVENT_WIND_CHANGE, (void*)&world->wind);
         windClock.restart();
     }
+    world->camera.x += 0.5f;
+    world->camera.y -= 0.5f;
 }
 
 void StatePlay::on_draw(sf::RenderWindow &window) {

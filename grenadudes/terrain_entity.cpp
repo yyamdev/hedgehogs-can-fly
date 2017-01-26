@@ -7,6 +7,7 @@
 #include <time.h>
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include "world.h"
 
 EntityTerrain::EntityTerrain(sf::Vector2u size, float scale, std::string filename) {
     // properties
@@ -191,5 +192,8 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
     shdTerrain.setParameter("sizeX", (float)size.x);
     shdTerrain.setParameter("sizeY", (float)size.y);
     shdTerrain.setParameter("screenHeight", (float)WINDOW_HEIGHT);
+    shdTerrain.setParameter("cameraX", world->camera.x);
+    shdTerrain.setParameter("cameraY", world->camera.y);
+    sprTerrain.setPosition(-world->camera);
     window.draw(sprTerrain, &shdTerrain); // draw
 }

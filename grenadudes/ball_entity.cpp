@@ -64,7 +64,7 @@ void EntityBall::event(sf::Event &e) {
 void EntityBall::draw(sf::RenderWindow &window) {
     spr.setTexture(txt);
     spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
-    spr.setPosition(position);
+    spr.setPosition(position - world->camera);
     window.draw(spr);
 }
 
