@@ -4,12 +4,13 @@
 
 #include "entity.h"
 #include "subject.h"
+#include "observer.h"
 
 #define BALL_TERM_VEL 6.f
 
 class EntityTerrain;
 
-class EntityBall : public Entity {
+class EntityBall : public Entity, public Observer {
 public:
     EntityBall();
     EntityBall(sf::Vector2f pos, sf::Vector2f vel);
@@ -17,6 +18,8 @@ public:
     void event(sf::Event &e);
     void tick(std::vector<Entity*> &entities);
     void draw(sf::RenderWindow &window);
+
+    void on_notify(Event event, void *data);
 private:
     static sf::Texture txt;
     static sf::Texture txtPoint;
@@ -32,6 +35,7 @@ private:
     sf::Vector2f contactPoint3;
     sf::Clock clkRest;
     bool rest;
+    void move_to_contact();
 
     bool dragging; // is user dragging the mouse to select grenade direction & speed?
     sf::Vector2f dragStart;

@@ -35,6 +35,8 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
 }
 
 void EntityBall::event(sf::Event &e) {
+    if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::A)
+        rest = !rest;
     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
         if (!dragging) {
             dragging = true;
@@ -83,6 +85,18 @@ void EntityBall::draw(sf::RenderWindow &window) {
     */
 }
 
+void EntityBall::move_to_contact() {
+    sf::Vector2f bottom = position + sf::Vector2f(0.f, collisionRadius - 1.f);
+    if (terrain) {
+        if (terrain->get_solid(bottom))
+            return;
+        while (!terrain->get_solid(bottom)) {
+            position.y += 1.f;
+            bottom = position + sf::Vector2f(0.f, collisionRadius - 1.f);
+        }
+    }
+}
+
 void EntityBall::tick(std::vector<Entity*> &entities) {
     //std::cout << "(" << position.x << "," << position.y << ")\n";
     // centre camera
@@ -91,24 +105,22 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         sf::Vector2f delta = (position - screenSize / 2.f) - world->camera;
         world->camera += delta * 0.05f;
     }
+
+    if (rest) return;
         
     // move
     sf::Vector2f oldPos = position;
     position += velocity;
 
-    /*
-    if (util::len(oldPos - position) > 2.f) {
+    if (util::len(oldPos - position) > 1.f) {
         clkRest.restart();
         rest = false;
-        //std::cout << "unrest\n";
     }
-    */
-
-    /*
-    if (rest) {
-        return;
+    if (clkRest.getElapsedTime().asSeconds() > 1.f) {
+        std::cout << "rest\n";
+        rest = true;
+        position.y = contactPoint.y - collisionRadius;
     }
-    */
 
     // apply gravity
     velocity += world->gravity;
@@ -116,16 +128,6 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     // cap y speed
     if (velocity.y > BALL_TERM_VEL)
         velocity.y = BALL_TERM_VEL;
-
-    
-    /*
-    if (clkRest.getElapsedTime().asSeconds() > 1.f && !rest) {
-        rest = true;
-        //std::cout << "rest\n";
-        velocity = sf::Vector2f(0.f, 0.f);
-    }
-    */
-
 
     // find terrain
     for (Entity *e : entities) {
@@ -149,7 +151,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         sf::Vector2f newPos;
         if (terrain->intersects_with_circle(position, velocity, collisionRadius, &contact, &newPos)) { // collision with terrain
             
-            contactPoint3 = contact;
+            contactPoint = contact;
             position = newPos;
             
             //position -= velocity;
@@ -183,8 +185,13 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             //if (util::len(bounce) < .5f)
                 //bounce = sf::Vector2f();
 
-            contactPoint = bounce;
+            //contactPoint = bounce;
             velocity = bounce;
         }
     }
+}
+
+void EntityBall::on_notify(Event event, void *data) {
+    if (event == EVENT_TERRAIN_CHANGE)
+        rest = false;
 }
