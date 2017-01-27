@@ -29,8 +29,6 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
     }
     terrain = NULL;
     dragging = false;
-    disable = false;
-    cameraPan = 0;
     rest = false;
 }
 
@@ -63,6 +61,7 @@ void EntityBall::event(sf::Event &e) {
 
                 velocity = dir;
                 rest = false;
+                clkRest.restart();
             }
         }
     }
@@ -74,27 +73,14 @@ void EntityBall::draw(sf::RenderWindow &window) {
     spr.setPosition(position - world->camera);
     window.draw(spr);
 
-    /*
     sprPoint.setTexture(txtPoint);
     sprPoint.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
-    sprPoint.setPosition(contactPoint3 - world->camera);
-    window.draw(sprPoint);
-    
+    sprPoint.setPosition(contactPoint - world->camera);
+    //window.draw(sprPoint);
+    /*
     draw_vector(contactPoint3 - world->camera, contactPoint, 50.f, sf::Color::Yellow, window);
     draw_vector(contactPoint3 - world->camera, contactPoint2, 50.f, sf::Color::Blue, window);
     */
-}
-
-void EntityBall::move_to_contact() {
-    sf::Vector2f bottom = position + sf::Vector2f(0.f, collisionRadius - 1.f);
-    if (terrain) {
-        if (terrain->get_solid(bottom))
-            return;
-        while (!terrain->get_solid(bottom)) {
-            position.y += 1.f;
-            bottom = position + sf::Vector2f(0.f, collisionRadius - 1.f);
-        }
-    }
 }
 
 void EntityBall::tick(std::vector<Entity*> &entities) {
@@ -119,7 +105,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     if (clkRest.getElapsedTime().asSeconds() > 1.f) {
         std::cout << "rest\n";
         rest = true;
-        position.y = contactPoint.y - collisionRadius;
+        position.y = contactPoint.y - collisionRadius - 1.f;
     }
 
     // apply gravity
@@ -162,7 +148,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             //if (impactSpeed < 0.62f) impactSpeed = 0.f;
             
             // calculate vectors
-            sf::Vector2f normal = contactPoint2 = util::normalize(terrain->get_normal(contact));
+            sf::Vector2f normal = util::normalize(terrain->get_normal(contact));
             sf::Vector2f reflect = velocity - 2.f * normal * (util::dot(velocity, normal));
             sf::Vector2f bounce = sf::Vector2f();
             //position += normal * (collisionRadius - util::len(position - contact)); // move out of collision
@@ -192,6 +178,8 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
 }
 
 void EntityBall::on_notify(Event event, void *data) {
-    if (event == EVENT_TERRAIN_CHANGE)
+    if (event == EVENT_TERRAIN_CHANGE) {
         rest = false;
+        clkRest.restart();
+    }
 }

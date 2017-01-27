@@ -181,7 +181,7 @@ bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, sf::Vector2f vel, f
         vel = util::normalize(vel * speed);
         if (util::len(vel) != 0.f){
             sf::Vector2f velUnit = util::normalize(vel);
-            int max = 100;
+            int max = 30;
             int i = 0;
             while (inside && i < max) {
                 ++i;
