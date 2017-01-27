@@ -31,6 +31,7 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
     dragging = false;
     disable = false;
     cameraPan = 0;
+    rest = false;
 }
 
 void EntityBall::event(sf::Event &e) {
@@ -51,13 +52,16 @@ void EntityBall::event(sf::Event &e) {
             mouse.x = (float)e.mouseButton.x;
             mouse.y = (float)e.mouseButton.y;
             sf::Vector2f dir = dragStart - mouse;
-            float speed = util::len(dragStart - mouse) / 15.f;
+            if (util::len(dir) != 0.f) {
+                float speed = util::len(dragStart - mouse) / 15.f;
 
-            speed = util::clamp(speed, 0.f, 10.f);
-            sf::Vector2f start = position;
-            dir = dir / util::len(dir) * speed;
+                speed = util::clamp(speed, 0.f, 12.f);
+                sf::Vector2f start = position;
+                dir = dir / util::len(dir) * speed;
 
-            velocity = dir;
+                velocity = dir;
+                rest = false;
+            }
         }
     }
 }
@@ -67,19 +71,44 @@ void EntityBall::draw(sf::RenderWindow &window) {
     spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
     spr.setPosition(position - world->camera);
     window.draw(spr);
+
+    /*
+    sprPoint.setTexture(txtPoint);
+    sprPoint.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
+    sprPoint.setPosition(contactPoint3 - world->camera);
+    window.draw(sprPoint);
+    
+    draw_vector(contactPoint3 - world->camera, contactPoint, 50.f, sf::Color::Yellow, window);
+    draw_vector(contactPoint3 - world->camera, contactPoint2, 50.f, sf::Color::Blue, window);
+    */
 }
 
 void EntityBall::tick(std::vector<Entity*> &entities) {
+    //std::cout << "(" << position.x << "," << position.y << ")\n";
     // centre camera
     if (!world->is_paused()) {
         sf::Vector2f screenSize((float)WINDOW_WIDTH, (float)WINDOW_HEIGHT);
         sf::Vector2f delta = (position - screenSize / 2.f) - world->camera;
         world->camera += delta * 0.05f;
     }
-
+        
     // move
     sf::Vector2f oldPos = position;
     position += velocity;
+
+    /*
+    if (util::len(oldPos - position) > 2.f) {
+        clkRest.restart();
+        rest = false;
+        //std::cout << "unrest\n";
+    }
+    */
+
+    /*
+    if (rest) {
+        return;
+    }
+    */
 
     // apply gravity
     velocity += world->gravity;
@@ -87,6 +116,16 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     // cap y speed
     if (velocity.y > BALL_TERM_VEL)
         velocity.y = BALL_TERM_VEL;
+
+    
+    /*
+    if (clkRest.getElapsedTime().asSeconds() > 1.f && !rest) {
+        rest = true;
+        //std::cout << "rest\n";
+        velocity = sf::Vector2f(0.f, 0.f);
+    }
+    */
+
 
     // find terrain
     for (Entity *e : entities) {
@@ -106,27 +145,45 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     }
 
     if (terrain) {
-        sf::Vector2f contact;
-        if (terrain->intersects_with_circle(position, velocity, collisionRadius, &contact)) { // collision with terrain
+        sf::Vector2f contact = sf::Vector2f(50.f, 50.f);
+        sf::Vector2f newPos;
+        if (terrain->intersects_with_circle(position, velocity, collisionRadius, &contact, &newPos)) { // collision with terrain
+            
+            contactPoint3 = contact;
+            position = newPos;
+            
+            //position -= velocity;
             float impactSpeed = util::len(velocity);
-            if (impactSpeed < 0.62f) impactSpeed = 0.f;
-            sf::Vector2f impactDirection = util::normalize(velocity);
+            sf::Vector2f impactDirection;
+            if (impactSpeed != 0.f)
+                impactDirection = util::normalize(velocity);
+            //if (impactSpeed < 0.62f) impactSpeed = 0.f;
+            
             // calculate vectors
-            sf::Vector2f normal = util::normalize(terrain->get_normal(contact));
-            sf::Vector2f reflect = impactDirection - 2.f * normal * (util::dot(impactDirection, normal));
+            sf::Vector2f normal = contactPoint2 = util::normalize(terrain->get_normal(contact));
+            sf::Vector2f reflect = velocity - 2.f * normal * (util::dot(velocity, normal));
             sf::Vector2f bounce = sf::Vector2f();
             //position += normal * (collisionRadius - util::len(position - contact)); // move out of collision
-            position += normal * util::len(velocity) * 1.1f;
+           // position += normal * util::len(velocity) * 1.1f;
+
             if (impactSpeed > 0.2f && impactSpeed < 3.1f) { // bounce a little
-                bounce = reflect * impactSpeed * .6f;
+                bounce = reflect * .6f;
+                //bounce += normal * 0.02f;
             }
             else if (impactSpeed >= 3.1f) { // bounce a lot
-                bounce = reflect * impactSpeed * .6f;
+                bounce = reflect * .6f;
+                //bounce += normal * 0.02f;
             }
 
-            if (util::len(bounce) < .5f)
-                bounce = sf::Vector2f();
+            if (util::dot(normal, util::normalize(reflect)) < 0.3f) {
+                bounce += normal;
+                //std::cout << "fuck\n";
+            }
 
+            //if (util::len(bounce) < .5f)
+                //bounce = sf::Vector2f();
+
+            contactPoint = bounce;
             velocity = bounce;
         }
     }

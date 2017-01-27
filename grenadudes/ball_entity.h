@@ -28,6 +28,10 @@ private:
     // physics
     bool disable;
     sf::Vector2f contactPoint;
+    sf::Vector2f contactPoint2;
+    sf::Vector2f contactPoint3;
+    sf::Clock clkRest;
+    bool rest;
 
     bool dragging; // is user dragging the mouse to select grenade direction & speed?
     sf::Vector2f dragStart;

@@ -142,7 +142,7 @@ sf::Vector2f EntityTerrain::get_normal_ground(sf::Vector2f pos) {
     return get_normal(pos);
 }
 
-bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, sf::Vector2f vel, float rad, sf::Vector2f *contact) {
+bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, sf::Vector2f vel, float rad, sf::Vector2f *contact, sf::Vector2f *newPos) {
     // broad phase
     bool intersects = false;
     int divisions = 16;
@@ -159,6 +159,7 @@ bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, sf::Vector2f vel, f
     }
     if (!intersects) return false;
     else { // narrow phase (find contact point)
+        /*
         sf::Vector2f normalBroad = get_normal(contactBroad);
         if (util::dot(vel, normalBroad) > 0.f) normalBroad = -normalBroad;
         sf::Vector2f contactNarrow = pos + util::normalize(-normalBroad) * rad;
@@ -170,6 +171,41 @@ bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, sf::Vector2f vel, f
             *contact = contactNarrow;
         else
             *contact = contactOld;
+        return true;
+        */
+        bool inside = true;
+        bool once = false;
+        *newPos = pos;
+        *contact = contactBroad;
+        float speed = fmax(1.f, util::len(vel));
+        vel = util::normalize(vel * speed);
+        if (util::len(vel) != 0.f){
+            sf::Vector2f velUnit = util::normalize(vel);
+            int max = 100;
+            int i = 0;
+            while (inside && i < max) {
+                ++i;
+                inside = false;
+                int divisions = 8;
+                float deltaAngle = (2.f * (float)M_PI) / (float)divisions;
+                for (int i=0; i<divisions; ++i) {
+                    float angle = (float)i * deltaAngle;
+                    sf::Vector2f probe(newPos->x + rad * cos(angle), newPos->y + rad * sin(angle));
+                    if (get_solid(probe)) {
+                        *contact = probe;
+                        inside = true;
+                        *newPos -= velUnit;
+                        once = true;
+                        break;
+                    }
+                }
+            }
+            //*newPos -= vel * 0.05f;
+            if (!once) {
+                std::cout << "(" << vel.x << "," << vel.y << ")\n";
+                *newPos -= vel;
+            }
+        }
         return true;
     }
 }
