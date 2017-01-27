@@ -164,8 +164,12 @@ bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, sf::Vector2f vel, f
         sf::Vector2f contactNarrow = pos + util::normalize(-normalBroad) * rad;
         sf::Vector2f normal = get_normal(contactNarrow);
         if (util::dot(vel, normal) > 0.f) normal = -normal;
+        sf::Vector2f contactOld = contactNarrow;
         while (get_solid(contactNarrow)) contactNarrow += normal;// step along until not in terrain
-        *contact = contactNarrow;
+        if (util::len_squared(contactNarrow - pos) < util::len_squared(contactOld - pos))
+            *contact = contactNarrow;
+        else
+            *contact = contactOld;
         return true;
     }
 }
@@ -192,6 +196,7 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
     shdTerrain.setParameter("txtData", txtTerrainData);
     shdTerrain.setParameter("sizeX", (float)size.x);
     shdTerrain.setParameter("sizeY", (float)size.y);
+    shdTerrain.setParameter("screenWidth", (float)WINDOW_WIDTH);
     shdTerrain.setParameter("screenHeight", (float)WINDOW_HEIGHT);
     shdTerrain.setParameter("cameraX", world->camera.x);
     shdTerrain.setParameter("cameraY", world->camera.y);

@@ -115,7 +115,8 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             sf::Vector2f normal = util::normalize(terrain->get_normal(contact));
             sf::Vector2f reflect = impactDirection - 2.f * normal * (util::dot(impactDirection, normal));
             sf::Vector2f bounce = sf::Vector2f();
-            position += normal * (collisionRadius - util::len(position - contact)); // move out of collision
+            //position += normal * (collisionRadius - util::len(position - contact)); // move out of collision
+            position += normal * util::len(velocity) * 1.1f;
             if (impactSpeed > 0.2f && impactSpeed < 3.1f) { // bounce a little
                 bounce = reflect * impactSpeed * .6f;
             }
