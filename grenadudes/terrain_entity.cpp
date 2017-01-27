@@ -159,50 +159,36 @@ bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, sf::Vector2f vel, f
     }
     if (!intersects) return false;
     else { // narrow phase (find contact point)
-        /*
-        sf::Vector2f normalBroad = get_normal(contactBroad);
-        if (util::dot(vel, normalBroad) > 0.f) normalBroad = -normalBroad;
-        sf::Vector2f contactNarrow = pos + util::normalize(-normalBroad) * rad;
-        sf::Vector2f normal = get_normal(contactNarrow);
-        if (util::dot(vel, normal) > 0.f) normal = -normal;
-        sf::Vector2f contactOld = contactNarrow;
-        while (get_solid(contactNarrow)) contactNarrow += normal;// step along until not in terrain
-        if (util::len_squared(contactNarrow - pos) < util::len_squared(contactOld - pos))
-            *contact = contactNarrow;
-        else
-            *contact = contactOld;
-        return true;
-        */
+        // this is a load of shit really... half of it probably isn't necessary
+        // doesn't account for multiple contact points so doesn't work well in tight scenarios
         bool inside = true;
-        bool once = false;
+        bool once = true;
         *newPos = pos;
         *contact = contactBroad;
         float speed = fmax(1.f, util::len(vel));
         vel = util::normalize(vel * speed);
         if (util::len(vel) != 0.f){
             sf::Vector2f velUnit = util::normalize(vel);
-            int max = 30;
+            int max = 40;
             int i = 0;
             while (inside && i < max) {
                 ++i;
                 inside = false;
-                int divisions = 8;
+                int divisions = 16;
                 float deltaAngle = (2.f * (float)M_PI) / (float)divisions;
                 for (int i=0; i<divisions; ++i) {
                     float angle = (float)i * deltaAngle;
                     sf::Vector2f probe(newPos->x + rad * cos(angle), newPos->y + rad * sin(angle));
                     if (get_solid(probe)) {
                         *contact = probe;
-                        inside = true;
                         *newPos -= velUnit;
-                        once = true;
+                        inside = true;
+                        once = false;
                         break;
                     }
                 }
             }
-            //*newPos -= vel * 0.05f;
-            if (!once) {
-                std::cout << "(" << vel.x << "," << vel.y << ")\n";
+            if (once) {
                 *newPos -= vel;
             }
         }

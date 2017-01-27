@@ -33,8 +33,6 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
 }
 
 void EntityBall::event(sf::Event &e) {
-    if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::A)
-        rest = !rest;
     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
         if (!dragging) {
             dragging = true;
