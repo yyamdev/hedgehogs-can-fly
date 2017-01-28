@@ -22,9 +22,13 @@ EntityTerrain::EntityTerrain(float scale, std::string filename) {
     terrain = new sf::Uint8[size.x * size.y * 4]; // 4 x 8 bit colour components for each pixel
     memcpy((void*)terrain, (void*)imgMap.getPixelsPtr(), (size_t)(size.x * size.y * 4));
     txtTerrainData.create(size.x, size.y); // for sfml rendering (passed to shader)
-    // load front-end texture
-    txtImage.loadFromFile("data/terrain.png");
-    txtImage.setRepeated(true);
+    // load front-end textures
+    txtSolid.loadFromFile("data/solid.png");
+    txtSolid.setRepeated(true);
+    txtWater.loadFromFile("data/water.png");
+    txtWater.setRepeated(true);
+    txtWeak.loadFromFile("data/weak.png");
+    txtWeak.setRepeated(true);
     // load fragment shader
     shdTerrain.loadFromFile("data/terrain.frag", sf::Shader::Fragment);
     // notify
@@ -62,9 +66,13 @@ bool EntityTerrain::get_solid(sf::Vector2f pos) {
     if (!pos_in_bounds(pos))
         return false;
     unsigned int base = (unsigned int)(((unsigned int)pos.y * size.x + (unsigned int)pos.x) * 4);
-    return (terrain[base + 0] == 255 &&
-            terrain[base + 1] == 255 &&
-            terrain[base + 2] == 255);
+    return !(terrain[base + 0] == 0 &&
+             terrain[base + 1] == 0 &&
+             terrain[base + 2] == 0)
+            &&
+           !(terrain[base + 0] == 0 &&
+             terrain[base + 1] == 128 &&
+             terrain[base + 2] == 128);
 }
 
 void EntityTerrain::set_solid() {
@@ -212,10 +220,12 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
     if (!render) return;
     txtTerrainData.update(terrain); // update data texture
     // create terrain image sprite
-    sf::Sprite sprTerrain(txtImage);
+    sf::Sprite sprTerrain(txtSolid); // I think this has to be set for size only?
     sprTerrain.setTextureRect(sf::IntRect(0, 0, (int)size.x, (int)size.y));
     // pass parameters into shader
-    shdTerrain.setParameter("txtTerrain", txtImage);
+    shdTerrain.setParameter("txtSolid", txtSolid);
+    shdTerrain.setParameter("txtKill", txtWater);
+    shdTerrain.setParameter("txtWeak", txtWeak);
     shdTerrain.setParameter("txtData", txtTerrainData);
     shdTerrain.setParameter("sizeX", (float)size.x);
     shdTerrain.setParameter("sizeY", (float)size.y);

@@ -42,8 +42,11 @@ private:
     sf::Vector2u size; // terrain texture size
     float scale; // scale factor for drawing
     sf::Shader shdTerrain;
-    sf::Texture txtImage; // terrain texture that is drawn
     sf::Uint8 *terrain; // terrain data
     sf::Texture txtTerrainData; // terrain data as a texture (updated at draw time)
+    // terrain textures that are drawn
+    sf::Texture txtSolid;
+    sf::Texture txtWater;
+    sf::Texture txtWeak;
     bool render;
 };
