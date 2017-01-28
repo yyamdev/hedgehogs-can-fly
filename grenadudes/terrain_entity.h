@@ -60,5 +60,7 @@ private:
     sf::Texture txtWater;
     sf::Texture txtWeak;
     sf::Texture txtBouncy;
+    sf::Texture txtSlow;
+    sf::Texture txtSticky;
     bool render;
 };

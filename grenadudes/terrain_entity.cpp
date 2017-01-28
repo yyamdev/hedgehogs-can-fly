@@ -31,6 +31,10 @@ EntityTerrain::EntityTerrain(float scale, std::string filename) {
     txtWeak.setRepeated(true);
     txtBouncy.loadFromFile("data/bouncy.png");
     txtBouncy.setRepeated(true);
+    txtSlow.loadFromFile("data/slow.png");
+    txtSlow.setRepeated(true);
+    txtSticky.loadFromFile("data/sticky.png");
+    txtSlow.setRepeated(true);
     // load fragment shader
     shdTerrain.loadFromFile("data/terrain.frag", sf::Shader::Fragment);
     // notify
@@ -96,6 +100,14 @@ TerrainType EntityTerrain::get_pos(sf::Vector2f pos) {
     if (terrain[base + 0] == 67 &&
         terrain[base + 1] == 191 &&
         terrain[base + 2] == 6) return T_BOUNCY;
+
+    if (terrain[base + 0] == 210 &&
+        terrain[base + 1] == 176 &&
+        terrain[base + 2] == 60) return T_SLOW;
+
+    if (terrain[base + 0] == 255 &&
+        terrain[base + 1] == 174 &&
+        terrain[base + 2] == 201) return T_STICKY;
 
     return T_BLANK;
 }
@@ -252,6 +264,8 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
     shdTerrain.setParameter("txtKill", txtWater);
     shdTerrain.setParameter("txtWeak", txtWeak);
     shdTerrain.setParameter("txtBouncy", txtBouncy);
+    shdTerrain.setParameter("txtSlow", txtSlow);
+    shdTerrain.setParameter("txtSticky", txtSticky);
     shdTerrain.setParameter("txtData", txtTerrainData);
     shdTerrain.setParameter("sizeX", (float)size.x);
     shdTerrain.setParameter("sizeY", (float)size.y);

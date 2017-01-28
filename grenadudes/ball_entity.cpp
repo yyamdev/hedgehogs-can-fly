@@ -129,6 +129,8 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             if (t == T_KILL) std::cout << "kill\n";
             if (t == T_WEAK) std::cout << "weak\n";
             if (t == T_BOUNCY) std::cout << "bouncy\n";
+            if (t == T_SLOW) std::cout << "slow\n";
+            if (t == T_STICKY) std::cout << "sticky\n";
 
             float impactSpeed = util::len(velocity);
             sf::Vector2f impactDirection;

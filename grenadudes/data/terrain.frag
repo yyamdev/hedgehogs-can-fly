@@ -4,6 +4,8 @@ uniform sampler2D txtSolid;   // solid terrain image texture
 uniform sampler2D txtKill;    // ^
 uniform sampler2D txtWeak;    // ^
 uniform sampler2D txtBouncy;  // ^
+uniform sampler2D txtSlow;  // ^
+uniform sampler2D txtSticky;  // ^
 uniform sampler2D txtData;    // terrain data texture
 uniform float sizeX;          // size of rendering space
 uniform float sizeY;          // ^
@@ -45,6 +47,14 @@ void main() {
         }
         else if (dataPixel.r == 67 && dataPixel.g == 191 && dataPixel.b == 6) {
             pixel = texture2D(txtBouncy, gl_TexCoord[0].xy);
+            gl_FragColor = gl_Color * pixel;
+        }
+        else if (dataPixel.r == 210 && dataPixel.g == 176 && dataPixel.b == 60) {
+            pixel = texture2D(txtSlow, gl_TexCoord[0].xy);
+            gl_FragColor = gl_Color * pixel;
+        }
+        else if (dataPixel.r == 255 && dataPixel.g == 174 && dataPixel.b == 201) {
+            pixel = texture2D(txtSticky, gl_TexCoord[0].xy);
             gl_FragColor = gl_Color * pixel;
         }
         else
