@@ -34,7 +34,7 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
 
 void EntityBall::event(sf::Event &e) {
     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
-        if (!dragging) {
+        if (!dragging && rest) {
             dragging = true;
             dragStart.x = (float)e.mouseButton.x;
             dragStart.y = (float)e.mouseButton.y;
@@ -86,7 +86,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     sf::Vector2f oldPos = position;
     position += velocity;
 
-    if (util::len(oldPos - position) > 1.f) {
+    if (util::len(oldPos - position) > 1.5f) {
         clkRest.restart();
         rest = false;
     }
@@ -101,6 +101,12 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     // cap y speed
     if (velocity.y > BALL_TERM_VEL)
         velocity.y = BALL_TERM_VEL;
+
+    // cap speed
+    float speed = util::len(velocity);
+    if (speed > BALL_MAX_SPEED) {
+        velocity = util::normalize(velocity) * BALL_MAX_SPEED;
+    }
 
     // find terrain
     for (Entity *e : entities) {
@@ -127,7 +133,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             TerrainType t = terrain->get_pos(contactPoint);
 
             float bounceFactor = .6f;
-            if (t == T_BOUNCY) bounceFactor = 1.4f;
+            if (t == T_BOUNCY) bounceFactor = 1.2f;
             if (t == T_SLOW) bounceFactor = 0.3f;
             if (t == T_STICKY) {
                 rest = true;

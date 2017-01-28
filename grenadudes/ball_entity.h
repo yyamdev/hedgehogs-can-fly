@@ -6,7 +6,8 @@
 #include "subject.h"
 #include "observer.h"
 
-#define BALL_TERM_VEL 6.f
+#define BALL_TERM_VEL 9.f
+#define BALL_MAX_SPEED 12.f
 
 class EntityTerrain;
 

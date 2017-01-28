@@ -15,8 +15,11 @@ StatePlay::StatePlay(World *world, std::string filename) : State(world) {
     terrain = new EntityTerrain(2.f, filename);
     world->add_entity(terrain);
     
-    // add ball
-    world->add_entity(new EntityBall(terrain->playerSpawn, sf::Vector2f()));
+    // add ball & centre camera
+    EntityBall *player = new EntityBall(terrain->playerSpawn, sf::Vector2f());
+    world->add_entity(player);
+    sf::Vector2f screenSize((float)WINDOW_WIDTH, (float)WINDOW_HEIGHT);
+    world->camera = (player->position - screenSize / 2.f);
 
     // reset wind change clock
     windClock.restart();
