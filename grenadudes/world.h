@@ -28,12 +28,19 @@ public:
 
     void add_entity(Entity *entity);
     int remove_entity(std::string tag); // returns number of entities removed
+
     void toggle_pause();
+    bool is_paused();
+
+    void set_camera_clamp(sf::Vector2f topLeft, sf::Vector2f size);
+    void disable_camera_clamp();
+    sf::Vector2f camera;
+    bool clamp;
+    sf::Vector2f clampPos, clampSize;
 
     sf::Vector2f gravity;
     sf::Vector2f wind;
-    sf::Vector2f camera;
-    bool is_paused();
+
 private:
     sf::RenderWindow *window;
     std::vector<Entity*> entities;

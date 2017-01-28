@@ -9,6 +9,7 @@ World::World(sf::RenderWindow &window) {
     paused = false;
     gravity = sf::Vector2f(0.f, GRAVITY);
     wind = sf::Vector2f (0.f, 0.f);
+    clamp = false;
     notify(EVENT_WIND_CHANGE, (void*)&wind);
 }
 
@@ -57,6 +58,13 @@ void World::tick() {
         entities.push_back(entityAddQueue.front());
         entityAddQueue.pop();
     }
+
+    if (clamp) {
+        if (camera.x < clampPos.x) camera.x = clampPos.x;
+        if (camera.y < clampPos.y) camera.y = clampPos.y;
+        if (camera.x + WINDOW_WIDTH  > clampPos.x + clampSize.x) camera.x = clampPos.x + clampSize.x - WINDOW_WIDTH;
+        if (camera.y + WINDOW_HEIGHT > clampPos.y + clampSize.y) camera.y = clampPos.y + clampSize.y - WINDOW_HEIGHT;
+    }
 }
 
 void World::draw() {
@@ -104,10 +112,17 @@ void World::toggle_pause() {
         }
     }
 }
+bool World::is_paused() { return paused; }
 
 void World::on_notify(Event event, void *data) {
 }
 
-bool World::is_paused() {
-    return paused;
+void World::disable_camera_clamp() {
+    clamp = false;
+}
+
+void World::set_camera_clamp(sf::Vector2f topLeft, sf::Vector2f size) {
+    clamp = true;
+    clampPos = topLeft;
+    clampSize = size;
 }

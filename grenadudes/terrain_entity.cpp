@@ -205,6 +205,7 @@ void EntityTerrain::event(sf::Event &e) {
 }
 
 void EntityTerrain::tick(std::vector<Entity*> &entities) {
+    world->set_camera_clamp(sf::Vector2f(0.f, 0.f), sf::Vector2f((float)size.x, (float)size.y));
 }
 
 void EntityTerrain::draw(sf::RenderWindow &window) {
