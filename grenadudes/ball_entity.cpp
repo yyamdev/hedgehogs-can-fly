@@ -125,14 +125,6 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             contactPoint = contact;
 
             TerrainType t = terrain->get_pos(contactPoint);
-            /*
-            if (t == T_SOLID) std::cout << "solid\n";
-            if (t == T_KILL) std::cout << "kill\n";
-            if (t == T_WEAK) std::cout << "weak\n";
-            if (t == T_BOUNCY) std::cout << "bouncy\n";
-            if (t == T_SLOW) std::cout << "slow\n";
-            if (t == T_STICKY) std::cout << "sticky\n";
-            */
 
             float bounceFactor = .6f;
             if (t == T_BOUNCY) bounceFactor = 1.4f;

@@ -130,4 +130,11 @@ namespace util {
     inline T sign(const T &value) {
         return (value > static_cast<T>(0.0)) ? static_cast<T>(1.0) : static_cast<T>(-1.0);
     }
+
+    template <typename T>
+    inline std::string vec2_to_str(const T &vec) {
+        std::stringstream s;
+        s << "(" << vec.x << ", " << vec.y << ")";
+        return s.str();
+    }
 }

@@ -16,7 +16,7 @@ StatePlay::StatePlay(World *world, std::string filename) : State(world) {
     world->add_entity(terrain);
     
     // add ball
-    world->add_entity(new EntityBall(sf::Vector2f(200.f, 200.f), sf::Vector2f()));
+    world->add_entity(new EntityBall(terrain->playerSpawn, sf::Vector2f()));
 
     // reset wind change clock
     windClock.restart();

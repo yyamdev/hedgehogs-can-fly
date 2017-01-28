@@ -22,6 +22,7 @@ EntityTerrain::EntityTerrain(float scale, std::string filename) {
     terrain = new sf::Uint8[size.x * size.y * 4]; // 4 x 8 bit colour components for each pixel
     memcpy((void*)terrain, (void*)imgMap.getPixelsPtr(), (size_t)(size.x * size.y * 4));
     txtTerrainData.create(size.x, size.y); // for sfml rendering (passed to shader)
+    spawn_entities();
     // load front-end textures
     txtSolid.loadFromFile("data/solid.png");
     txtSolid.setRepeated(true);
@@ -39,6 +40,22 @@ EntityTerrain::EntityTerrain(float scale, std::string filename) {
     shdTerrain.loadFromFile("data/terrain.frag", sf::Shader::Fragment);
     // notify
     notify(EVENT_TERRAIN_CHANGE, NULL);
+}
+
+void EntityTerrain::spawn_entities() {
+    for (unsigned int i=0; i< size.x * size.y * 4; i += 4) {
+        if (terrain[i + 0] == 255 &&
+            terrain[i + 1] == 127 &&
+            terrain[i + 2] == 1) {
+            // player
+            playerSpawn.x = (float)((i / 4) % size.x);
+            playerSpawn.y = (float)((i / 4) / size.x);
+            // erase
+            terrain[i + 0] = 0;
+            terrain[i + 1] = 0;
+            terrain[i + 2] = 0;
+        }
+    }
 }
 
 EntityTerrain::~EntityTerrain() {

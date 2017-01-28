@@ -49,6 +49,8 @@ public:
     void tick(std::vector<Entity*> &entities);
     void draw(sf::RenderWindow &window);
 
+    sf::Vector2f playerSpawn;
+
 private:
     sf::Vector2u size; // terrain texture size
     float scale; // scale factor for drawing
@@ -63,4 +65,5 @@ private:
     sf::Texture txtSlow;
     sf::Texture txtSticky;
     bool render;
+    void spawn_entities();
 };
