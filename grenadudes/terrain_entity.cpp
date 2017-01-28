@@ -29,6 +29,8 @@ EntityTerrain::EntityTerrain(float scale, std::string filename) {
     txtWater.setRepeated(true);
     txtWeak.loadFromFile("data/weak.png");
     txtWeak.setRepeated(true);
+    txtBouncy.loadFromFile("data/bouncy.png");
+    txtBouncy.setRepeated(true);
     // load fragment shader
     shdTerrain.loadFromFile("data/terrain.frag", sf::Shader::Fragment);
     // notify
@@ -73,6 +75,29 @@ bool EntityTerrain::get_solid(sf::Vector2f pos) {
            !(terrain[base + 0] == 0 &&
              terrain[base + 1] == 128 &&
              terrain[base + 2] == 128);
+}
+
+TerrainType EntityTerrain::get_pos(sf::Vector2f pos) {
+    if (!pos_in_bounds(pos))
+        return T_BLANK;
+    unsigned int base = (unsigned int)(((unsigned int)pos.y * size.x + (unsigned int)pos.x) * 4);
+    if (terrain[base + 0] == 255 &&
+        terrain[base + 1] == 255 &&
+        terrain[base + 2] == 255) return T_SOLID;
+
+    if (terrain[base + 0] == 0 &&
+        terrain[base + 1] == 128 &&
+        terrain[base + 2] == 128) return T_KILL;
+
+    if (terrain[base + 0] == 127 &&
+        terrain[base + 1] == 127 &&
+        terrain[base + 2] == 127) return T_WEAK;
+
+    if (terrain[base + 0] == 67 &&
+        terrain[base + 1] == 191 &&
+        terrain[base + 2] == 6) return T_BOUNCY;
+
+    return T_BLANK;
 }
 
 void EntityTerrain::set_solid() {
@@ -226,6 +251,7 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
     shdTerrain.setParameter("txtSolid", txtSolid);
     shdTerrain.setParameter("txtKill", txtWater);
     shdTerrain.setParameter("txtWeak", txtWeak);
+    shdTerrain.setParameter("txtBouncy", txtBouncy);
     shdTerrain.setParameter("txtData", txtTerrainData);
     shdTerrain.setParameter("sizeX", (float)size.x);
     shdTerrain.setParameter("sizeY", (float)size.y);

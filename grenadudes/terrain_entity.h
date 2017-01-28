@@ -6,6 +6,16 @@
 #include "subject.h"
 #include <string>
 
+enum TerrainType {
+    T_BLANK,
+    T_SOLID,
+    T_KILL,
+    T_SLOW,
+    T_BOUNCY,
+    T_STICKY,
+    T_WEAK,
+};
+
 class EntityTerrain : public Entity {
 public:
     EntityTerrain(float scale, std::string filename);
@@ -21,6 +31,7 @@ public:
     // basic manipulation
     void set_solid(sf::Vector2f pos, bool solid);
     bool get_solid(sf::Vector2f pos);
+    TerrainType get_pos(sf::Vector2f pos);
 
     void set_solid(); // make terrain all solid
     void set_empty(); // make terrain all empty
@@ -48,5 +59,6 @@ private:
     sf::Texture txtSolid;
     sf::Texture txtWater;
     sf::Texture txtWeak;
+    sf::Texture txtBouncy;
     bool render;
 };

@@ -123,6 +123,13 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         sf::Vector2f contact = sf::Vector2f(50.f, 50.f);
         if (terrain->intersects_with_circle(position, velocity, collisionRadius, &contact, &position)) { // collision with terrain
             contactPoint = contact;
+
+            TerrainType t = terrain->get_pos(contactPoint);
+            if (t == T_SOLID) std::cout << "solid\n";
+            if (t == T_KILL) std::cout << "kill\n";
+            if (t == T_WEAK) std::cout << "weak\n";
+            if (t == T_BOUNCY) std::cout << "bouncy\n";
+
             float impactSpeed = util::len(velocity);
             sf::Vector2f impactDirection;
             if (impactSpeed != 0.f)
