@@ -125,12 +125,18 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             contactPoint = contact;
 
             TerrainType t = terrain->get_pos(contactPoint);
+            /*
             if (t == T_SOLID) std::cout << "solid\n";
             if (t == T_KILL) std::cout << "kill\n";
             if (t == T_WEAK) std::cout << "weak\n";
             if (t == T_BOUNCY) std::cout << "bouncy\n";
             if (t == T_SLOW) std::cout << "slow\n";
             if (t == T_STICKY) std::cout << "sticky\n";
+            */
+
+            float bounceFactor = .6f;
+            if (t == T_BOUNCY) bounceFactor = 1.4f;
+            if (t == T_SLOW) bounceFactor = 0.3f;
 
             float impactSpeed = util::len(velocity);
             sf::Vector2f impactDirection;
@@ -143,10 +149,10 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             sf::Vector2f bounce = sf::Vector2f();
 
             if (impactSpeed > 0.2f && impactSpeed < 3.1f) { // bounce a little
-                bounce = reflect * .6f;
+                bounce = reflect * bounceFactor;
             }
             else if (impactSpeed >= 3.1f) { // bounce a lot
-                bounce = reflect * .6f;
+                bounce = reflect * bounceFactor;
             }
 
             if (util::dot(normal, util::normalize(reflect)) < 0.3f) {
