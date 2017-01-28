@@ -137,6 +137,10 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             float bounceFactor = .6f;
             if (t == T_BOUNCY) bounceFactor = 1.4f;
             if (t == T_SLOW) bounceFactor = 0.3f;
+            if (t == T_STICKY) {
+                rest = true;
+                bounceFactor = 0.0f;
+            }
 
             float impactSpeed = util::len(velocity);
             sf::Vector2f impactDirection;
