@@ -65,5 +65,5 @@ private:
     sf::Texture txtSlow;
     sf::Texture txtSticky;
     bool render;
-    void spawn_entities();
+    void data_pass();
 };

@@ -22,7 +22,7 @@ EntityTerrain::EntityTerrain(float scale, std::string filename) {
     terrain = new sf::Uint8[size.x * size.y * 4]; // 4 x 8 bit colour components for each pixel
     memcpy((void*)terrain, (void*)imgMap.getPixelsPtr(), (size_t)(size.x * size.y * 4));
     txtTerrainData.create(size.x, size.y); // for sfml rendering (passed to shader)
-    spawn_entities();
+    data_pass();
     // load front-end textures
     txtSolid.loadFromFile("data/solid.png");
     txtSolid.setRepeated(true);
@@ -42,7 +42,9 @@ EntityTerrain::EntityTerrain(float scale, std::string filename) {
     notify(EVENT_TERRAIN_CHANGE, NULL);
 }
 
-void EntityTerrain::spawn_entities() {
+void EntityTerrain::data_pass() {
+    // iterate though map and spawn/store locations of entities
+    // erase data pixels & comments
     for (unsigned int i=0; i< size.x * size.y * 4; i += 4) {
         if (terrain[i + 0] == 255 &&
             terrain[i + 1] == 127 &&
@@ -51,6 +53,14 @@ void EntityTerrain::spawn_entities() {
             playerSpawn.x = (float)((i / 4) % size.x);
             playerSpawn.y = (float)((i / 4) / size.x);
             // erase
+            terrain[i + 0] = 0;
+            terrain[i + 1] = 0;
+            terrain[i + 2] = 0;
+        }
+        else if (terrain[i + 0] == 239 &&
+                 terrain[i + 1] == 228 &&
+                 terrain[i + 2] == 176) {
+            // erase comment
             terrain[i + 0] = 0;
             terrain[i + 1] = 0;
             terrain[i + 2] = 0;
