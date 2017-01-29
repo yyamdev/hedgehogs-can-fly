@@ -19,4 +19,6 @@ enum Event {
     EVENT_DUDE_WEAPON_COOLDOWN_CHANGE, // EntityDude* pointer to dude
     EVENT_LIVES_CHANGE, // int *array[2] player number, lives
     EVENT_TERRAIN_CHANGE, // NULL
+    EVENT_BALL_REST_POS, // sf::Vector2f* pointer to new rest position
+    EVENT_BALL_START_MOVING, // NULL
 };

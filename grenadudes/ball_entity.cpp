@@ -9,7 +9,6 @@
 
 sf::Texture EntityBall::txt;
 sf::Texture EntityBall::txtPoint;
-sf::Texture EntityBall::txtArrow;
 bool EntityBall::textureLoaded = false;
 
 EntityBall::EntityBall() {
@@ -26,7 +25,6 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
     if (!textureLoaded) {
         txt.loadFromFile("data/ball.png");
         txtPoint.loadFromFile("data/point.png");
-        txtArrow.loadFromFile("data/arrow.png");
         textureLoaded = true;
     }
     terrain = NULL;
@@ -38,6 +36,7 @@ void EntityBall::event(sf::Event &e) {
     if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Space) {
         rest = true;
         position = prevRest;
+        notify(EVENT_BALL_REST_POS, (void*)(&position));
     }
     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
         if (!dragging && rest) {
@@ -66,6 +65,7 @@ void EntityBall::event(sf::Event &e) {
                 velocity = dir;
                 rest = false;
                 clkRest.restart();
+                notify(EVENT_BALL_START_MOVING, NULL);
             }
         }
     }
@@ -76,25 +76,6 @@ void EntityBall::draw(sf::RenderWindow &window) {
     spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
     spr.setPosition(position - world->camera);
     window.draw(spr);
-
-    if (dragging) {
-        sprArrow.setTexture(txtArrow);
-        sprArrow.setOrigin(sf::Vector2f(0.f, (float)txtArrow.getSize().y / 2.f));
-        sprArrow.setPosition(position - world->camera);
-        sf::Vector2i mouseI = sf::Mouse::getPosition(window);
-        sf::Vector2f mouse;
-        mouse.x = (float)mouseI.x;
-        mouse.y = (float)mouseI.y;
-        sf::Vector2f dir = dragStart - mouse;
-        float mag = util::len(dir) / 15.f;
-        float scale = fmin(mag / BALL_MAX_SPEED, 1.f);
-        float ang = atan2f(dir.y, dir.x);
-        ang *= 180.f / PI_F;
-        sprArrow.setScale(sf::Vector2f(scale, 1.f));
-        sprArrow.setRotation(ang);
-        sprArrow.setColor(sf::Color(255, 255, 255, 128));
-        window.draw(sprArrow);
-    }
 }
 
 void EntityBall::tick(std::vector<Entity*> &entities) {
@@ -114,10 +95,12 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     if (util::len(oldPos - position) > 1.5f) {
         clkRest.restart();
         rest = false;
+        notify(EVENT_BALL_START_MOVING, NULL);
     }
     if (clkRest.getElapsedTime().asSeconds() > 1.f) {
         rest = true;
         prevRest = position;
+        notify(EVENT_BALL_REST_POS, (void*)(&position));
         position.y = contactPoint.y - collisionRadius - 1.f;
     }
 
@@ -165,6 +148,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                 rest = true;
                 prevRest = position;
                 bounceFactor = 0.0f;
+                notify(EVENT_BALL_REST_POS, (void*)(&position));
             }
 
             float impactSpeed = util::len(velocity);

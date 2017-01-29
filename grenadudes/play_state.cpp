@@ -21,10 +21,6 @@ StatePlay::StatePlay(World *world, std::string filename) : State(world) {
     sf::Vector2f screenSize((float)WINDOW_WIDTH, (float)WINDOW_HEIGHT);
     world->camera = (player->position - screenSize / 2.f);
 
-    // load cursors
-    txtCursorDrag.loadFromFile("data/cursor_drag.png");
-    txtCursorStop.loadFromFile("data/cursor_stop.png");
-
     // reset wind change clock
     windClock.restart();
 }
@@ -44,7 +40,6 @@ void StatePlay::on_tick() {
 }
 
 void StatePlay::on_draw(sf::RenderWindow &window) {
-    hud.draw(window);
     if (DRAW_TERRAIN_NORMALS) {
         sf::Vector2i mouseI = sf::Mouse::getPosition(window);
         sf::Vector2f mouse;
@@ -56,19 +51,7 @@ void StatePlay::on_draw(sf::RenderWindow &window) {
 }
 
 void StatePlay::on_draw_ui(sf::RenderWindow &window) {
-    sf::Sprite sprCursor;
-    if (player->is_at_rest())
-        sprCursor.setTexture(txtCursorDrag);
-    else
-        sprCursor.setTexture(txtCursorStop);
-    //txtCursorDrag.se
-    sprCursor.setOrigin(sf::Vector2f(13.f, 13.f));
-    sf::Vector2i mouseI = sf::Mouse::getPosition(window);
-    sf::Vector2f mouse;
-    mouse.x = (float)mouseI.x;
-    mouse.y = (float)mouseI.y;
-    sprCursor.setPosition(mouse);
-    window.draw(sprCursor);
+    hud.draw(window, world->camera);
 }
 
 void StatePlay::on_gain_focus() {

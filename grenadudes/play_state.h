@@ -31,7 +31,4 @@ private:
     Hud hud; // hud renderer
     EntityTerrain *terrain;
     sf::Clock windClock;
-
-    sf::Texture txtCursorDrag;
-    sf::Texture txtCursorStop;
 };

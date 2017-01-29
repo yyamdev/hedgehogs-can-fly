@@ -7,7 +7,6 @@
 #include "observer.h"
 
 #define BALL_TERM_VEL 9.f
-#define BALL_MAX_SPEED 12.f
 
 class EntityTerrain;
 
@@ -25,9 +24,8 @@ public:
 private:
     static sf::Texture txt;
     static sf::Texture txtPoint;
-    static sf::Texture txtArrow;
     static bool textureLoaded;
-    sf::Sprite spr, sprPoint, sprArrow;
+    sf::Sprite spr, sprPoint;
 
     EntityTerrain *terrain;
 
