@@ -24,6 +24,8 @@ EntityTerrain::EntityTerrain(float scale, std::string filename) {
     txtTerrainData.create(size.x, size.y); // for sfml rendering (passed to shader)
     data_pass();
     // load front-end textures
+    txtBg.loadFromFile("data/bg.png");
+    txtBg.setRepeated(true);
     txtSolid.loadFromFile("data/solid.png");
     txtSolid.setRepeated(true);
     txtWater.loadFromFile("data/water.png");
@@ -105,7 +107,11 @@ bool EntityTerrain::get_solid(sf::Vector2f pos) {
             &&
            !(terrain[base + 0] == 0 &&
              terrain[base + 1] == 128 &&
-             terrain[base + 2] == 128);
+             terrain[base + 2] == 128)
+            &&
+           !(terrain[base + 0] == 185 &&
+             terrain[base + 1] == 122 &&
+             terrain[base + 2] == 87);
 }
 
 TerrainType EntityTerrain::get_pos(sf::Vector2f pos) {
@@ -287,6 +293,7 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
     sf::Sprite sprTerrain(txtSolid); // I think this has to be set for size only?
     sprTerrain.setTextureRect(sf::IntRect(0, 0, (int)size.x, (int)size.y));
     // pass parameters into shader
+    shdTerrain.setParameter("txtBg", txtBg);
     shdTerrain.setParameter("txtSolid", txtSolid);
     shdTerrain.setParameter("txtKill", txtWater);
     shdTerrain.setParameter("txtWeak", txtWeak);

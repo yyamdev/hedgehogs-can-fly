@@ -33,6 +33,7 @@ private:
     sf::Vector2f contactPoint;
     sf::Clock clkRest;
     bool rest;
+    sf::Vector2f prevRest;
 
     bool dragging; // is user dragging the mouse to select grenade direction & speed?
     sf::Vector2f dragStart;

@@ -58,6 +58,7 @@ private:
     sf::Uint8 *terrain; // terrain data
     sf::Texture txtTerrainData; // terrain data as a texture (updated at draw time)
     // terrain textures that are drawn
+    sf::Texture txtBg;
     sf::Texture txtSolid;
     sf::Texture txtWater;
     sf::Texture txtWeak;

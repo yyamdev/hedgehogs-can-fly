@@ -64,6 +64,9 @@
     <Filter Include="Source Files\game\state\play">
       <UniqueIdentifier>{11debbbe-53fe-4104-a1a9-6def65660b8d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\game\world\ball">
+      <UniqueIdentifier>{b39de2f2-08a1-4f15-8062-775057e59992}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="events.h">
@@ -134,11 +137,11 @@
     <ClCompile Include="observer.cpp">
       <Filter>Source Files\framework\events</Filter>
     </ClCompile>
-    <ClCompile Include="ball_entity.cpp">
-      <Filter>Source Files\game\world</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ball_entity.cpp">
+      <Filter>Source Files\game\world\ball</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

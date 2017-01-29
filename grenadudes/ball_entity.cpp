@@ -16,7 +16,7 @@ EntityBall::EntityBall() {
 }
 
 EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
-    position = pos;
+    position = prevRest = pos;
     velocity = vel;
     tag = "ball";
     collisionRadius = 8.f;
@@ -33,6 +33,10 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
 }
 
 void EntityBall::event(sf::Event &e) {
+    if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Space) {
+        rest = true;
+        position = prevRest;
+    }
     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
         if (!dragging && rest) {
             dragging = true;
@@ -92,6 +96,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     }
     if (clkRest.getElapsedTime().asSeconds() > 1.f) {
         rest = true;
+        prevRest = position;
         position.y = contactPoint.y - collisionRadius - 1.f;
     }
 
@@ -137,6 +142,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             if (t == T_SLOW) bounceFactor = 0.3f;
             if (t == T_STICKY) {
                 rest = true;
+                prevRest = position;
                 bounceFactor = 0.0f;
             }
 
