@@ -7,6 +7,8 @@
 #include "observer.h"
 #include <string>
 #include "subject.h"
+#include <SFML/Graphics.hpp>
+#include "ball_entity.h"
 
 class EntityTerrain;
 
@@ -17,13 +19,19 @@ public:
     void on_event(sf::Event &event);
     void on_tick();
     void on_draw(sf::RenderWindow &window);
+    void on_draw_ui(sf::RenderWindow &window);
     void on_gain_focus();
     void on_lose_focus();
 
     void on_notify(Event event, void *data);
 
 private:
+    EntityBall *player;
+
     Hud hud; // hud renderer
     EntityTerrain *terrain;
     sf::Clock windClock;
+
+    sf::Texture txtCursorDrag;
+    sf::Texture txtCursorStop;
 };

@@ -11,6 +11,7 @@ void print_debug_controls();
 int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), TITLE, sf::Style::Close);
     window.setFramerateLimit(60);
+    window.setMouseCursorVisible(false);
 
     World world(window);
 

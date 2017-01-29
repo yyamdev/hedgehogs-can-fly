@@ -19,6 +19,7 @@ public:
     virtual void on_event(sf::Event &event) = 0;
     virtual void on_tick() = 0;
     virtual void on_draw(sf::RenderWindow &window) = 0;
+    virtual void on_draw_ui(sf::RenderWindow &window){};
     virtual void on_gain_focus(){};
     virtual void on_lose_focus(){};
     // </>

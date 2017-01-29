@@ -21,11 +21,13 @@ public:
     void draw(sf::RenderWindow &window);
 
     void on_notify(Event event, void *data);
+    bool is_at_rest();
 private:
     static sf::Texture txt;
     static sf::Texture txtPoint;
+    static sf::Texture txtArrow;
     static bool textureLoaded;
-    sf::Sprite spr, sprPoint;
+    sf::Sprite spr, sprPoint, sprArrow;
 
     EntityTerrain *terrain;
 

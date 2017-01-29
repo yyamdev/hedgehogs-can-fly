@@ -56,4 +56,6 @@ void State::tick_current() {
 void State::draw_current(sf::RenderWindow &window) {
     if (!State::states.empty())
         State::states.top()->on_draw(window);
+    if (!State::states.empty())
+        State::states.top()->on_draw_ui(window);
 }

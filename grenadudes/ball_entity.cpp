@@ -9,6 +9,7 @@
 
 sf::Texture EntityBall::txt;
 sf::Texture EntityBall::txtPoint;
+sf::Texture EntityBall::txtArrow;
 bool EntityBall::textureLoaded = false;
 
 EntityBall::EntityBall() {
@@ -25,6 +26,7 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
     if (!textureLoaded) {
         txt.loadFromFile("data/ball.png");
         txtPoint.loadFromFile("data/point.png");
+        txtArrow.loadFromFile("data/arrow.png");
         textureLoaded = true;
     }
     terrain = NULL;
@@ -57,7 +59,7 @@ void EntityBall::event(sf::Event &e) {
             if (util::len(dir) != 0.f) {
                 float speed = util::len(dragStart - mouse) / 15.f;
 
-                speed = util::clamp(speed, 0.f, 12.f);
+                speed = util::clamp(speed, 0.f, BALL_MAX_SPEED);
                 sf::Vector2f start = position;
                 dir = dir / util::len(dir) * speed;
 
@@ -74,6 +76,25 @@ void EntityBall::draw(sf::RenderWindow &window) {
     spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
     spr.setPosition(position - world->camera);
     window.draw(spr);
+
+    if (dragging) {
+        sprArrow.setTexture(txtArrow);
+        sprArrow.setOrigin(sf::Vector2f(0.f, (float)txtArrow.getSize().y / 2.f));
+        sprArrow.setPosition(position - world->camera);
+        sf::Vector2i mouseI = sf::Mouse::getPosition(window);
+        sf::Vector2f mouse;
+        mouse.x = (float)mouseI.x;
+        mouse.y = (float)mouseI.y;
+        sf::Vector2f dir = dragStart - mouse;
+        float mag = util::len(dir) / 15.f;
+        float scale = fmin(mag / BALL_MAX_SPEED, 1.f);
+        float ang = atan2f(dir.y, dir.x);
+        ang *= 180.f / PI_F;
+        sprArrow.setScale(sf::Vector2f(scale, 1.f));
+        sprArrow.setRotation(ang);
+        sprArrow.setColor(sf::Color(255, 255, 255, 128));
+        window.draw(sprArrow);
+    }
 }
 
 void EntityBall::tick(std::vector<Entity*> &entities) {
@@ -177,4 +198,8 @@ void EntityBall::on_notify(Event event, void *data) {
         rest = false;
         clkRest.restart();
     }
+}
+
+bool EntityBall::is_at_rest() {
+    return rest;
 }
