@@ -14,6 +14,7 @@ enum TerrainType {
     T_BOUNCY,
     T_STICKY,
     T_WEAK,
+    T_THIN,
 };
 
 class EntityTerrain : public Entity {
@@ -32,6 +33,9 @@ public:
     void set_solid(sf::Vector2f pos, bool solid);
     bool get_solid(sf::Vector2f pos);
     TerrainType get_pos(sf::Vector2f pos);
+
+    void remove_flood_fill(sf::Vector2f pos);
+    void flood_fill(sf::Vector2f pos, sf::Color replacement, sf::Color old);
 
     void set_solid(); // make terrain all solid
     void set_empty(); // make terrain all empty

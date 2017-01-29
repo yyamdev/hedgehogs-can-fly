@@ -58,7 +58,7 @@ void EntityBall::event(sf::Event &e) {
             if (util::len(dir) != 0.f) {
                 float speed = util::len(dragStart - mouse) / 15.f;
 
-                speed = util::clamp(speed, 0.f, BALL_MAX_SPEED);
+                speed = util::clamp(speed, 0.f, BALL_MAX_SPEED - 2.f);
                 sf::Vector2f start = position;
                 dir = dir / util::len(dir) * speed;
 
@@ -117,6 +117,9 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         velocity = util::normalize(velocity) * BALL_MAX_SPEED;
     }
 
+    // apply air resistance
+    velocity *= .995f;
+
     // find terrain
     for (Entity *e : entities) {
         if (!terrain && e->get_tag() == "terrain") { // get terrain entity
@@ -155,6 +158,12 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             sf::Vector2f impactDirection;
             if (impactSpeed != 0.f)
                 impactDirection = util::normalize(velocity);
+
+            if (t == T_THIN && impactSpeed > 9.f) {
+                terrain->remove_flood_fill(contactPoint);
+                velocity = util::normalize(velocity) * fmax(0.f, impactSpeed - 7.f);
+                return;
+            }
             
             // calculate vectors
             sf::Vector2f normal = util::normalize(terrain->get_normal(contact));

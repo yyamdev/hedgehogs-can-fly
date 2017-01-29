@@ -62,6 +62,10 @@ void main() {
             pixel = texture2D(txtBg, gl_TexCoord[0].xy);
             gl_FragColor = gl_Color * pixel;
         }
+        else if (dataPixel.r == 255 && dataPixel.g == 242 && dataPixel.b == 0) {
+            pixel = texture2D(txtBg, gl_TexCoord[0].xy);
+            gl_FragColor = gl_Color * pixel;
+        }
         else
             gl_FragColor.a = 0;
     }

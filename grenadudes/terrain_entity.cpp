@@ -97,6 +97,26 @@ void EntityTerrain::set_solid(sf::Vector2f pos, bool solid) {
     notify(EVENT_TERRAIN_CHANGE, NULL);
 }
 
+void EntityTerrain::remove_flood_fill(sf::Vector2f pos) {
+    unsigned int base = (unsigned int)(((unsigned int)pos.y * size.x + (unsigned int)pos.x) * 4);
+    flood_fill(pos, sf::Color::Black, sf::Color(terrain[base], terrain[base + 1], terrain[base + 2], 255));
+}
+
+void EntityTerrain::flood_fill(sf::Vector2f pos, sf::Color replacement, sf::Color old) {
+    // may crash if near edge of map
+    if (replacement == old) return;
+    unsigned int base = (unsigned int)(((unsigned int)pos.y * size.x + (unsigned int)pos.x) * 4);
+    if (old != sf::Color(terrain[base], terrain[base + 1], terrain[base + 2], 255)) return;
+    terrain[base] = replacement.r;
+    terrain[base + 1] = replacement.g;
+    terrain[base + 2] = replacement.b;
+    flood_fill(pos + sf::Vector2f(1.f, 0.f), replacement, old);
+    flood_fill(pos + sf::Vector2f(-1.f, 0.f), replacement, old);
+    flood_fill(pos + sf::Vector2f(0.f, 1.f), replacement, old);
+    flood_fill(pos + sf::Vector2f(0.f, -1.f), replacement, old);
+    return;
+}
+
 bool EntityTerrain::get_solid(sf::Vector2f pos) {
     if (!pos_in_bounds(pos))
         return false;
@@ -141,6 +161,10 @@ TerrainType EntityTerrain::get_pos(sf::Vector2f pos) {
     if (terrain[base + 0] == 255 &&
         terrain[base + 1] == 174 &&
         terrain[base + 2] == 201) return T_STICKY;
+
+    if (terrain[base + 0] == 255 &&
+        terrain[base + 1] == 242 &&
+        terrain[base + 2] == 0) return T_THIN;
 
     return T_BLANK;
 }
