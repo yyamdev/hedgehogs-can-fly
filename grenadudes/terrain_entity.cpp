@@ -38,6 +38,8 @@ EntityTerrain::EntityTerrain(float scale, std::string filename) {
     txtSlow.setRepeated(true);
     txtSticky.loadFromFile("data/sticky.png");
     txtSlow.setRepeated(true);
+    txtFinish.loadFromFile("data/finish.png");
+    txtFinish.setRepeated(true);
     // load fragment shader
     shdTerrain.loadFromFile("data/terrain.frag", sf::Shader::Fragment);
     // notify
@@ -324,6 +326,7 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
     shdTerrain.setParameter("txtBouncy", txtBouncy);
     shdTerrain.setParameter("txtSlow", txtSlow);
     shdTerrain.setParameter("txtSticky", txtSticky);
+    shdTerrain.setParameter("txtFinish", txtFinish);
     shdTerrain.setParameter("txtData", txtTerrainData);
     shdTerrain.setParameter("sizeX", (float)size.x);
     shdTerrain.setParameter("sizeY", (float)size.y);
