@@ -4,6 +4,7 @@
 #include "debug_draw.h"
 #include "util.h"
 #include "build_options.h"
+#include "ball_entity.h"
 
 Hud::Hud() {
     Subject::add_observer(this); // register for events
@@ -24,10 +25,10 @@ void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera) {
     if (dragging) {
         sf::Vector2f dir = mouseDragStart -  mouse;
         float mag = util::len(dir) / 15.f;
-        float scale = fmin(mag / BALL_MAX_SPEED, 1.f);
+        float scale = fmin(mag / BALL_MAX_LAUNCH_SPEED, 1.f);
         float ang = atan2f(dir.y, dir.x) * (180.f / PI_F);
         // draw red line
-        draw_vector(mouse, dir, util::len(mouse - mouseDragStart), sf::Color::Red, window);
+        draw_vector(mouseDragStart, -dir, fmin(util::len(mouseDragStart - mouse), BALL_MAX_LAUNCH_SPEED * 15.f), sf::Color::Red, window);
         // draw arrow
         sf::Sprite sprArrow(txtArrow);
         sprArrow.setOrigin(sf::Vector2f(0.f, (float)txtArrow.getSize().y / 2.f));

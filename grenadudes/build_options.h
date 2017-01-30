@@ -15,8 +15,6 @@
 
 #define DRAW_TERRAIN_NORMALS false
 
-#define BALL_MAX_SPEED 14.f
-
 // balancing
 // hp
 #define START_HP_DUDE 110
