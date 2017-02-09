@@ -13,6 +13,8 @@ int main() {
     window.setFramerateLimit(60);
     window.setMouseCursorVisible(false);
 
+    std::cout << "OpenGL version " << window.getSettings().majorVersion << "." << window.getSettings().minorVersion << std::endl;
+
     World world(window);
 
     State::change_state(new StatePlay(&world, "data/map.png"));

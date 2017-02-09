@@ -16,8 +16,8 @@ uniform float screenHeight;   // ^
 uniform float cameraX;
 uniform float cameraY;
 
-void main() {
-    // calculate texture lookup coordinates
+void main() { 
+    // calculate texture lookup coordinates 
     vec4 dataCoord;
     dataCoord.x = gl_FragCoord.x + cameraX;
     dataCoord.y = gl_FragCoord.y - cameraY;
@@ -30,7 +30,11 @@ void main() {
     if (dataCoord.x >= cameraX && screenHeight - dataCoord.y >= cameraY && dataCoord.x < cameraX + screenWidth && screenHeight - dataCoord.y < cameraY + screenHeight) {
         // lookup terrain type in map file
         vec4 dataPixel = texture2D(txtData, dataTexCoord.xy);
-        dataPixel.xyza *= 255;
+        //dataPixel.xyza *= 255;
+        dataPixel.x *= 255;
+        dataPixel.y *= 255;
+        dataPixel.z *= 255;
+        dataPixel.a *= 255;
         vec4 pixel = vec4(0.0, 0.0, 0.0, 1.0);
         
         // sample from correct terrain texture 
