@@ -37,6 +37,7 @@ void EntityBall::event(sf::Event &e) {
         rest = true;
         position = prevRest;
         notify(EVENT_BALL_REST_POS, (void*)(&position));
+        notify(EVENT_PRESS_SPACE, NULL);
     }
     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
         if (!dragging && rest) {
