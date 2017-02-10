@@ -139,6 +139,13 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     }
 
     if (terrain) {
+        // test if hit water
+        if (terrain->get_pos(position) == T_KILL) {
+            rest = true;
+            position = prevRest;
+            notify(EVENT_BALL_REST_POS, (void*)(&position));
+        }
+
         sf::Vector2f contact = sf::Vector2f(50.f, 50.f);
         if (terrain->intersects_with_circle(position, velocity, collisionRadius, &contact, &position)) { // collision with terrain
             contactPoint = contact;
