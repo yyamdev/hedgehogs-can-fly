@@ -13,6 +13,8 @@ Hud::Hud() {
     txtArrow.loadFromFile("data/arrow.png");
     txtCursorDrag.loadFromFile("data/cursor_drag.png");
     txtCursorStop.loadFromFile("data/cursor_stop.png");
+    moveCount = 0;
+    fntCounter.loadFromFile("data/VCR_OSD_MONO.ttf");
 }
 
 void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera) {
@@ -49,6 +51,11 @@ void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera) {
     sprCursor.setOrigin(sf::Vector2f(13.f, 13.f));
     sprCursor.setPosition(mouse);
     window.draw(sprCursor);
+
+    sf::Text txtCounter(util::to_string(moveCount), fntCounter);
+    txtCounter.setPosition(sf::Vector2f(20.f, 10.f));
+    txtCounter.setColor(sf::Color::Black);
+    window.draw(txtCounter);
 }
 
 void Hud::on_notify(Event event, void *data) {
@@ -58,6 +65,7 @@ void Hud::on_notify(Event event, void *data) {
     }
     if (event == EVENT_PLAYER_END_DRAG) {
         dragging = false;
+        moveCount += 1;
     }
     if (event == EVENT_BALL_REST_POS) {
         ballRestPos = *((sf::Vector2f*)data);

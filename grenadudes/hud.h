@@ -20,6 +20,8 @@ private:
     sf::Texture txtArrow;
     sf::Texture txtCursorDrag;
     sf::Texture txtCursorStop;
+    int moveCount;
+    sf::Font fntCounter;
 
     // wind
     sf::Vector2f currentWind;
