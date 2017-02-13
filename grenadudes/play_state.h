@@ -9,6 +9,7 @@
 #include "subject.h"
 #include <SFML/Graphics.hpp>
 #include "ball_entity.h"
+#include "audio.h"
 
 class EntityTerrain;
 
@@ -29,6 +30,7 @@ private:
     EntityBall *player;
 
     Hud hud; // hud renderer
+    Audio audio; // audio player
     EntityTerrain *terrain;
     sf::Clock windClock;
 };
