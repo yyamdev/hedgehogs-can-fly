@@ -45,5 +45,6 @@ sf::Vector2f EntityTnt::get_normal(sf::Vector2f pos, sf::Vector2f vel) {
     if (before.x < position.x - collisionRadius) return sf::Vector2f(-1.f, 0.f);
     if (before.x > position.x + collisionRadius) return sf::Vector2f( 1.f, 0.f);
     if (before.y < position.y - collisionRadius) return sf::Vector2f(0.f, -1.f);
-    else return sf::Vector2f(0.f,  1.f);
+    else return sf::Vector2f(0.f,  -1.f);
+    // TODO -> handle case where ball is sitting still on top of tnt box
 }

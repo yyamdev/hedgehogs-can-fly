@@ -23,6 +23,8 @@ public:
 
     void on_notify(Event event, void *data);
     bool is_at_rest();
+
+    void bounce(float bounceFactor, sf::Vector2f norm);
 private:
     static sf::Texture txt;
     static sf::Texture txtPoint;

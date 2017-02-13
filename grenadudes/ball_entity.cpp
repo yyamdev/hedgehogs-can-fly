@@ -138,31 +138,10 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         }
         if (e->get_tag() == "tnt" && ((EntityTnt*)e)->intersects_with_circle(position, collisionRadius)) {
             EntityTnt *tnt = (EntityTnt*)e;
-
-            float impactSpeed = util::len(velocity);
-            sf::Vector2f impactDirection;
-            if (impactSpeed != 0.f)
-                impactDirection = util::normalize(velocity);
-
-            // calculate vectors
-            sf::Vector2f normal = util::normalize(tnt->get_normal(position - velocity, velocity));
-            sf::Vector2f reflect = velocity - 2.f * normal * (util::dot(velocity, normal));
-            sf::Vector2f bounce = sf::Vector2f();
-
-            float bounceFactor = .6f;
-            if (impactSpeed > 0.2f && impactSpeed < 3.1f) { // bounce a little
-                bounce = reflect * bounceFactor;
-            }
-            else if (impactSpeed >= 3.1f) { // bounce a lot
-                bounce = reflect * bounceFactor;
-            }
-
-            if (util::dot(normal, util::normalize(reflect)) < 0.3f) {
-                bounce += normal;
-            }
-
-            position -= velocity;
-            velocity = bounce;
+            tnt->touch();
+            position -= velocity * 1.5f;
+            bounce(.6f, tnt->get_normal(position, velocity));
+            
         }
     }
 
@@ -183,36 +162,34 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                 notify(EVENT_BALL_REST_POS, (void*)(&position));
             }
 
-            float impactSpeed = util::len(velocity);
-            sf::Vector2f impactDirection;
-            if (impactSpeed != 0.f)
-                impactDirection = util::normalize(velocity);
-
-            if (t == T_THIN && impactSpeed > 9.f) {
-                terrain->remove_flood_fill(contactPoint);
-                velocity = util::normalize(velocity) * fmax(0.f, impactSpeed - 7.f);
-                return;
-            }
-            
-            // calculate vectors
-            sf::Vector2f normal = util::normalize(terrain->get_normal(contact));
-            sf::Vector2f reflect = velocity - 2.f * normal * (util::dot(velocity, normal));
-            sf::Vector2f bounce = sf::Vector2f();
-
-            if (impactSpeed > 0.2f && impactSpeed < 3.1f) { // bounce a little
-                bounce = reflect * bounceFactor;
-            }
-            else if (impactSpeed >= 3.1f) { // bounce a lot
-                bounce = reflect * bounceFactor;
-            }
-
-            if (util::dot(normal, util::normalize(reflect)) < 0.3f) {
-                bounce += normal;
-            }
-
-            velocity = bounce;
+            bounce(bounceFactor, terrain->get_normal(contact));
         }
     }
+}
+
+void EntityBall::bounce(float bounceFactor, sf::Vector2f norm) {
+    float impactSpeed = util::len(velocity);
+    sf::Vector2f impactDirection;
+    if (impactSpeed != 0.f)
+        impactDirection = util::normalize(velocity);
+
+    // calculate vectors
+    sf::Vector2f normal = util::normalize(norm);
+    sf::Vector2f reflect = velocity - 2.f * normal * (util::dot(velocity, normal));
+    sf::Vector2f bounce = sf::Vector2f();
+
+    if (impactSpeed > 0.2f && impactSpeed < 3.1f) { // bounce a little
+        bounce = reflect * bounceFactor;
+    }
+    else if (impactSpeed >= 3.1f) { // bounce a lot
+        bounce = reflect * bounceFactor;
+    }
+
+    if (util::dot(normal, util::normalize(reflect)) < 0.3f) {
+        bounce += normal;
+    }
+
+    velocity = bounce;
 }
 
 void EntityBall::on_notify(Event event, void *data) {
