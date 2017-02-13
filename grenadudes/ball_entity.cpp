@@ -143,6 +143,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         if (terrain->get_pos(position) == T_KILL) {
             rest = true;
             position = prevRest;
+            notify(EVENT_HIT_WATER, NULL);
             notify(EVENT_BALL_REST_POS, (void*)(&position));
         }
 
@@ -167,10 +168,14 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             if (impactSpeed != 0.f)
                 impactDirection = util::normalize(velocity);
 
-            if (t == T_THIN && impactSpeed > 9.f) {
-                terrain->remove_flood_fill(contactPoint);
-                velocity = util::normalize(velocity) * fmax(0.f, impactSpeed - 7.f);
-                return;
+            if (t == T_THIN) {
+                if (impactSpeed > 9.f) {
+                    terrain->remove_flood_fill(contactPoint);
+                    velocity = util::normalize(velocity) * fmax(0.f, impactSpeed - 7.f);
+                    notify(EVENT_SMASH_DOOR, NULL);
+                    return;
+                } else
+                    notify(EVENT_BOUNCE_DOOR, NULL);
             }
             
             // calculate vectors
