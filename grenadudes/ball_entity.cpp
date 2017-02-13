@@ -6,6 +6,7 @@
 #include <iostream>
 #include "util.h"
 #include "debug_draw.h"
+#include "tnt_entity.h"
 
 sf::Texture EntityBall::txt;
 sf::Texture EntityBall::txtPoint;
@@ -134,6 +135,34 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             sf::Vector2f normal = util::normalize(position - e->position);
             sf::Vector2f reflect = impactDirection - 2.f * normal * (util::dot(impactDirection, normal));
             velocity = reflect * impactSpeed * .6f;
+        }
+        if (e->get_tag() == "tnt" && ((EntityTnt*)e)->intersects_with_circle(position, collisionRadius)) {
+            EntityTnt *tnt = (EntityTnt*)e;
+
+            float impactSpeed = util::len(velocity);
+            sf::Vector2f impactDirection;
+            if (impactSpeed != 0.f)
+                impactDirection = util::normalize(velocity);
+
+            // calculate vectors
+            sf::Vector2f normal = util::normalize(tnt->get_normal(position - velocity, velocity));
+            sf::Vector2f reflect = velocity - 2.f * normal * (util::dot(velocity, normal));
+            sf::Vector2f bounce = sf::Vector2f();
+
+            float bounceFactor = .6f;
+            if (impactSpeed > 0.2f && impactSpeed < 3.1f) { // bounce a little
+                bounce = reflect * bounceFactor;
+            }
+            else if (impactSpeed >= 3.1f) { // bounce a lot
+                bounce = reflect * bounceFactor;
+            }
+
+            if (util::dot(normal, util::normalize(reflect)) < 0.3f) {
+                bounce += normal;
+            }
+
+            position -= velocity;
+            velocity = bounce;
         }
     }
 
