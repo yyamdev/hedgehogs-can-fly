@@ -14,4 +14,7 @@ private:
 
     sf::SoundBuffer bufBounce;
     sf::Sound sndBounce;
+
+    sf::SoundBuffer bufSmash;
+    sf::Sound sndSmash;
 };

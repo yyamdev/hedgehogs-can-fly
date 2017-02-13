@@ -7,6 +7,9 @@ Audio::Audio() {
 
     bufBounce.loadFromFile("data/bounce.wav");
     sndBounce.setBuffer(bufBounce);
+
+    bufSmash.loadFromFile("data/smash.wav");
+    sndSmash.setBuffer(bufSmash);
 }
 
 void Audio::on_notify(Event event, void *data) {
@@ -16,5 +19,9 @@ void Audio::on_notify(Event event, void *data) {
 
     if (event == EVENT_BOUNCE_DOOR) {
         sndBounce.play();
+    }
+
+    if (event == EVENT_SMASH_DOOR) {
+        sndSmash.play();
     }
 }
