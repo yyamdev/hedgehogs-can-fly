@@ -108,6 +108,9 @@
     <ClInclude Include="terrain_entity.h">
       <Filter>Header Files\game\world</Filter>
     </ClInclude>
+    <ClInclude Include="tnt_entity.h">
+      <Filter>Header Files\game\world</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="subject.cpp">
@@ -142,6 +145,9 @@
     </ClCompile>
     <ClCompile Include="ball_entity.cpp">
       <Filter>Source Files\game\world\ball</Filter>
+    </ClCompile>
+    <ClCompile Include="tnt_entity.cpp">
+      <Filter>Source Files\game\world</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

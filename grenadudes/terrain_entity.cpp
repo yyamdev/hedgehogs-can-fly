@@ -8,6 +8,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "world.h"
+#include "tnt_entity.h"
 
 EntityTerrain::EntityTerrain(float scale, std::string filename) {
     // load map image
@@ -302,7 +303,8 @@ bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, sf::Vector2f vel, f
 
 void EntityTerrain::event(sf::Event &e) {
     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Right && !sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
-        set_circle(sf::Vector2f((float)e.mouseButton.x, (float)e.mouseButton.y), 25, true);
+        //set_circle(sf::Vector2f((float)e.mouseButton.x, (float)e.mouseButton.y), 25, true);
+        world->add_entity(new EntityTnt(sf::Vector2f((float)e.mouseButton.x + world->camera.x, (float)e.mouseButton.y + world->camera.y)));
     }
     if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::T)
         render = !render;
