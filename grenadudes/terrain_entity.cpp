@@ -37,7 +37,7 @@ EntityTerrain::EntityTerrain(float scale, std::string filename) {
     txtSlow.loadFromFile("data/slow.png");
     txtSlow.setRepeated(true);
     txtSticky.loadFromFile("data/sticky.png");
-    txtSlow.setRepeated(true);
+    txtSticky.setRepeated(true);
     txtFinish.loadFromFile("data/finish.png");
     txtFinish.setRepeated(true);
     // load fragment shader
