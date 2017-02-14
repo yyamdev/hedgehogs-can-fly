@@ -141,7 +141,6 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             tnt->touch();
             position -= velocity * 1.5f;
             bounce(.6f, tnt->get_normal(position, velocity));
-            
         }
     }
 
