@@ -25,4 +25,5 @@ enum Event {
     EVENT_HIT_WATER, // NULL
     EVENT_BOUNCE_DOOR, // NULL
     EVENT_SMASH_DOOR, // NULL
+    EVENT_BALL_CHANGE_CAN_MOVE, // bool* pointer to canMove?
 };

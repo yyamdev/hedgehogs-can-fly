@@ -111,6 +111,9 @@
     <ClInclude Include="audio.h">
       <Filter>Header Files\game\state\play</Filter>
     </ClInclude>
+    <ClInclude Include="tnt_entity.h">
+      <Filter>Header Files\game\world</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="subject.cpp">
@@ -148,6 +151,9 @@
     </ClCompile>
     <ClCompile Include="audio.cpp">
       <Filter>Source Files\game\state\play</Filter>
+    </ClCompile>
+    <ClCompile Include="tnt_entity.cpp">
+      <Filter>Source Files\game\world</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

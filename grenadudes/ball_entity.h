@@ -9,6 +9,7 @@
 #define BALL_TERM_VEL 9.f
 #define BALL_MAX_LAUNCH_SPEED 14.f
 #define BALL_MAX_SPEED 14.f
+#define MIN_MOVE_SPEED 1.2f
 
 class EntityTerrain;
 
@@ -23,6 +24,8 @@ public:
 
     void on_notify(Event event, void *data);
     bool is_at_rest();
+
+    void bounce(float bounceFactor, sf::Vector2f norm);
 private:
     static sf::Texture txt;
     static sf::Texture txtPoint;
@@ -39,4 +42,5 @@ private:
 
     bool dragging; // is user dragging the mouse to select grenade direction & speed?
     sf::Vector2f dragStart;
+    bool canMove;
 };
