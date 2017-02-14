@@ -61,9 +61,12 @@ void Hud::on_notify(Event event, void *data) {
     }
     if (event == EVENT_BALL_REST_POS) {
         ballRestPos = *((sf::Vector2f*)data);
-        moving = false;
+       // moving = false;
     }
     if (event == EVENT_BALL_START_MOVING) {
-        moving = true;
+        //moving = true;
+    }
+    if (event == EVENT_BALL_CHANGE_CAN_MOVE) {
+        moving = !*((bool*)data);
     }
 }

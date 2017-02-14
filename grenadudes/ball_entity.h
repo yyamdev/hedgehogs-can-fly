@@ -9,6 +9,7 @@
 #define BALL_TERM_VEL 9.f
 #define BALL_MAX_LAUNCH_SPEED 14.f
 #define BALL_MAX_SPEED 14.f
+#define MIN_MOVE_SPEED 1.2f
 
 class EntityTerrain;
 
@@ -41,4 +42,5 @@ private:
 
     bool dragging; // is user dragging the mouse to select grenade direction & speed?
     sf::Vector2f dragStart;
+    bool canMove;
 };

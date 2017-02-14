@@ -31,16 +31,18 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
     terrain = NULL;
     dragging = false;
     rest = false;
+    canMove = false;
 }
 
 void EntityBall::event(sf::Event &e) {
     if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Space) {
-        rest = true;
+        rest = canMove = true;
         position = prevRest;
         notify(EVENT_BALL_REST_POS, (void*)(&position));
+        notify(EVENT_BALL_CHANGE_CAN_MOVE, (void*)(&canMove));
     }
     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
-        if (!dragging && rest) {
+        if (!dragging && canMove) {
             dragging = true;
             dragStart.x = (float)e.mouseButton.x;
             dragStart.y = (float)e.mouseButton.y;
@@ -104,6 +106,11 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         notify(EVENT_BALL_REST_POS, (void*)(&position));
     }
 
+    if (rest) canMove = true;
+    if (util::len(velocity) > MIN_MOVE_SPEED) canMove = false;
+    notify(EVENT_BALL_CHANGE_CAN_MOVE, (void*)(&canMove));
+    notify(EVENT_BALL_REST_POS, (void*)(&position));
+
     // apply gravity
     velocity += world->gravity;
 
@@ -140,6 +147,9 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             tnt->touch();
             position -= velocity * 1.5f;
             bounce(.6f, tnt->get_normal(position, velocity));
+            if (util::len(velocity) < MIN_MOVE_SPEED) canMove = true;
+            notify(EVENT_BALL_CHANGE_CAN_MOVE, (void*)(&canMove));
+            notify(EVENT_BALL_REST_POS, (void*)(&position));
         }
     }
 
@@ -161,6 +171,9 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             }
 
             bounce(bounceFactor, terrain->get_normal(contact));
+            if (util::len(velocity) < MIN_MOVE_SPEED) canMove = true;
+            notify(EVENT_BALL_CHANGE_CAN_MOVE, (void*)(&canMove));
+            notify(EVENT_BALL_REST_POS, (void*)(&position));
         }
     }
 }
