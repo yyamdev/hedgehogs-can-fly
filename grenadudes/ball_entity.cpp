@@ -69,6 +69,7 @@ void EntityBall::event(sf::Event &e) {
                 rest = false;
                 clkRest.restart();
                 notify(EVENT_BALL_START_MOVING, NULL);
+                prevRest = position;
             }
         }
     }
@@ -168,6 +169,14 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                 prevRest = position;
                 bounceFactor = 0.0f;
                 notify(EVENT_BALL_REST_POS, (void*)(&position));
+            }
+            if (t == T_THIN) {
+                float impactSpeed = util::len(velocity);
+                if (impactSpeed > 9.f) {
+                    terrain->remove_flood_fill(contactPoint);
+                    velocity = util::normalize(velocity) * fmax(0.f, impactSpeed - 7.f);
+                    return;
+                }
             }
 
             bounce(bounceFactor, terrain->get_normal(contact));
