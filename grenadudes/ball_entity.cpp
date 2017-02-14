@@ -102,7 +102,6 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         rest = true;
         prevRest = position;
         notify(EVENT_BALL_REST_POS, (void*)(&position));
-        position.y = contactPoint.y - collisionRadius - 1.f;
     }
 
     // apply gravity
