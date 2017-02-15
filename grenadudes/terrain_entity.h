@@ -57,10 +57,6 @@ public:
 
     sf::Vector2f playerSpawn;
 
-    // temp instructions
-    sf::Texture txtInstructionDrag, txtInstructionSpace;
-    sf::Sprite sprInstructionDrag, sprInstructionSpace;
-
 private:
     sf::Vector2u size; // terrain texture size
     float scale; // scale factor for drawing

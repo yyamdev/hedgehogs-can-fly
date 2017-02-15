@@ -5,6 +5,8 @@
 #include "observer.h"
 #include <SFML/Graphics.hpp>
 
+#define SHOW_INITIAL_INSTRUCTIONS 1
+
 class Hud : public Observer{
 public:
     Hud();
@@ -25,4 +27,8 @@ private:
 
     // wind
     sf::Vector2f currentWind;
+
+    // instructions
+    sf::Texture txtInstructionDrag, txtInstructionSpace;
+    sf::Sprite sprInstructionDrag, sprInstructionSpace;
 };

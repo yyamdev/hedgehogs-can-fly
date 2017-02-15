@@ -45,14 +45,6 @@ EntityTerrain::EntityTerrain(float scale, std::string filename) {
     shdTerrain.loadFromFile("data/terrain.frag", sf::Shader::Fragment);
     // notify
     notify(EVENT_TERRAIN_CHANGE, NULL);
-
-    txtInstructionDrag.loadFromFile("data/instruction1.png");
-    txtInstructionSpace.loadFromFile("data/instruction2.png");
-    sprInstructionDrag.setTexture(txtInstructionDrag);
-    sprInstructionSpace.setTexture(txtInstructionSpace);
-    sprInstructionDrag.setOrigin(sf::Vector2f(txtInstructionDrag.getSize().x / 2.f, txtInstructionDrag.getSize().y / 2.f));
-    sprInstructionSpace.setOrigin(sf::Vector2f(txtInstructionSpace.getSize().x / 2.f, txtInstructionSpace.getSize().y / 2.f));
-    sprInstructionSpace.setScale(sf::Vector2f(0.7f, 0.7f));
 }
 
 void EntityTerrain::data_pass() {
@@ -347,16 +339,9 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
     sprTerrain.setPosition(-world->camera);
     window.draw(sprTerrain, &shdTerrain); // draw
 
-    // draw instructions
-    sprInstructionDrag.setPosition(sf::Vector2f(200.f - world->camera.x, 2200.f - world->camera.y));
-    sprInstructionSpace.setPosition(sf::Vector2f(950.f - world->camera.x, 2260.f - world->camera.y));
-    window.draw(sprInstructionDrag);
-    window.draw(sprInstructionSpace);
+    
 }
 
 void EntityTerrain::on_notify(Event event, void *data) {
-    if (event == EVENT_PLAYER_END_DRAG)
-        sprInstructionDrag.setColor(sf::Color(255,255,255,0));
-    if (event == EVENT_PRESS_SPACE)
-        sprInstructionSpace.setColor(sf::Color(255,255,255,0));
+
 }
