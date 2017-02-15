@@ -30,9 +30,15 @@ private:
     static bool textureLoaded;
 };
 
-/*
 class EntityExplosionGfx : public Entity {
 public:
+    EntityExplosionGfx();
+    EntityExplosionGfx(sf::Vector2f pos, float rad);
 
+    void event(sf::Event &e);
+    void tick(std::vector<Entity*> &entities);
+    void draw(sf::RenderWindow &window);
+private:
+    sf::Clock life;
+    float rad;
 };
-*/

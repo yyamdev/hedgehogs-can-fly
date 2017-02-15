@@ -43,7 +43,8 @@ void EntityTnt::tick(std::vector<Entity*> &entities) {
         if (pulses >= 4) {
             if (terrain) {
                 // TODO -> play sound explode
-                terrain->set_weak_terrain_circle(position, 128.f, false);
+                terrain->set_weak_terrain_circle(position, 96.f, false);
+                world->add_entity(new EntityExplosionGfx(position, 96.f));
                 remove = true;
             } else
                 std::cout << "TNT entity should have exploded but it didn't have a pointer to terrain entity\n";
@@ -81,4 +82,32 @@ sf::Vector2f EntityTnt::get_normal(sf::Vector2f pos, sf::Vector2f vel) {
     if (before.x > position.x + collisionRadius && vel.x < 0.f) return sf::Vector2f( 1.f, 0.f);
     if (before.y < position.y - collisionRadius && vel.y > 0.f) return sf::Vector2f(0.f, -1.f);
     else return sf::Vector2f(0.f,  -1.f);
+}
+
+
+EntityExplosionGfx::EntityExplosionGfx() {
+    EntityExplosionGfx(sf::Vector2f(0.f, 0.f), 0.f);
+}
+
+EntityExplosionGfx::EntityExplosionGfx(sf::Vector2f pos, float rad) {
+    life.restart();
+    position = pos;
+    this->rad = rad;
+}
+
+void EntityExplosionGfx::event(sf::Event &e) {}
+
+void EntityExplosionGfx::tick(std::vector<Entity*> &entities) {
+    if (life.getElapsedTime().asSeconds() > 0.1f) {
+        remove = true;
+    }
+}
+
+void EntityExplosionGfx::draw(sf::RenderWindow &window) {
+    sf::CircleShape c;
+    c.setRadius(rad);
+    c.setOrigin(sf::Vector2f(rad, rad));
+    c.setPosition(position - world->camera);
+    c.setFillColor(sf::Color::White);
+    window.draw(c);
 }
