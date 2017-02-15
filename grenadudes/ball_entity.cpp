@@ -108,8 +108,8 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         notify(EVENT_BALL_REST_POS, (void*)(&position));
     }
 
-    if (rest) canMove = true;
     if (util::len(velocity) > MIN_MOVE_SPEED) canMove = false;
+    if (rest) canMove = true;
     notify(EVENT_BALL_CHANGE_CAN_MOVE, (void*)(&canMove));
     notify(EVENT_BALL_REST_POS, (void*)(&position));
 
@@ -159,9 +159,11 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         // test if hit water
         if (terrain->get_pos(position) == T_KILL) {
             rest = true;
+            canMove = true;
             position = prevRest;
             notify(EVENT_HIT_WATER, NULL);
             notify(EVENT_BALL_REST_POS, (void*)(&position));
+            notify(EVENT_BALL_CHANGE_CAN_MOVE, (void*)(&canMove));
         }
 
         sf::Vector2f contact = sf::Vector2f(50.f, 50.f);
@@ -184,7 +186,10 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                 if (impactSpeed > 9.f) {
                     terrain->remove_flood_fill(contactPoint);
                     velocity = util::normalize(velocity) * fmax(0.f, impactSpeed - 7.f);
+                    notify(EVENT_SMASH_DOOR, NULL);
                     return;
+                } else {
+                    notify(EVENT_BOUNCE_DOOR, NULL);
                 }
             }
 
