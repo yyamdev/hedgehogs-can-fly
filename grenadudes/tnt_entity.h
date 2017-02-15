@@ -22,5 +22,17 @@ public:
 private:
     EntityTerrain *terrain;
     bool touched;
-    sf::Clock clkExplode;
+    int pulses;
+    sf::Clock clkPulse; // for graphical and sound effects
+    bool pulse;
+
+    static sf::Texture txt;
+    static bool textureLoaded;
 };
+
+/*
+class EntityExplosionGfx : public Entity {
+public:
+
+};
+*/

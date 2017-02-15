@@ -5,6 +5,9 @@
 #include "util.h"
 #include "terrain_entity.h"
 
+sf::Texture EntityTnt::txt;
+bool EntityTnt::textureLoaded = false;
+
 EntityTnt::EntityTnt() {
     EntityTnt(sf::Vector2f(0.f, 0.f));
 }
@@ -15,6 +18,12 @@ EntityTnt::EntityTnt(sf::Vector2f pos) {
     collisionRadius = 16.f;
     terrain = NULL;
     touched = false;
+    pulse = false;
+    pulses = 0;
+    if (!textureLoaded) {
+        textureLoaded = true;
+        txt.loadFromFile("data/tnt.png");
+    }
 }
 
 void EntityTnt::event(sf::Event &e) {
@@ -26,27 +35,36 @@ void EntityTnt::tick(std::vector<Entity*> &entities) {
             terrain = (EntityTerrain*)e;
     }
 
-    if (touched && clkExplode.getElapsedTime().asSeconds() > 3.f) {
-        if (terrain) {
-            terrain->set_weak_terrain_circle(position, 128.f, false);
-            remove = true;
-        } else {
-            std::cout << "TNT entity should have exploded but it didn't have a pointer to terrain entity\n";
+    if (touched && clkPulse.getElapsedTime().asSeconds() > 1.5f) {
+        clkPulse.restart();
+        pulse = true;
+        ++pulses;
+        // TODO -> play sound pulse
+        if (pulses >= 4) {
+            if (terrain) {
+                // TODO -> play sound explode
+                terrain->set_weak_terrain_circle(position, 128.f, false);
+                remove = true;
+            } else
+                std::cout << "TNT entity should have exploded but it didn't have a pointer to terrain entity\n";
         }
+    }
+    else if (touched && clkPulse.getElapsedTime().asSeconds() > 0.4f) {
+        pulse = false;
     }
 }
 
 void EntityTnt::draw(sf::RenderWindow &window) {
-    sf::RectangleShape rect(sf::Vector2f(32.f, 32.f));
-    rect.setOrigin(sf::Vector2f(16.f, 16.f));
-    rect.setFillColor(sf::Color::Red);
-    rect.setPosition(position - world->camera);
-    window.draw(rect);
+    sf::Sprite spr(txt);
+    spr.setOrigin(sf::Vector2f((float)txt.getSize().x / 2.f, (float)txt.getSize().y / 2.f));
+    spr.setPosition(position - world->camera);
+    if (!pulse) spr.setColor(sf::Color(210,210,210));
+    window.draw(spr);
 }
 
 void EntityTnt::touch() {
     touched = true;
-    clkExplode.restart();
+    pulses = 0;
 }
 
 bool EntityTnt::intersects_with_circle(sf::Vector2f pos, float rad) {
