@@ -1,0 +1,10 @@
+Playtest notes
+
+ > "Space to reset" unclear. People think it resets the whole level
+
+ > At the very beginning people tend to fling to the right with full velocity. First 
+level(s) should account for that
+
+ > sfx important. "door" only understood with sound effects
+
+ > maybe the goal is unclear, i.e, max moves to finish a level
