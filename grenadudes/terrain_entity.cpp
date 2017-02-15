@@ -216,6 +216,20 @@ void EntityTerrain::set_circle(sf::Vector2f center, float rad, bool solid) {
     notify(EVENT_TERRAIN_CHANGE, NULL);
 }
 
+void EntityTerrain::set_weak_terrain_circle(sf::Vector2f center, float rad, bool solid) {
+    sf::FloatRect bound(center.x - rad, center.y - rad, rad * 2.f, rad * 2);
+    for (float y=bound.top; y<bound.top + bound.height; ++y) {
+        for (float x=bound.left; x<bound.left + bound.width; ++x) {
+            float dx = center.x - x;
+            float dy = center.y - y;
+            if ((dx * dx + dy * dy) < (rad * rad) && get_pos(sf::Vector2f(x, y)) == T_WEAK) {
+                set_solid(sf::Vector2f(x, y), solid);
+            }
+        }
+    }
+    notify(EVENT_TERRAIN_CHANGE, NULL);
+}
+
 sf::Vector2f EntityTerrain::get_normal(sf::Vector2f pos) {
     std::vector<sf::Vector2f> positions;
     float sampleRadius = 4;

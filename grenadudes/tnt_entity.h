@@ -3,6 +3,9 @@
 // tnt box that can explode
 
 #include "entity.h"
+#include <SFML/Graphics.hpp>
+
+class EntityTerrain;
 
 class EntityTnt : public Entity {
 public:
@@ -17,4 +20,7 @@ public:
     sf::Vector2f get_normal(sf::Vector2f pos, sf::Vector2f vel);
     void touch();
 private:
+    EntityTerrain *terrain;
+    bool touched;
+    sf::Clock clkExplode;
 };

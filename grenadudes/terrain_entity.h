@@ -42,6 +42,7 @@ public:
     
     void set_rectangle(sf::FloatRect rect, bool solid); // set a rectangular block
     void set_circle(sf::Vector2f center, float rad, bool solid); // set a circular block
+    void set_weak_terrain_circle(sf::Vector2f center, float rad, bool solid); // sets the weak terrain im a circular block
 
     sf::Vector2f get_normal(sf::Vector2f pos); // get surface normal (unit)
     sf::Vector2f get_normal_ground(sf::Vector2f pos); // get surface normal (unit) at nearest downwards ground

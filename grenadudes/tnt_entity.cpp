@@ -3,6 +3,7 @@
 #include "world.h"
 #include <iostream>
 #include "util.h"
+#include "terrain_entity.h"
 
 EntityTnt::EntityTnt() {
     EntityTnt(sf::Vector2f(0.f, 0.f));
@@ -12,12 +13,27 @@ EntityTnt::EntityTnt(sf::Vector2f pos) {
     position = pos;
     tag = "tnt";
     collisionRadius = 16.f;
+    terrain = NULL;
+    touched = false;
 }
 
 void EntityTnt::event(sf::Event &e) {
 }
 
 void EntityTnt::tick(std::vector<Entity*> &entities) {
+    for (auto &e : entities) {
+        if (e->get_tag() == "terrain")
+            terrain = (EntityTerrain*)e;
+    }
+
+    if (touched && clkExplode.getElapsedTime().asSeconds() > 3.f) {
+        if (terrain) {
+            terrain->set_weak_terrain_circle(position, 128.f, false);
+            remove = true;
+        } else {
+            std::cout << "TNT entity should have exploded but it didn't have a pointer to terrain entity\n";
+        }
+    }
 }
 
 void EntityTnt::draw(sf::RenderWindow &window) {
@@ -29,7 +45,8 @@ void EntityTnt::draw(sf::RenderWindow &window) {
 }
 
 void EntityTnt::touch() {
-    std::cout << "TOUCH!\n";
+    touched = true;
+    clkExplode.restart();
 }
 
 bool EntityTnt::intersects_with_circle(sf::Vector2f pos, float rad) {
