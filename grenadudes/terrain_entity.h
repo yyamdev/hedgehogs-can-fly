@@ -17,10 +17,12 @@ enum TerrainType {
     T_THIN,
 };
 
-class EntityTerrain : public Entity {
+class EntityTerrain : public Entity, public Observer {
 public:
     EntityTerrain(float scale, std::string filename);
     ~EntityTerrain(); // free all memory
+
+    void on_notify(Event event, void *data);
 
     template <typename T>
     bool pos_in_bounds(T pos) {

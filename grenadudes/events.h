@@ -21,6 +21,10 @@ enum Event {
     EVENT_TERRAIN_CHANGE, // NULL
     EVENT_BALL_REST_POS, // sf::Vector2f* pointer to new rest position
     EVENT_BALL_START_MOVING, // NULL
+    EVENT_PRESS_SPACE, // NULL
+    EVENT_HIT_WATER, // NULL
+    EVENT_BOUNCE_DOOR, // NULL
+    EVENT_SMASH_DOOR, // NULL
     EVENT_BALL_CHANGE_CAN_MOVE, // bool* pointer to canMove?
     EVENT_TNT_EXPLODE, // sf::Vector3f* pointer to explosion position. z = explosion radius
 };

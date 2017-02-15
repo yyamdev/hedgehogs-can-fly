@@ -1,18 +1,4 @@
-> todo
-- done
+Playtest Prototype:
 
-To Playtest:
-
- > proper AI
-   > finish pathfinding
-   > redo navgraph generation
-   > better decision making
-
- / art
-   / weapon pickup art
-   / different grenade art
-
- > basic menu screen w/ "Start" button
- > basic win/loss screen
-
- / hud lives incidator
+ > sound fx
+ > move counter

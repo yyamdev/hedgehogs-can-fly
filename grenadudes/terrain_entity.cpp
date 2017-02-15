@@ -352,4 +352,10 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
     shdTerrain.setParameter("cameraY", world->camera.y);
     sprTerrain.setPosition(-world->camera);
     window.draw(sprTerrain, &shdTerrain); // draw
+
+    
+}
+
+void EntityTerrain::on_notify(Event event, void *data) {
+
 }
