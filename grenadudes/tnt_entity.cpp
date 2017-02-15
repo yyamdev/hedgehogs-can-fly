@@ -45,6 +45,8 @@ void EntityTnt::tick(std::vector<Entity*> &entities) {
                 // TODO -> play sound explode
                 terrain->set_weak_terrain_circle(position, 96.f, false);
                 world->add_entity(new EntityExplosionGfx(position, 96.f));
+                sf::Vector3f explodeData(position.x, position.y, 96.f);
+                notify(EVENT_TNT_EXPLODE, (void*)(&explodeData));
                 remove = true;
             } else
                 std::cout << "TNT entity should have exploded but it didn't have a pointer to terrain entity\n";
