@@ -28,6 +28,8 @@ private:
 
     static sf::Texture txt;
     static bool textureLoaded;
+
+    bool intersecting_terrain();
 };
 
 class EntityExplosionGfx : public Entity {

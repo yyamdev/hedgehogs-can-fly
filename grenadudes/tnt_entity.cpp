@@ -30,6 +30,11 @@ void EntityTnt::event(sf::Event &e) {
 }
 
 void EntityTnt::tick(std::vector<Entity*> &entities) {
+    position += velocity;
+
+    velocity += world->gravity;
+    if (velocity.y > 8.f) velocity.y = 8.f;
+
     for (auto &e : entities) {
         if (e->get_tag() == "terrain")
             terrain = (EntityTerrain*)e;
@@ -54,6 +59,11 @@ void EntityTnt::tick(std::vector<Entity*> &entities) {
     }
     else if (touched && clkPulse.getElapsedTime().asSeconds() > 0.4f) {
         pulse = false;
+    }
+
+    if (terrain && intersecting_terrain()) {
+        position -= velocity;
+        velocity.y = 0.f;
     }
 }
 
@@ -84,6 +94,14 @@ sf::Vector2f EntityTnt::get_normal(sf::Vector2f pos, sf::Vector2f vel) {
     if (before.x > position.x + collisionRadius && vel.x < 0.f) return sf::Vector2f( 1.f, 0.f);
     if (before.y < position.y - collisionRadius && vel.y > 0.f) return sf::Vector2f(0.f, -1.f);
     else return sf::Vector2f(0.f,  -1.f);
+}
+
+bool EntityTnt::intersecting_terrain() {
+    for (int i = 0; i < (int)(collisionRadius * 2.f); ++i) {
+        if (terrain && terrain->get_solid(sf::Vector2f(position.x - collisionRadius + (float)i, position.y + collisionRadius)))
+            return true;
+    }
+    return false;
 }
 
 
