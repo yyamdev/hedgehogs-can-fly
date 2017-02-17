@@ -114,6 +114,9 @@
     <ClInclude Include="tnt_entity.h">
       <Filter>Header Files\game\world</Filter>
     </ClInclude>
+    <ClInclude Include="menu_state.h">
+      <Filter>Header Files\game\state</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="subject.cpp">

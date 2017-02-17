@@ -149,6 +149,7 @@
     <ClInclude Include="entity.h" />
     <ClInclude Include="events.h" />
     <ClInclude Include="hud.h" />
+    <ClInclude Include="menu_state.h" />
     <ClInclude Include="observer.h" />
     <ClInclude Include="play_state.h" />
     <ClInclude Include="state.h" />

@@ -62,7 +62,7 @@ void EntityTnt::tick(std::vector<Entity*> &entities) {
     }
 
     if (terrain && intersecting_terrain()) {
-        position -= velocity;
+        position -= velocity * 0.5f;
         velocity.y = 0.f;
     }
 }
@@ -76,7 +76,7 @@ void EntityTnt::draw(sf::RenderWindow &window) {
 }
 
 void EntityTnt::touch() {
-    if (!touch) {
+    if (!touched) {
         touched = true;
         pulses = 0;
     }
