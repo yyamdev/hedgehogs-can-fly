@@ -5,7 +5,8 @@
 #include "state.h"
 #include "observer.h"
 #include "subject.h"
-/*
+
+class World;
 
 class StateMenu : public State, public Observer, public Subject {
 public:
@@ -22,4 +23,3 @@ public:
 
 private:
 };
-*/

@@ -158,6 +158,9 @@
     <ClCompile Include="tnt_entity.cpp">
       <Filter>Source Files\game\world</Filter>
     </ClCompile>
+    <ClCompile Include="menu_state.cpp">
+      <Filter>Source Files\game\state</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\terrain.frag">

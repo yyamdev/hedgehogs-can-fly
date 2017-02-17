@@ -5,6 +5,9 @@
 #include "world.h"
 #include "play_state.h"
 #include "util.h"
+#include "menu_state.h"
+
+#define GO_TO_TEST_LEVEL 0
 
 void print_debug_controls();
 
@@ -17,7 +20,10 @@ int main() {
 
     World world(window);
 
-    State::change_state(new StatePlay(&world, "data/map.png"));
+    if (GO_TO_TEST_LEVEL)
+        State::change_state(new StatePlay(&world, "data/map.png"));
+    else
+        State::change_state(new StateMenu(&world));
 
     print_debug_controls();
 
@@ -60,10 +66,6 @@ int main() {
 void print_debug_controls() {
     std::cout << "debug controls:\n";
     std::cout << "B - toggle pause\n";
-    std::cout << "P - toggle ai\n";
-    std::cout << "N - toggle show pathfinding nodes\n";
-    std::cout << "G - toggle show terrain grix approx.\n";
-    std::cout << "middle mouse - ai navigate\n";
     std::cout << "F1 - screenshot\n";
     std::cout << "R - restart game\n";
     std::cout << "H - print this message\n";

@@ -133,6 +133,7 @@
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="hud.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="menu_state.cpp" />
     <ClCompile Include="observer.cpp" />
     <ClCompile Include="play_state.cpp" />
     <ClCompile Include="state.cpp" />
