@@ -50,7 +50,7 @@ void EntityTnt::tick(std::vector<Entity*> &entities) {
                 // TODO -> play sound explode
                 terrain->set_weak_terrain_circle(position, 96.f, false);
                 world->add_entity(new EntityExplosionGfx(position, 96.f));
-                sf::Vector3f explodeData(position.x, position.y, 96.f);
+                sf::Vector3f explodeData(position.x, position.y, 128.f);
                 notify(EVENT_TNT_EXPLODE, (void*)(&explodeData));
                 remove = true;
             } else
@@ -76,8 +76,10 @@ void EntityTnt::draw(sf::RenderWindow &window) {
 }
 
 void EntityTnt::touch() {
-    touched = true;
-    pulses = 0;
+    if (!touch) {
+        touched = true;
+        pulses = 0;
+    }
 }
 
 bool EntityTnt::intersects_with_circle(sf::Vector2f pos, float rad) {

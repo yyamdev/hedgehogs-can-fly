@@ -235,7 +235,7 @@ void EntityBall::on_notify(Event event, void *data) {
         sf::Vector3f *info = (sf::Vector3f*)data;
         sf::Vector2f centre(info->x, info->y);
         sf::Vector2f tntToBall = position - centre;
-        float maxSpeed = 10.f;
+        float maxSpeed = 14.f;
         float speed = maxSpeed * (1.f -  fmin(1.f, util::len(tntToBall) / info->z));
         velocity = util::normalize(tntToBall) * speed;
     }
