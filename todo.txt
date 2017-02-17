@@ -1,4 +1,2 @@
-Playtest Prototype:
-
- > sound fx
- > move counter
+Micro Todo:
+ > make tnt boxes loaded in level
