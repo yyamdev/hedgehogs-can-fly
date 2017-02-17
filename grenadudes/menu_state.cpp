@@ -2,8 +2,16 @@
 #include "world.h"
 #include <iostream>
 #include "select_state.h"
+#include "shared_res.h"
+#include "build_options.h"
 
 StateMenu::StateMenu(World *world) : State(world) {
+    txtTitle.setString("Endangered Panda");
+    txtTitle.setFont(fntUi);
+    txtTitle.setCharacterSize(100);
+    txtTitle.setColor(sf::Color::Black);
+    txtTitle.setOrigin(sf::Vector2f(txtTitle.getLocalBounds().width / 2.f, txtTitle.getLocalBounds().height / 2.f));
+    txtTitle.setPosition(WINDOW_WIDTH / 2.f, 60.f);
 }
 
 void StateMenu::on_event(sf::Event &event) {
@@ -19,6 +27,7 @@ void StateMenu::on_draw(sf::RenderWindow &window) {
 }
 
 void StateMenu::on_draw_ui(sf::RenderWindow &window) {
+    window.draw(txtTitle);
 }
 
 void StateMenu::on_gain_focus() {

@@ -6,6 +6,7 @@
 #include "play_state.h"
 #include "util.h"
 #include "menu_state.h"
+#include "shared_res.h"
 
 #define GO_TO_TEST_LEVEL 0
 
@@ -15,6 +16,8 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), TITLE, sf::Style::Close);
     window.setFramerateLimit(60);
     window.setMouseCursorVisible(false);
+
+    load_shared_res();
 
     std::cout << "OpenGL version " << window.getSettings().majorVersion << "." << window.getSettings().minorVersion << std::endl;
     print_debug_controls();

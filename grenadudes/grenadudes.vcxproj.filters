@@ -120,6 +120,9 @@
     <ClInclude Include="select_state.h">
       <Filter>Header Files\game\state</Filter>
     </ClInclude>
+    <ClInclude Include="shared_res.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="subject.cpp">
@@ -166,6 +169,9 @@
     </ClCompile>
     <ClCompile Include="select_state.cpp">
       <Filter>Source Files\game\state</Filter>
+    </ClCompile>
+    <ClCompile Include="shared_res.cpp">
+      <Filter>Source Files\game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
