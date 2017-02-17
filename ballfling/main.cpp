@@ -8,7 +8,7 @@
 #include "menu_state.h"
 #include "shared_res.h"
 
-#define GO_TO_TEST_LEVEL 0
+#define GO_TO_TEST_LEVEL 1
 
 void print_debug_controls();
 

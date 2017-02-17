@@ -42,6 +42,9 @@ void EntityBall::event(sf::Event &e) {
         notify(EVENT_PRESS_SPACE, NULL);
         notify(EVENT_BALL_CHANGE_CAN_MOVE, (void*)(&canMove));
     }
+    if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::X) {
+        world->gravity.y = -world->gravity.y;
+    }
     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
         if (!dragging && canMove) {
             dragging = true;

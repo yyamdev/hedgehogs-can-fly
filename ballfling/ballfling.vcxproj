@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{096680FE-14B3-452E-8979-D44A3246ACBE}</ProjectGuid>
-    <RootNamespace>grenadudes</RootNamespace>
+    <ProjectGuid>{E7ADE0AD-EBC9-45DD-946D-03C1B451A919}</ProjectGuid>
+    <RootNamespace>ballfling</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
