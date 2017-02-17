@@ -1,11 +1,15 @@
 #include "menu_state.h"
 #include "world.h"
 #include <iostream>
+#include "select_state.h"
 
 StateMenu::StateMenu(World *world) : State(world) {
 }
 
 void StateMenu::on_event(sf::Event &event) {
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
+        State::push_state(new StateSelect(world));
+    }
 }
 
 void StateMenu::on_tick() {

@@ -117,6 +117,9 @@
     <ClInclude Include="menu_state.h">
       <Filter>Header Files\game\state</Filter>
     </ClInclude>
+    <ClInclude Include="select_state.h">
+      <Filter>Header Files\game\state</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="subject.cpp">
@@ -159,6 +162,9 @@
       <Filter>Source Files\game\world</Filter>
     </ClCompile>
     <ClCompile Include="menu_state.cpp">
+      <Filter>Source Files\game\state</Filter>
+    </ClCompile>
+    <ClCompile Include="select_state.cpp">
       <Filter>Source Files\game\state</Filter>
     </ClCompile>
   </ItemGroup>
