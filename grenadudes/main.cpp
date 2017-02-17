@@ -17,6 +17,7 @@ int main() {
     window.setMouseCursorVisible(false);
 
     std::cout << "OpenGL version " << window.getSettings().majorVersion << "." << window.getSettings().minorVersion << std::endl;
+    print_debug_controls();
 
     World world(window);
 
@@ -24,8 +25,6 @@ int main() {
         State::change_state(new StatePlay(&world, "data/map.png"));
     else
         State::change_state(new StateMenu(&world));
-
-    print_debug_controls();
 
     while (window.isOpen()) {
         sf::Event e;
