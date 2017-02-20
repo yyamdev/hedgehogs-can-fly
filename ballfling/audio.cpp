@@ -10,6 +10,9 @@ Audio::Audio() {
 
     bufSmash.loadFromFile("data/smash.wav");
     sndSmash.setBuffer(bufSmash);
+
+    bufExplode.loadFromFile("data/asplode.ogg");
+    sndExplode.setBuffer(bufExplode);
 }
 
 void Audio::on_notify(Event event, void *data) {
@@ -23,5 +26,9 @@ void Audio::on_notify(Event event, void *data) {
 
     if (event == EVENT_SMASH_DOOR) {
         sndSmash.play();
+    }
+
+    if (event == EVENT_TNT_EXPLODE) {
+        sndExplode.play();
     }
 }
