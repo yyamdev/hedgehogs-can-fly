@@ -55,6 +55,8 @@ void EntityTnt::tick(std::vector<Entity*> &entities) {
                 remove = true;
             } else
                 std::cout << "TNT entity should have exploded but it didn't have a pointer to terrain entity\n";
+        } else {
+            notify(EVENT_TNT_BEEP, NULL);
         }
     }
     else if (touched && clkPulse.getElapsedTime().asSeconds() > 0.4f) {

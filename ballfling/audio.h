@@ -20,4 +20,7 @@ private:
 
     sf::SoundBuffer bufExplode;
     sf::Sound sndExplode;
+    
+    sf::SoundBuffer bufTbeep;
+    sf::Sound sndTbeep;
 };

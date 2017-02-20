@@ -27,4 +27,5 @@ enum Event {
     EVENT_SMASH_DOOR, // NULL
     EVENT_BALL_CHANGE_CAN_MOVE, // bool* pointer to canMove?
     EVENT_TNT_EXPLODE, // sf::Vector3f* pointer to explosion position. z = explosion radius
+    EVENT_TNT_BEEP, // NULL
 };

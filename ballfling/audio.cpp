@@ -13,6 +13,9 @@ Audio::Audio() {
 
     bufExplode.loadFromFile("data/asplode.ogg");
     sndExplode.setBuffer(bufExplode);
+
+    bufTbeep.loadFromFile("data/tntbeep.wav");
+    sndTbeep.setBuffer(bufTbeep);
 }
 
 void Audio::on_notify(Event event, void *data) {
@@ -30,5 +33,9 @@ void Audio::on_notify(Event event, void *data) {
 
     if (event == EVENT_TNT_EXPLODE) {
         sndExplode.play();
+    }
+
+    if (event == EVENT_TNT_BEEP) {
+        sndTbeep.play();
     }
 }
