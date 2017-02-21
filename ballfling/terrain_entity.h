@@ -59,6 +59,7 @@ public:
     sf::Vector2f playerSpawn;
 
 private:
+    std::string filename;
     sf::Vector2u size; // terrain texture size
     float scale; // scale factor for drawing
     sf::Shader shdTerrain;
@@ -75,4 +76,5 @@ private:
     sf::Texture txtFinish;
     bool render;
     void data_pass();
+    bool editMode;
 };

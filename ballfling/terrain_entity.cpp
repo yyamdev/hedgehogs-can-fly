@@ -9,11 +9,14 @@
 #include <math.h>
 #include "world.h"
 #include "tnt_entity.h"
+#include "debug_draw.h"
+#include "imgui.h"
 
 EntityTerrain::EntityTerrain(float scale, std::string filename) {
     // load map image
     sf::Image imgMap;
     imgMap.loadFromFile(filename);
+    this->filename = filename;
     // properties
     size = imgMap.getSize();
     this->scale = scale;
@@ -45,6 +48,7 @@ EntityTerrain::EntityTerrain(float scale, std::string filename) {
     shdTerrain.loadFromFile("data/terrain.frag", sf::Shader::Fragment);
     // notify
     notify(EVENT_TERRAIN_CHANGE, NULL);
+    editMode = false;
 }
 
 void EntityTerrain::data_pass() {
@@ -353,7 +357,9 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
     sprTerrain.setPosition(-world->camera);
     window.draw(sprTerrain, &shdTerrain); // draw
 
-    
+    if (edit && ImGui::CollapsingHeader("Terrain")) {
+        ImGui::TextDisabled(filename.c_str());
+    }
 }
 
 void EntityTerrain::on_notify(Event event, void *data) {
