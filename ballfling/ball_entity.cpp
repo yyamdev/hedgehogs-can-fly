@@ -87,6 +87,10 @@ void EntityBall::draw(sf::RenderWindow &window) {
     spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
     spr.setPosition(position - world->camera);
     window.draw(spr);
+
+    if (edit && ImGui::CollapsingHeader("Ball")) {
+        
+    }
 }
 
 void EntityBall::tick(std::vector<Entity*> &entities) {

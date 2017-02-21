@@ -77,17 +77,17 @@ void World::draw() {
         entity->draw(*window);
     }
 
-    if (edit) {
+    if (edit && ImGui::CollapsingHeader("World")) {
         ImGui::InputFloat("Gravity.x", &gravity.x);
         ImGui::InputFloat("Gravity.y", &gravity.y);
         if (ImGui::Button("Flip Gravity")) {
             gravity = -gravity;
         }
-        bool show = true;
-        if (ImGui::CollapsingHeader("entities")) {
-            ImGui::LabelText(util::to_string(entities.size()).c_str(), "entity count");
+        ImGui::Separator();
+        ImGui::LabelText(util::to_string(entities.size()).c_str(), "entity count");
+        if (ImGui::TreeNode("list")) {
             for (auto &e : entities) {
-                if (ImGui::BeginMenu(e->get_tag().c_str())) {
+                if (ImGui::TreeNode(e->get_tag().c_str())) {
                     // posiiton
                     float pos[2] = {e->position.x, e->position.y};
                     ImGui::InputFloat2("position", pos);
@@ -98,9 +98,10 @@ void World::draw() {
                     ImGui::InputFloat2("velocity", vel);
                     e->velocity.x = vel[0];
                     e->velocity.y = vel[1];
-                    ImGui::EndMenu();
+                    ImGui::TreePop();
                 }
             }
+        ImGui::TreePop();
         }
     }
 }
