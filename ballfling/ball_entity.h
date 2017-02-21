@@ -46,7 +46,11 @@ private:
     enum DragMode {
         DM_REST = 0,
         DM_TIME = 1,
+        DM_HINT = 2,
     } dragMode;
     float dragTimerSeconds;
     sf::Clock clkMove;
+    float nudgeStr = 0.4f;
+    
+    bool reactToInput;
 };

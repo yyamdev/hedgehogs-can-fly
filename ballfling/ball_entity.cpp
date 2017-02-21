@@ -35,17 +35,16 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
     canMove = false;
     dragMode = DM_REST;
     dragTimerSeconds = 1.f;
+    reactToInput = true;
 }
 
 void EntityBall::event(sf::Event &e) {
-    if (edit) return;
+    if (!reactToInput) return;
 
     if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Space) {
-        if (dragMode == DM_REST) {
-            rest = canMove = true;
-            position = prevRest;
-            notify(EVENT_BALL_REST_POS, (void*)(&position));
-        }
+        rest = canMove = true;
+        position = prevRest;
+        notify(EVENT_BALL_REST_POS, (void*)(&position));
         notify(EVENT_PRESS_SPACE, NULL);
         notify(EVENT_BALL_CHANGE_CAN_MOVE, (void*)(&canMove));
     }
@@ -78,15 +77,21 @@ void EntityBall::event(sf::Event &e) {
                 sf::Vector2f start = position;
                 dir = dir / util::len(dir) * speed;
 
-                velocity = dir;
+                if (dragMode == DM_HINT && util::len(velocity) > MIN_MOVE_SPEED) {
+                    velocity += dir * nudgeStr;
+                } else {
+                    velocity = dir;
+                }
                 rest = false;
-                if (dragMode == DM_TIME) {
+                if (dragMode == DM_TIME || dragMode == DM_HINT) {
                     clkRest.restart();
                     canMove = false;
                 }
                 notify(EVENT_BALL_CHANGE_CAN_MOVE, (void*)(&canMove));
                 notify(EVENT_BALL_START_MOVING, NULL);
-                prevRest = position;
+                if (dragMode == DM_REST) {
+                    prevRest = position;
+                }
             }
         }
     }
@@ -99,13 +104,20 @@ void EntityBall::draw(sf::RenderWindow &window) {
     window.draw(spr);
 
     if (edit && ImGui::CollapsingHeader("Ball")) {
+        ImGui::Checkbox("react to input", &reactToInput);
+        ImGui::Separator();
         sf::Color dragCol = sf::Color::Red;
+        if (dragMode == DM_HINT && util::len(velocity) > MIN_MOVE_SPEED) dragCol = sf::Color::Blue;
         if (canMove) dragCol = sf::Color::Green;
         ImGui::TextColored(dragCol, "Drag Mode");
         ImGui::RadioButton("rest", (int*)(&dragMode), 0); ImGui::SameLine();
-        ImGui::RadioButton("timer", (int*)(&dragMode), 1);
-        if (dragMode == DM_TIME) {
+        ImGui::RadioButton("timer", (int*)(&dragMode), 1); ImGui::SameLine();
+        ImGui::RadioButton("nudge", (int*)(&dragMode), 2);
+        if (dragMode == DM_TIME || dragMode == DM_HINT) {
             ImGui::DragFloat("drag timer", &dragTimerSeconds, 0.01f, 0.f, 6.f);
+        }
+        if (dragMode == DM_HINT) {
+            ImGui::DragFloat("nudge strength", &nudgeStr, 0.01f, 0.f, 1.f);
         }
         ImGui::Separator();
     }
@@ -139,7 +151,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     if (dragMode == DM_REST) {
         if (util::len(velocity) > MIN_MOVE_SPEED) canMove = false;
         if (rest) canMove = true;
-    } else if (dragMode == DM_TIME) {
+    } else if (dragMode == DM_TIME || dragMode == DM_HINT) {
         if (clkMove.getElapsedTime().asSeconds() > dragTimerSeconds) {
             canMove = true;
         }
