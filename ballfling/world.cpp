@@ -78,7 +78,6 @@ void World::draw() {
     }
 
     if (edit) {
-        ImGui::Begin("World");
         ImGui::InputFloat("Gravity.x", &gravity.x);
         ImGui::InputFloat("Gravity.y", &gravity.y);
         if (ImGui::Button("Flip Gravity")) {
@@ -87,8 +86,22 @@ void World::draw() {
         bool show = true;
         if (ImGui::CollapsingHeader("entities")) {
             ImGui::LabelText(util::to_string(entities.size()).c_str(), "entity count");
+            for (auto &e : entities) {
+                if (ImGui::BeginMenu(e->get_tag().c_str())) {
+                    // posiiton
+                    float pos[2] = {e->position.x, e->position.y};
+                    ImGui::InputFloat2("position", pos);
+                    e->position.x = pos[0];
+                    e->position.y = pos[1];
+                    // velocity
+                    float vel[2] = {e->velocity.x, e->velocity.y};
+                    ImGui::InputFloat2("velocity", vel);
+                    e->velocity.x = vel[0];
+                    e->velocity.y = vel[1];
+                    ImGui::EndMenu();
+                }
+            }
         }
-        ImGui::End();
     }
 }
 
