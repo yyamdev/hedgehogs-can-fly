@@ -7,6 +7,7 @@
 #include "util.h"
 #include "debug_draw.h"
 #include "tnt_entity.h"
+#include "imgui.h"
 
 sf::Texture EntityBall::txt;
 sf::Texture EntityBall::txtPoint;
@@ -35,6 +36,8 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
 }
 
 void EntityBall::event(sf::Event &e) {
+    if (edit) return;
+
     if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Space) {
         rest = canMove = true;
         position = prevRest;

@@ -3,6 +3,9 @@
 #include <iostream>
 #include "subject.h"
 #include "build_options.h"
+#include "debug_draw.h"
+#include "imgui.h"
+#include "util.h"
 
 World::World(sf::RenderWindow &window) {
     this->window = &window;
@@ -72,6 +75,20 @@ void World::tick() {
 void World::draw() {
     for (auto &entity : entities) {
         entity->draw(*window);
+    }
+
+    if (edit) {
+        ImGui::Begin("World");
+        ImGui::InputFloat("Gravity.x", &gravity.x);
+        ImGui::InputFloat("Gravity.y", &gravity.y);
+        if (ImGui::Button("Flip Gravity")) {
+            gravity = -gravity;
+        }
+        bool show = true;
+        if (ImGui::CollapsingHeader("entities")) {
+            ImGui::LabelText(util::to_string(entities.size()).c_str(), "entity count");
+        }
+        ImGui::End();
     }
 }
 

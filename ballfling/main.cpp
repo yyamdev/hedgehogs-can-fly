@@ -7,6 +7,9 @@
 #include "util.h"
 #include "menu_state.h"
 #include "shared_res.h"
+#include "imgui.h"
+#include "imgui-SFML.h"
+#include "debug_draw.h"
 
 #define GO_TO_TEST_LEVEL 1
 
@@ -29,11 +32,19 @@ int main() {
     else
         State::change_state(new StateMenu(&world));
 
+    ImGui::SFML::Init(window);
+    sf::Clock imguiDelta;
     while (window.isOpen()) {
         sf::Event e;
         while (window.pollEvent(e)) {
+            ImGui::SFML::ProcessEvent(e);
+
             if (e.type == sf::Event::Closed) {
                 window.close();
+            }
+
+            if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::E) {
+                edit = !edit;
             }
 
             if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::F1)
@@ -52,15 +63,18 @@ int main() {
             State::event_current(e);
         }
 
+        ImGui::SFML::Update(window, imguiDelta.restart());
         world.tick();
         State::tick_current();
         
         window.clear(sf::Color(153, 217, 234));
         world.draw();
         State::draw_current(window);
+        ImGui::Render();
         window.display();
     }
 
+    ImGui::SFML::Shutdown();
     State::free_memory();
     return 0;
 }
@@ -72,4 +86,5 @@ void print_debug_controls() {
     std::cout << "R - restart game\n";
     std::cout << "H - print this message\n";
     std::cout << "C - clear console\n";
+    std::cout << "E - toggle tools mode\n";
 }
