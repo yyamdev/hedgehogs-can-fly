@@ -43,4 +43,10 @@ private:
     bool dragging; // is user dragging the mouse to select grenade direction & speed?
     sf::Vector2f dragStart;
     bool canMove;
+    enum DragMode {
+        DM_REST = 0,
+        DM_TIME = 1,
+    } dragMode;
+    float dragTimerSeconds;
+    sf::Clock clkMove;
 };

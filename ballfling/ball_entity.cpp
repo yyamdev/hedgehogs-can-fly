@@ -33,15 +33,19 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
     dragging = false;
     rest = false;
     canMove = false;
+    dragMode = DM_REST;
+    dragTimerSeconds = 1.f;
 }
 
 void EntityBall::event(sf::Event &e) {
     if (edit) return;
 
     if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Space) {
-        rest = canMove = true;
-        position = prevRest;
-        notify(EVENT_BALL_REST_POS, (void*)(&position));
+        if (dragMode == DM_REST) {
+            rest = canMove = true;
+            position = prevRest;
+            notify(EVENT_BALL_REST_POS, (void*)(&position));
+        }
         notify(EVENT_PRESS_SPACE, NULL);
         notify(EVENT_BALL_CHANGE_CAN_MOVE, (void*)(&canMove));
     }
@@ -61,6 +65,8 @@ void EntityBall::event(sf::Event &e) {
             dragging = false;
             notify(EVENT_PLAYER_END_DRAG, NULL);
 
+            clkMove.restart();
+
             sf::Vector2f mouse;
             mouse.x = (float)e.mouseButton.x;
             mouse.y = (float)e.mouseButton.y;
@@ -74,7 +80,11 @@ void EntityBall::event(sf::Event &e) {
 
                 velocity = dir;
                 rest = false;
-                clkRest.restart();
+                if (dragMode == DM_TIME) {
+                    clkRest.restart();
+                    canMove = false;
+                }
+                notify(EVENT_BALL_CHANGE_CAN_MOVE, (void*)(&canMove));
                 notify(EVENT_BALL_START_MOVING, NULL);
                 prevRest = position;
             }
@@ -89,7 +99,15 @@ void EntityBall::draw(sf::RenderWindow &window) {
     window.draw(spr);
 
     if (edit && ImGui::CollapsingHeader("Ball")) {
-        
+        sf::Color dragCol = sf::Color::Red;
+        if (canMove) dragCol = sf::Color::Green;
+        ImGui::TextColored(dragCol, "Drag Mode");
+        ImGui::RadioButton("rest", (int*)(&dragMode), 0); ImGui::SameLine();
+        ImGui::RadioButton("timer", (int*)(&dragMode), 1);
+        if (dragMode == DM_TIME) {
+            ImGui::DragFloat("drag timer", &dragTimerSeconds, 0.01f, 0.f, 6.f);
+        }
+        ImGui::Separator();
     }
 }
 
@@ -118,8 +136,14 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         notify(EVENT_BALL_REST_POS, (void*)(&position));
     }
 
-    if (util::len(velocity) > MIN_MOVE_SPEED) canMove = false;
-    if (rest) canMove = true;
+    if (dragMode == DM_REST) {
+        if (util::len(velocity) > MIN_MOVE_SPEED) canMove = false;
+        if (rest) canMove = true;
+    } else if (dragMode == DM_TIME) {
+        if (clkMove.getElapsedTime().asSeconds() > dragTimerSeconds) {
+            canMove = true;
+        }
+    }
     notify(EVENT_BALL_CHANGE_CAN_MOVE, (void*)(&canMove));
     notify(EVENT_BALL_REST_POS, (void*)(&position));
 
