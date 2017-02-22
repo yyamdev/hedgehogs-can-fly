@@ -50,6 +50,8 @@ void EntityBall::event(sf::Event &e) {
     }
     if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Space) {
         reset_to_rest();
+        rest = true;
+        record_new_rest_pos();
         notify(EVENT_PRESS_SPACE, NULL);
     }
     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
