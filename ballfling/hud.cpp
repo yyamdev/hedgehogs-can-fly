@@ -89,7 +89,7 @@ void Hud::on_notify(Event event, void *data) {
     if (event == EVENT_BALL_START_MOVING) {
         //moving = true;
     }
-    if (event == EVENT_BALL_CHANGE_CAN_MOVE) {
+    if (event == EVENT_BALL_CHANGE_CAN_FLING) {
         moving = !*((bool*)data);
     }
     if (event == EVENT_PLAYER_END_DRAG)

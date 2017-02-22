@@ -32,27 +32,24 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
     terrain = NULL;
     dragging = false;
     rest = false;
-    canMove = false;
     dragMode = DM_REST;
-    dragTimerSeconds = 1.f;
+    flingTimerValue = 1000;
     reactToInput = true;
+    canFling = false;
+    canNudge = false;
+    nudgeStr = 0.2f;
+    maxFlingVelocity = 1.4f;
 }
 
 void EntityBall::event(sf::Event &e) {
     if (!reactToInput) return;
 
     if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Space) {
-        rest = canMove = true;
-        position = prevRest;
-        notify(EVENT_BALL_REST_POS, (void*)(&position));
+        reset_to_rest();
         notify(EVENT_PRESS_SPACE, NULL);
-        notify(EVENT_BALL_CHANGE_CAN_MOVE, (void*)(&canMove));
-    }
-    if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::X) {
-        world->gravity.y = -world->gravity.y;
     }
     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
-        if (!dragging && canMove) {
+        if (!dragging && (canFling || canNudge)) {
             dragging = true;
             dragStart.x = (float)e.mouseButton.x;
             dragStart.y = (float)e.mouseButton.y;
@@ -63,34 +60,41 @@ void EntityBall::event(sf::Event &e) {
         if (dragging) {
             dragging = false;
             notify(EVENT_PLAYER_END_DRAG, NULL);
-
-            clkMove.restart();
-
             sf::Vector2f mouse;
             mouse.x = (float)e.mouseButton.x;
             mouse.y = (float)e.mouseButton.y;
             sf::Vector2f dir = dragStart - mouse;
             if (util::len(dir) != 0.f) {
                 float speed = util::len(dragStart - mouse) / 15.f;
-
                 speed = util::clamp(speed, 0.f, BALL_MAX_LAUNCH_SPEED - 2.f);
                 sf::Vector2f start = position;
                 dir = dir / util::len(dir) * speed;
 
-                if (dragMode == DM_HINT && util::len(velocity) > MIN_MOVE_SPEED) {
-                    velocity += dir * nudgeStr;
-                } else {
-                    velocity = dir;
-                }
-                rest = false;
-                if (dragMode == DM_TIME || dragMode == DM_HINT) {
-                    clkRest.restart();
-                    canMove = false;
-                }
-                notify(EVENT_BALL_CHANGE_CAN_MOVE, (void*)(&canMove));
-                notify(EVENT_BALL_START_MOVING, NULL);
-                if (dragMode == DM_REST) {
-                    prevRest = position;
+                if (canFling || canNudge) {
+                    switch (dragMode) {
+                    case DM_REST:
+                        record_new_rest_pos();
+                        velocity = dir;
+                        stop_resting();
+                        break;
+                    case DM_TIME:
+                        clkFlingTimer.restart();
+                        velocity = dir;
+                        stop_resting();
+                        break;
+                    case DM_NUDGE:
+                        if (canFling) {
+                            record_new_rest_pos();
+                            velocity = dir;
+                            stop_resting();
+                        } else if (canNudge) {
+                            velocity += dir * nudgeStr;
+                            std::cout << "nudge\n";
+                        }
+                        break;
+                    }
+                
+                    notify(EVENT_BALL_START_MOVING, NULL);
                 }
             }
         }
@@ -106,17 +110,19 @@ void EntityBall::draw(sf::RenderWindow &window) {
     if (edit && ImGui::CollapsingHeader("Ball")) {
         ImGui::Checkbox("react to input", &reactToInput);
         ImGui::Separator();
-        sf::Color dragCol = sf::Color::Red;
-        if (dragMode == DM_HINT && util::len(velocity) > MIN_MOVE_SPEED) dragCol = sf::Color::Blue;
-        if (canMove) dragCol = sf::Color::Green;
+        ImGui::Text("wall clock: %d", clkWallTouch.getElapsedTime().asMilliseconds());
+        ImGui::Text("speed: %f", util::len(velocity));
+        ImGui::Separator();
+        sf::Color dragCol = sf::Color::White;
         ImGui::TextColored(dragCol, "Drag Mode");
         ImGui::RadioButton("rest", (int*)(&dragMode), 0); ImGui::SameLine();
         ImGui::RadioButton("timer", (int*)(&dragMode), 1); ImGui::SameLine();
         ImGui::RadioButton("nudge", (int*)(&dragMode), 2);
-        if (dragMode == DM_TIME || dragMode == DM_HINT) {
-            ImGui::DragFloat("drag timer", &dragTimerSeconds, 0.01f, 0.f, 6.f);
+        ImGui::DragFloat("max fling velocity", &maxFlingVelocity, 0.01f, 0.f, 4.f);
+        if (dragMode == DM_TIME) {
+            ImGui::DragInt("fling timer threshold (ms)", &flingTimerValue, 0, 10000);
         }
-        if (dragMode == DM_HINT) {
+        if (dragMode == DM_NUDGE) {
             ImGui::DragFloat("nudge strength", &nudgeStr, 0.01f, 0.f, 1.f);
         }
         ImGui::Separator();
@@ -138,31 +144,42 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     position += velocity;
 
     if (util::len(oldPos - position) > 1.5f) {
-        clkRest.restart();
-        rest = false;
+        stop_resting();
         notify(EVENT_BALL_START_MOVING, NULL);
     }
-    if (clkRest.getElapsedTime().asSeconds() > 1.f) {
+    if (clkRest.getElapsedTime().asSeconds() > 1.f && touching_wall()) {
+        record_new_rest_pos();
         rest = true;
-        prevRest = position;
-        notify(EVENT_BALL_REST_POS, (void*)(&position));
     }
 
-    if (dragMode == DM_REST) {
-        if (util::len(velocity) > MIN_MOVE_SPEED) canMove = false;
-        if (rest) canMove = true;
-    } else if (dragMode == DM_TIME || dragMode == DM_HINT) {
-        if (clkMove.getElapsedTime().asSeconds() > dragTimerSeconds) {
-            canMove = true;
-        }
+    // update canFling
+    if (dragMode == DM_REST || dragMode == DM_NUDGE) {
+        if (util::len(velocity) < maxFlingVelocity && (touching_wall() || rest))
+            canFling = true;
+        else
+            canFling = false;
     }
-    notify(EVENT_BALL_CHANGE_CAN_MOVE, (void*)(&canMove));
-    notify(EVENT_BALL_REST_POS, (void*)(&position));
+    else if (dragMode == DM_TIME) {
+        if (clkFlingTimer.getElapsedTime().asMilliseconds() > flingTimerValue)
+            canFling = true;
+        else
+            canFling = false;
+    }
+    notify(EVENT_BALL_CHANGE_CAN_FLING, (void*)(&canFling));
+
+    // update canNudge
+    if (dragMode == DM_NUDGE) {
+        if (1)
+            canNudge = true;
+        else
+            canNudge = false;
+    } else canNudge = false;
 
     // apply gravity
     velocity += world->gravity;
 
     // cap y speed
+    // TODO -> handle gravity being any direction
     if (velocity.y > BALL_TERM_VEL)
         velocity.y = BALL_TERM_VEL;
 
@@ -195,21 +212,14 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             tnt->touch();
             position -= velocity * 1.5f;
             bounce(.6f, tnt->get_normal(position, velocity));
-            if (util::len(velocity) < MIN_MOVE_SPEED) canMove = true;
-            notify(EVENT_BALL_CHANGE_CAN_MOVE, (void*)(&canMove));
-            notify(EVENT_BALL_REST_POS, (void*)(&position));
         }
     }
 
     if (terrain) {
         // test if hit water
         if (terrain->get_pos(position) == T_KILL) {
-            rest = true;
-            canMove = true;
-            position = prevRest;
+            reset_to_rest();
             notify(EVENT_HIT_WATER, NULL);
-            notify(EVENT_BALL_REST_POS, (void*)(&position));
-            notify(EVENT_BALL_CHANGE_CAN_MOVE, (void*)(&canMove));
         }
 
         sf::Vector2f contact = sf::Vector2f(50.f, 50.f);
@@ -217,6 +227,8 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             contactPoint = contact;
 
             TerrainType t = terrain->get_pos(contactPoint);
+
+            clkWallTouch.restart();
 
             float bounceFactor = .6f;
             if (t == T_BOUNCY) bounceFactor = 1.2f;
@@ -240,9 +252,6 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             }
 
             bounce(bounceFactor, terrain->get_normal(contact));
-            if (util::len(velocity) < MIN_MOVE_SPEED) canMove = true;
-            notify(EVENT_BALL_CHANGE_CAN_MOVE, (void*)(&canMove));
-            notify(EVENT_BALL_REST_POS, (void*)(&position));
         }
     }
 }
@@ -285,8 +294,35 @@ void EntityBall::on_notify(Event event, void *data) {
         float speed = maxSpeed * (1.f -  fmin(1.f, util::len(tntToBall) / info->z));
         velocity += util::normalize(tntToBall) * speed;
     }
+    if (event == EVENT_NEW_WORLD_GRAVITY) {
+        stop_resting();
+    }
 }
 
 bool EntityBall::is_at_rest() {
     return rest;
+}
+
+bool EntityBall::touching_wall() {
+    return clkWallTouch.getElapsedTime().asMilliseconds() < 800;
+}
+
+void EntityBall::record_new_rest_pos() {
+    // called when ball is at rest
+    prevRest = position;
+    notify(EVENT_BALL_REST_POS, (void*)(&position));
+    if (dragMode == DM_REST || dragMode == DM_NUDGE) {
+        canFling = true;
+        notify(EVENT_BALL_CHANGE_CAN_FLING, &canFling);
+    }
+}
+
+void EntityBall::stop_resting() {
+    rest = false;
+    clkRest.restart();
+}
+
+void EntityBall::reset_to_rest() {
+    position = prevRest;
+    velocity = sf::Vector2f();
 }

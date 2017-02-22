@@ -78,11 +78,13 @@ void World::draw() {
     }
 
     if (edit && ImGui::CollapsingHeader("World")) {
+        sf::Vector2f oldGrav = gravity;
         ImGui::InputFloat("Gravity.x", &gravity.x);
         ImGui::InputFloat("Gravity.y", &gravity.y);
         if (ImGui::Button("Flip Gravity")) {
             gravity = -gravity;
         }
+        if (oldGrav != gravity) notify(EVENT_NEW_WORLD_GRAVITY, NULL);
         ImGui::Separator();
         ImGui::LabelText(util::to_string(entities.size()).c_str(), "entity count");
         if (ImGui::TreeNode("list")) {

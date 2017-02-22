@@ -9,7 +9,6 @@
 #define BALL_TERM_VEL 9.f
 #define BALL_MAX_LAUNCH_SPEED 14.f
 #define BALL_MAX_SPEED 14.f
-#define MIN_MOVE_SPEED 1.2f
 
 class EntityTerrain;
 
@@ -34,23 +33,32 @@ private:
 
     EntityTerrain *terrain;
 
+    bool reactToInput;
+
     // physics
     sf::Vector2f contactPoint;
     sf::Clock clkRest;
     bool rest;
     sf::Vector2f prevRest;
+    void record_new_rest_pos();
+    void stop_resting();
+    void reset_to_rest();
 
-    bool dragging; // is user dragging the mouse to select grenade direction & speed?
+    // moving
+    bool dragging;
     sf::Vector2f dragStart;
-    bool canMove;
+    bool canFling;
+    bool canNudge;
     enum DragMode {
         DM_REST = 0,
         DM_TIME = 1,
-        DM_HINT = 2,
+        DM_NUDGE = 2,
     } dragMode;
-    float dragTimerSeconds;
-    sf::Clock clkMove;
-    float nudgeStr = 0.4f;
+    int flingTimerValue;
+    sf::Clock clkFlingTimer;
+    float nudgeStr;
+    float maxFlingVelocity;
     
-    bool reactToInput;
+    sf::Clock clkWallTouch;
+    bool touching_wall();
 };

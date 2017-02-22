@@ -4,7 +4,7 @@
 // data type of the data pointer for on_notify is specified in comments
 
 enum Event {
-    EVENT_PLAYER_START_DRAG, // sf::Vector2f start position
+    EVENT_PLAYER_START_DRAG, // sf::Vector2f* start position
     EVENT_PLAYER_END_DRAG, // NULL
     EVENT_ENTITY_HP_CHANGE, // int new hp
     EVENT_DUDE_HP_CHANGE, // EntityDude* pointer to dude
@@ -25,7 +25,8 @@ enum Event {
     EVENT_HIT_WATER, // NULL
     EVENT_BOUNCE_DOOR, // NULL
     EVENT_SMASH_DOOR, // NULL
-    EVENT_BALL_CHANGE_CAN_MOVE, // bool* pointer to canMove?
+    EVENT_BALL_CHANGE_CAN_FLING, // bool* pointer to canMove
     EVENT_TNT_EXPLODE, // sf::Vector3f* pointer to explosion position. z = explosion radius
     EVENT_TNT_BEEP, // NULL
+    EVENT_NEW_WORLD_GRAVITY, // NULL
 };
