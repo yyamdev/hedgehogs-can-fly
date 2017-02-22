@@ -13,6 +13,12 @@
 
 #define GO_TO_TEST_LEVEL 1
 
+// frame time profiler
+#define PBUFLEN 16
+sf::Int32 pbuf[PBUFLEN];
+int pbufi = 0;
+float framePercent = 0.f;
+
 void print_debug_controls();
 
 int main() {
@@ -34,7 +40,9 @@ int main() {
     ImGui::SFML::Init(window);
     window.setMouseCursorVisible(false);
     sf::Clock imguiDelta;
+    sf::Clock clkProfile;
     while (window.isOpen()) {
+        clkProfile.restart();
         sf::Event e;
         while (window.pollEvent(e)) {
             ImGui::SFML::ProcessEvent(e);
@@ -71,8 +79,23 @@ int main() {
         window.clear(sf::Color(153, 217, 234));
         world.draw();
         State::draw_current(window);
+        if (edit && ImGui::CollapsingHeader("Performance")) {
+            sf::Color frameCol = sf::Color::Green;
+            if (framePercent > 100.f) frameCol = sf::Color::Red;
+            ImGui::TextColored(frameCol, "frame time: %f%", framePercent);
+        }
         ImGui::Render();
         window.display();
+
+        pbuf[pbufi] = clkProfile.getElapsedTime().asMilliseconds();
+        pbufi = (pbufi + 1) % PBUFLEN;
+        if (pbufi == 0) {
+            sf::Int32 av = 0;
+            for (int i = 0; i < PBUFLEN; ++i) {
+                av += pbuf[i];
+            }
+            framePercent = (float)(av / PBUFLEN) / 16 * 100.f;
+        }
     }
 
     ImGui::SFML::Shutdown();
@@ -86,6 +109,6 @@ void print_debug_controls() {
     std::cout << "F1 - screenshot\n";
     std::cout << "R - restart game\n";
     std::cout << "H - print this message\n";
-    std::cout << "C - clear console\n";
     std::cout << "E - toggle tools mode\n";
+    std::cout << "C - clear console\n";
 }

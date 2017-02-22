@@ -324,8 +324,6 @@ void EntityTerrain::event(sf::Event &e) {
         //set_circle(sf::Vector2f((float)e.mouseButton.x + world->camera.x, (float)e.mouseButton.y + world->camera.y), 25, false);
         world->add_entity(new EntityTnt(sf::Vector2f((float)e.mouseButton.x + world->camera.x, (float)e.mouseButton.y + world->camera.y)));
     }
-    if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::T)
-        render = !render;
 }
 
 void EntityTerrain::tick(std::vector<Entity*> &entities) {
@@ -333,32 +331,34 @@ void EntityTerrain::tick(std::vector<Entity*> &entities) {
 }
 
 void EntityTerrain::draw(sf::RenderWindow &window) {
-    if (!render) return;
-    txtTerrainData.update(terrain); // update data texture
-    // create terrain image sprite
-    sf::Sprite sprTerrain(txtSolid); // I think this has to be set for size only?
-    sprTerrain.setTextureRect(sf::IntRect(0, 0, (int)size.x, (int)size.y));
-    // pass parameters into shader
-    shdTerrain.setParameter("txtBg", txtBg);
-    shdTerrain.setParameter("txtSolid", txtSolid);
-    shdTerrain.setParameter("txtKill", txtWater);
-    shdTerrain.setParameter("txtWeak", txtWeak);
-    shdTerrain.setParameter("txtBouncy", txtBouncy);
-    shdTerrain.setParameter("txtSlow", txtSlow);
-    shdTerrain.setParameter("txtSticky", txtSticky);
-    shdTerrain.setParameter("txtFinish", txtFinish);
-    shdTerrain.setParameter("txtData", txtTerrainData);
-    shdTerrain.setParameter("sizeX", (float)size.x);
-    shdTerrain.setParameter("sizeY", (float)size.y);
-    shdTerrain.setParameter("screenWidth", (float)WINDOW_WIDTH);
-    shdTerrain.setParameter("screenHeight", (float)WINDOW_HEIGHT);
-    shdTerrain.setParameter("cameraX", world->camera.x);
-    shdTerrain.setParameter("cameraY", world->camera.y);
-    sprTerrain.setPosition(-world->camera);
-    window.draw(sprTerrain, &shdTerrain); // draw
+    if (render) {
+        txtTerrainData.update(terrain); // update data texture
+        // create terrain image sprite
+        sf::Sprite sprTerrain(txtSolid); // I think this has to be set for size only?
+        sprTerrain.setTextureRect(sf::IntRect(0, 0, (int)size.x, (int)size.y));
+        // pass parameters into shader
+        shdTerrain.setParameter("txtBg", txtBg);
+        shdTerrain.setParameter("txtSolid", txtSolid);
+        shdTerrain.setParameter("txtKill", txtWater);
+        shdTerrain.setParameter("txtWeak", txtWeak);
+        shdTerrain.setParameter("txtBouncy", txtBouncy);
+        shdTerrain.setParameter("txtSlow", txtSlow);
+        shdTerrain.setParameter("txtSticky", txtSticky);
+        shdTerrain.setParameter("txtFinish", txtFinish);
+        shdTerrain.setParameter("txtData", txtTerrainData);
+        shdTerrain.setParameter("sizeX", (float)size.x);
+        shdTerrain.setParameter("sizeY", (float)size.y);
+        shdTerrain.setParameter("screenWidth", (float)WINDOW_WIDTH);
+        shdTerrain.setParameter("screenHeight", (float)WINDOW_HEIGHT);
+        shdTerrain.setParameter("cameraX", world->camera.x);
+        shdTerrain.setParameter("cameraY", world->camera.y);
+        sprTerrain.setPosition(-world->camera);
+        window.draw(sprTerrain, &shdTerrain); // draw
+    }
 
     if (edit && ImGui::CollapsingHeader("Terrain")) {
         ImGui::TextDisabled(filename.c_str());
+        ImGui::Checkbox("render", &render);
     }
 }
 
