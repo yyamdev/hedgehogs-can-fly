@@ -14,6 +14,7 @@ Hud::Hud() {
     txtCursorDrag.loadFromFile("data/cursor_drag.png");
     txtCursorStop.loadFromFile("data/cursor_stop.png");
     txtCursorNudge.loadFromFile("data/cursor_nudge.png");
+    txtBallNudge.loadFromFile("data/ball_nudge.png");
     moveCount = 0;
     fntCounter.loadFromFile("data/VCR_OSD_MONO.ttf");
     txtInstructionDrag.loadFromFile("data/instruction1.png");
@@ -55,6 +56,25 @@ void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera) {
         sprArrow.setRotation(ang);
         sprArrow.setColor(sf::Color(255, 255, 255, 128));
         window.draw(sprArrow);
+    }
+
+    // draw nudge indicator
+    if (canNudge && !canFling) {
+        sf::Vector2f mouse;
+        mouse.x = (float)sf::Mouse::getPosition(window).x;
+        mouse.y = (float)sf::Mouse::getPosition(window).y;
+        sf::Vector2f dir = mouse - (ballRestPos - camera);
+        float ang = atan2f(dir.y, dir.x) * (180.f / PI_F);
+        sf::Sprite sprNudge(txtBallNudge);
+        sprNudge.setOrigin(sf::Vector2f((float)txtBallNudge.getSize().x / 2.f, (float)txtBallNudge.getSize().y / 2.f));
+        sprNudge.setPosition(ballRestPos - camera);
+        sprNudge.setRotation(ang);
+        sprNudge.setColor(sf::Color::Black);
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            sprNudge.setColor(sf::Color::Red);
+            sprNudge.setScale(sf::Vector2f(1.2f, 1.2f));
+        }
+        window.draw(sprNudge);
     }
 
     // wind

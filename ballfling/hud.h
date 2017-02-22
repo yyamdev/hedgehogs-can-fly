@@ -23,6 +23,7 @@ private:
     sf::Texture txtCursorDrag;
     sf::Texture txtCursorStop;
     sf::Texture txtCursorNudge;
+    sf::Texture txtBallNudge;
     int moveCount;
     sf::Font fntCounter;
 

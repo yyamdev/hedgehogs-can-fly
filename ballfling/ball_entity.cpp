@@ -32,12 +32,12 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
     terrain = NULL;
     dragging = false;
     rest = false;
-    dragMode = DM_REST;
+    dragMode = DM_NUDGE;
     flingTimerValue = 1000;
     reactToInput = true;
     canFling = false;
     canNudge = false;
-    nudgeStr = 0.2f;
+    nudgeStr = 0.05f;
     maxFlingVelocity = 1.4f;
 }
 
@@ -53,7 +53,7 @@ void EntityBall::event(sf::Event &e) {
         notify(EVENT_PRESS_SPACE, NULL);
     }
     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
-        if (!dragging && (canFling || canNudge)) {
+        if (!dragging && (canFling)) {
             dragging = true;
             dragStart.x = (float)e.mouseButton.x;
             dragStart.y = (float)e.mouseButton.y;
@@ -91,9 +91,6 @@ void EntityBall::event(sf::Event &e) {
                             record_new_rest_pos();
                             velocity = dir;
                             stop_resting();
-                        } else if (canNudge) {
-                            //velocity += dir * nudgeStr;
-                            //std::cout << "nudge\n";
                         }
                         break;
                     }
@@ -312,7 +309,7 @@ bool EntityBall::is_at_rest() {
 }
 
 bool EntityBall::touching_wall() {
-    return clkWallTouch.getElapsedTime().asMilliseconds() < 800;
+    return clkWallTouch.getElapsedTime().asMilliseconds() < 400;
 }
 
 void EntityBall::record_new_rest_pos() {
