@@ -159,7 +159,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
 
     // update canFling
     if (dragMode == DM_REST || dragMode == DM_NUDGE) {
-        if (util::len(velocity) < maxFlingVelocity && (touching_wall() || rest))
+        if (util::len(velocity) < maxFlingVelocity && rest)
             canFling = true;
         else
             canFling = false;
