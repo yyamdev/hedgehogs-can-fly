@@ -18,6 +18,8 @@
 sf::Int32 pbuf[PBUFLEN];
 int pbufi = 0;
 float framePercent = 0.f;
+float framePercentBuf[PBUFLEN];
+int fbufi = 0;
 
 void print_debug_controls();
 
@@ -83,6 +85,7 @@ int main() {
             sf::Color frameCol = sf::Color::Green;
             if (framePercent > 100.f) frameCol = sf::Color::Red;
             ImGui::TextColored(frameCol, "frame time: %f%", framePercent);
+            ImGui::PlotLines("frame time", framePercentBuf, PBUFLEN, 0, 0, 95.f, 140.f, sf::Vector2f(0, 70.f), 4);
         }
         ImGui::Render();
         window.display();
@@ -95,6 +98,8 @@ int main() {
                 av += pbuf[i];
             }
             framePercent = (float)(av / PBUFLEN) / 16 * 100.f;
+            framePercentBuf[fbufi] = framePercent;
+            fbufi = (fbufi + 1) % PBUFLEN;
         }
     }
 

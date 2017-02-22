@@ -25,8 +25,6 @@ void main() {
     dataTexCoord.x = dataCoord.x / sizeX;
     dataTexCoord.y = (screenHeight - dataCoord.y) / sizeY; // y needs to be flipped for some reason
     
-    
-    
     if (dataCoord.x >= cameraX && screenHeight - dataCoord.y >= cameraY && dataCoord.x < cameraX + screenWidth && screenHeight - dataCoord.y < cameraY + screenHeight) {
         // lookup terrain type in map file
         vec4 dataPixel = texture2D(txtData, dataTexCoord.xy);
@@ -77,5 +75,5 @@ void main() {
         }
         else
             gl_FragColor.a = 0;
-    }
+   }
 }
