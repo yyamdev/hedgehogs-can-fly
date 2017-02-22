@@ -9,10 +9,11 @@
 Hud::Hud() {
     Subject::add_observer(this); // register for events
     dragging = false;
-    moving = true;
+    canFling = canNudge = false;
     txtArrow.loadFromFile("data/arrow.png");
     txtCursorDrag.loadFromFile("data/cursor_drag.png");
     txtCursorStop.loadFromFile("data/cursor_stop.png");
+    txtCursorNudge.loadFromFile("data/cursor_nudge.png");
     moveCount = 0;
     fntCounter.loadFromFile("data/VCR_OSD_MONO.ttf");
     txtInstructionDrag.loadFromFile("data/instruction1.png");
@@ -61,8 +62,9 @@ void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera) {
 
     // draw cursors
     sf::Sprite sprCursor;
-    if (moving) sprCursor.setTexture(txtCursorStop);
-    else        sprCursor.setTexture(txtCursorDrag);
+    if (canNudge) sprCursor.setTexture(txtCursorNudge);
+    if (canFling) sprCursor.setTexture(txtCursorDrag);
+    if (!canNudge && !canFling) sprCursor.setTexture(txtCursorStop);
     sprCursor.setOrigin(sf::Vector2f(13.f, 13.f));
     sprCursor.setPosition(mouse);
     window.draw(sprCursor);
@@ -82,15 +84,14 @@ void Hud::on_notify(Event event, void *data) {
         dragging = false;
         moveCount += 1;
     }
-    if (event == EVENT_BALL_REST_POS) {
+    if (event == EVENT_BALL_REST_POS || event == EVENT_BALL_MOVE) {
         ballRestPos = *((sf::Vector2f*)data);
-       // moving = false;
-    }
-    if (event == EVENT_BALL_START_MOVING) {
-        //moving = true;
     }
     if (event == EVENT_BALL_CHANGE_CAN_FLING) {
-        moving = !*((bool*)data);
+        canFling = *((bool*)data);
+    }
+    if (event == EVENT_BALL_CHANGE_CAN_NUDGE) {
+        canNudge = *((bool*)data);
     }
     if (event == EVENT_PLAYER_END_DRAG)
         sprInstructionDrag.setColor(sf::Color(255,255,255,0));

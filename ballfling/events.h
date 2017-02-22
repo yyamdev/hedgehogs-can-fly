@@ -20,12 +20,13 @@ enum Event {
     EVENT_LIVES_CHANGE, // int *array[2] player number, lives
     EVENT_TERRAIN_CHANGE, // NULL
     EVENT_BALL_REST_POS, // sf::Vector2f* pointer to new rest position
-    EVENT_BALL_START_MOVING, // NULL
+    EVENT_BALL_MOVE, // sf::Vector2f* pointer to new position
     EVENT_PRESS_SPACE, // NULL
     EVENT_HIT_WATER, // NULL
     EVENT_BOUNCE_DOOR, // NULL
     EVENT_SMASH_DOOR, // NULL
-    EVENT_BALL_CHANGE_CAN_FLING, // bool* pointer to canMove
+    EVENT_BALL_CHANGE_CAN_FLING, // bool* pointer to canFling
+    EVENT_BALL_CHANGE_CAN_NUDGE, // bool* pointer to canNudge
     EVENT_TNT_EXPLODE, // sf::Vector3f* pointer to explosion position. z = explosion radius
     EVENT_TNT_BEEP, // NULL
     EVENT_NEW_WORLD_GRAVITY, // NULL

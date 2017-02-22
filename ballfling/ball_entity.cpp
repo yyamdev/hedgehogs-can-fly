@@ -93,8 +93,6 @@ void EntityBall::event(sf::Event &e) {
                         }
                         break;
                     }
-                
-                    notify(EVENT_BALL_START_MOVING, NULL);
                 }
             }
         }
@@ -142,10 +140,10 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     // move
     sf::Vector2f oldPos = position;
     position += velocity;
+    notify(EVENT_BALL_MOVE, (void*)(&position));
 
     if (util::len(oldPos - position) > 1.5f) {
         stop_resting();
-        notify(EVENT_BALL_START_MOVING, NULL);
     }
     if (clkRest.getElapsedTime().asSeconds() > 1.f && touching_wall()) {
         record_new_rest_pos();
@@ -174,6 +172,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         else
             canNudge = false;
     } else canNudge = false;
+    notify(EVENT_BALL_CHANGE_CAN_NUDGE, (void*)(&canNudge));
 
     // apply gravity
     velocity += world->gravity;
@@ -235,9 +234,8 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             if (t == T_SLOW) bounceFactor = 0.3f;
             if (t == T_STICKY) {
                 rest = true;
-                prevRest = position;
+                record_new_rest_pos();
                 bounceFactor = 0.0f;
-                notify(EVENT_BALL_REST_POS, (void*)(&position));
             }
             if (t == T_THIN) {
                 float impactSpeed = util::len(velocity);

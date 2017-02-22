@@ -16,12 +16,13 @@ public:
     void draw(sf::RenderWindow &window, sf::Vector2f camera);
 private:
     // mouse & dragging
-    bool dragging, moving;
+    bool dragging, canFling, canNudge;
     sf::Vector2f mouseDragStart;
     sf::Vector2f ballRestPos;
     sf::Texture txtArrow;
     sf::Texture txtCursorDrag;
     sf::Texture txtCursorStop;
+    sf::Texture txtCursorNudge;
     int moveCount;
     sf::Font fntCounter;
 

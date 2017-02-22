@@ -18,7 +18,6 @@ void print_debug_controls();
 int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), TITLE, sf::Style::Close);
     window.setFramerateLimit(60);
-    window.setMouseCursorVisible(false);
 
     load_shared_res();
 
@@ -33,6 +32,7 @@ int main() {
         State::change_state(new StateMenu(&world));
 
     ImGui::SFML::Init(window);
+    window.setMouseCursorVisible(false);
     sf::Clock imguiDelta;
     while (window.isOpen()) {
         sf::Event e;
@@ -64,6 +64,7 @@ int main() {
         }
 
         ImGui::SFML::Update(window, imguiDelta.restart());
+        window.setMouseCursorVisible(edit);
         world.tick();
         State::tick_current();
         
