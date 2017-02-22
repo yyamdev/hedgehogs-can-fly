@@ -30,6 +30,7 @@ private:
     static sf::Texture txtPoint;
     static bool textureLoaded;
     sf::Sprite spr, sprPoint;
+    sf::Vector2f mouse;
 
     EntityTerrain *terrain;
 

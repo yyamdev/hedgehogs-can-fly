@@ -44,6 +44,10 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
 void EntityBall::event(sf::Event &e) {
     if (!reactToInput) return;
 
+    if (e.type == sf::Event::MouseMoved) {
+        mouse.x = (float)e.mouseMove.x;
+        mouse.y = (float)e.mouseMove.y;
+    }
     if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Space) {
         reset_to_rest();
         notify(EVENT_PRESS_SPACE, NULL);
@@ -88,8 +92,8 @@ void EntityBall::event(sf::Event &e) {
                             velocity = dir;
                             stop_resting();
                         } else if (canNudge) {
-                            velocity += dir * nudgeStr;
-                            std::cout << "nudge\n";
+                            //velocity += dir * nudgeStr;
+                            //std::cout << "nudge\n";
                         }
                         break;
                     }
@@ -141,6 +145,12 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     sf::Vector2f oldPos = position;
     position += velocity;
     notify(EVENT_BALL_MOVE, (void*)(&position));
+
+    // handle nudging
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && dragMode == DM_NUDGE && canNudge) {
+        sf::Vector2f dir = util::normalize(mouse - (position - world->camera));
+        velocity += dir * nudgeStr;
+    }
 
     if (util::len(oldPos - position) > 1.5f) {
         stop_resting();

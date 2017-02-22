@@ -40,7 +40,7 @@ void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera) {
     }
 
     // draw mouse drag visual indicators
-    if (dragging) {
+    if (dragging && canFling) {
         sf::Vector2f dir = mouseDragStart -  mouse;
         float mag = util::len(dir) / 15.f;
         float scale = fmin(mag / BALL_MAX_LAUNCH_SPEED, 1.f);
