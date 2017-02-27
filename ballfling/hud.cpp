@@ -5,6 +5,7 @@
 #include "util.h"
 #include "build_options.h"
 #include "ball_entity.h"
+#include "imgui.h"
 
 Hud::Hud() {
     Subject::add_observer(this); // register for events
@@ -24,6 +25,7 @@ Hud::Hud() {
     sprInstructionDrag.setOrigin(sf::Vector2f(txtInstructionDrag.getSize().x / 2.f, txtInstructionDrag.getSize().y / 2.f));
     sprInstructionSpace.setOrigin(sf::Vector2f(txtInstructionSpace.getSize().x / 2.f, txtInstructionSpace.getSize().y / 2.f));
     sprInstructionSpace.setScale(sf::Vector2f(0.7f, 0.7f));
+    drawArrowOnBall = true;
 }
 
 void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera) {
@@ -49,7 +51,10 @@ void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera) {
         // draw arrow
         sf::Sprite sprArrow(txtArrow);
         sprArrow.setOrigin(sf::Vector2f(0.f, (float)txtArrow.getSize().y / 2.f));
-        sprArrow.setPosition(ballRestPos - camera);
+        if (drawArrowOnBall)
+            sprArrow.setPosition(ballRestPos - camera);
+        else
+            sprArrow.setPosition(mouseDragStart);
         sprArrow.setScale(sf::Vector2f(scale, 1.f));
         sprArrow.setRotation(ang);
         sprArrow.setColor(sf::Color(255, 255, 255, 128));
@@ -91,6 +96,10 @@ void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera) {
     txtCounter.setPosition(sf::Vector2f(20.f, 10.f));
     txtCounter.setColor(sf::Color::Black);
     window.draw(txtCounter);
+
+    if (edit && ImGui::CollapsingHeader("Hud")) {
+        ImGui::Checkbox("draw arrow on ball", &drawArrowOnBall);
+    }
 }
 
 void Hud::on_notify(Event event, void *data) {

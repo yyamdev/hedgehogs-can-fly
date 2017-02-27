@@ -26,6 +26,7 @@ private:
     sf::Texture txtBallNudge;
     int moveCount;
     sf::Font fntCounter;
+    bool drawArrowOnBall;
 
     // wind
     sf::Vector2f currentWind;
