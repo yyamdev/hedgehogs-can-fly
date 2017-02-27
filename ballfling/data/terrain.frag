@@ -28,6 +28,7 @@ void main() {
     if (dataCoord.x >= cameraX && screenHeight - dataCoord.y >= cameraY && dataCoord.x < cameraX + screenWidth && screenHeight - dataCoord.y < cameraY + screenHeight) {
         // lookup terrain type in map file
         vec4 dataPixel = texture2D(txtData, dataTexCoord.xy);
+        //vec4 dataPixel = vec4(0.0, 0.0, 0.0, 0.0);
         //dataPixel.xyza *= 255;
         dataPixel.x *= 255;
         dataPixel.y *= 255;

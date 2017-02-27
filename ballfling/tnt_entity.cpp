@@ -52,6 +52,8 @@ void EntityTnt::tick(std::vector<Entity*> &entities) {
                 world->add_entity(new EntityExplosionGfx(position, 96.f));
                 sf::Vector3f explodeData(position.x, position.y, 128.f);
                 notify(EVENT_TNT_EXPLODE, (void*)(&explodeData));
+                sf::Rect<unsigned int> updateRect((unsigned int)position.x - 96, (unsigned int)position.y - 96, 96 * 2, 96 * 2);
+                notify(EVENT_TERRAIN_CHANGE, (void*)(&updateRect));
                 remove = true;
             } else
                 std::cout << "TNT entity should have exploded but it didn't have a pointer to terrain entity\n";

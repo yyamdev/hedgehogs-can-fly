@@ -18,7 +18,7 @@ enum Event {
     EVENT_WIND_CHANGE, // sf::Vector2f* pointer to wind vector
     EVENT_DUDE_WEAPON_COOLDOWN_CHANGE, // EntityDude* pointer to dude
     EVENT_LIVES_CHANGE, // int *array[2] player number, lives
-    EVENT_TERRAIN_CHANGE, // NULL
+    EVENT_TERRAIN_CHANGE, // sf::Rect<unsigned int>* pointer to rect of reigion to update
     EVENT_BALL_REST_POS, // sf::Vector2f* pointer to new rest position
     EVENT_BALL_MOVE, // sf::Vector2f* pointer to new position
     EVENT_PRESS_SPACE, // NULL

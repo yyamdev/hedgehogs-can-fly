@@ -27,6 +27,7 @@ EntityTerrain::EntityTerrain(float scale, std::string filename) {
     memcpy((void*)terrain, (void*)imgMap.getPixelsPtr(), (size_t)(size.x * size.y * 4));
     txtTerrainData.create(size.x, size.y); // for sfml rendering (passed to shader)
     data_pass();
+    txtTerrainData.update(terrain); // update data texture
     // load front-end textures
     txtBg.loadFromFile("data/bg.png");
     txtBg.setRepeated(true);
@@ -46,8 +47,6 @@ EntityTerrain::EntityTerrain(float scale, std::string filename) {
     txtFinish.setRepeated(true);
     // load fragment shader
     shdTerrain.loadFromFile("data/terrain.frag", sf::Shader::Fragment);
-    // notify
-    notify(EVENT_TERRAIN_CHANGE, NULL);
     editMode = false;
 }
 
@@ -184,7 +183,6 @@ void EntityTerrain::set_solid() {
         terrain[i + 2] = 255;
         terrain[i + 3] = 255;
     }
-    notify(EVENT_TERRAIN_CHANGE, NULL);
 }
 
 void EntityTerrain::set_empty() {
@@ -195,7 +193,6 @@ void EntityTerrain::set_empty() {
         terrain[i + 2] = 0;
         terrain[i + 3] = 255;
     }
-    notify(EVENT_TERRAIN_CHANGE, NULL);
 }
 
 void EntityTerrain::set_rectangle(sf::FloatRect rect, bool solid) {
@@ -204,7 +201,6 @@ void EntityTerrain::set_rectangle(sf::FloatRect rect, bool solid) {
             set_solid(sf::Vector2f(x, y), solid);
         }
     }
-    notify(EVENT_TERRAIN_CHANGE, NULL);
 }
 
 void EntityTerrain::set_circle(sf::Vector2f center, float rad, bool solid) {
@@ -217,7 +213,6 @@ void EntityTerrain::set_circle(sf::Vector2f center, float rad, bool solid) {
                 set_solid(sf::Vector2f(x, y), solid);
         }
     }
-    notify(EVENT_TERRAIN_CHANGE, NULL);
 }
 
 void EntityTerrain::set_weak_terrain_circle(sf::Vector2f center, float rad, bool solid) {
@@ -231,7 +226,6 @@ void EntityTerrain::set_weak_terrain_circle(sf::Vector2f center, float rad, bool
             }
         }
     }
-    notify(EVENT_TERRAIN_CHANGE, NULL);
 }
 
 sf::Vector2f EntityTerrain::get_normal(sf::Vector2f pos) {
@@ -321,6 +315,7 @@ bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, sf::Vector2f vel, f
 
 void EntityTerrain::event(sf::Event &e) {
     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Right && !sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+        //std::cout << "TODO -> EVENT_TERRAIN_CHANGED if this code uses set_circle\n";
         //set_circle(sf::Vector2f((float)e.mouseButton.x + world->camera.x, (float)e.mouseButton.y + world->camera.y), 25, false);
         world->add_entity(new EntityTnt(sf::Vector2f((float)e.mouseButton.x + world->camera.x, (float)e.mouseButton.y + world->camera.y)));
     }
@@ -332,7 +327,6 @@ void EntityTerrain::tick(std::vector<Entity*> &entities) {
 
 void EntityTerrain::draw(sf::RenderWindow &window) {
     if (render) {
-        txtTerrainData.update(terrain); // update data texture
         // create terrain image sprite
         sf::Sprite sprTerrain(txtSolid); // I think this has to be set for size only?
         sprTerrain.setTextureRect(sf::IntRect(0, 0, (int)size.x, (int)size.y));
@@ -363,5 +357,10 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
 }
 
 void EntityTerrain::on_notify(Event event, void *data) {
-
+    if (event == EVENT_TERRAIN_CHANGE) {
+        // TODO -> optimise to only update part of the texture that's changed
+        sf::Rect<unsigned int> updateBounds = *(sf::Rect<unsigned int>*)data;
+        // need to construct an array of pixels that is exactly the reigion we want to copy over into the texture
+        txtTerrainData.update(terrain); // update data texture
+    }
 }

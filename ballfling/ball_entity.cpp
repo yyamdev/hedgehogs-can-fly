@@ -146,7 +146,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     notify(EVENT_BALL_MOVE, (void*)(&position));
 
     // handle nudging
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && dragMode == DM_NUDGE && canNudge) {
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && dragMode == DM_NUDGE && canNudge && !canFling) {
         sf::Vector2f dir = util::normalize(mouse - (position - world->camera));
         velocity += dir * nudgeStr;
     }
@@ -161,9 +161,9 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
 
     // update canFling
     if (dragMode == DM_REST || dragMode == DM_NUDGE) {
-        if (util::len(velocity) < maxFlingVelocity && rest)
+        if (util::len(velocity) < maxFlingVelocity && touching_wall() && !canFling)
             canFling = true;
-        else
+        else if (util::len(velocity) > 2.f * maxFlingVelocity && !touching_wall() && canFling)
             canFling = false;
     }
     else if (dragMode == DM_TIME) {
@@ -311,7 +311,7 @@ bool EntityBall::is_at_rest() {
 }
 
 bool EntityBall::touching_wall() {
-    return clkWallTouch.getElapsedTime().asMilliseconds() < 400;
+    return clkWallTouch.getElapsedTime().asMilliseconds() < 100;
 }
 
 void EntityBall::record_new_rest_pos() {

@@ -99,6 +99,7 @@ void World::draw() {
                     float vel[2] = {e->velocity.x, e->velocity.y};
                     ImGui::InputFloat2("velocity", vel);
                     e->velocity.x = vel[0];
+
                     e->velocity.y = vel[1];
                     ImGui::TreePop();
                 }
