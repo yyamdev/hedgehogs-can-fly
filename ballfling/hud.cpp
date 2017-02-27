@@ -40,14 +40,12 @@ void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera) {
         window.draw(sprInstructionSpace);
     }
 
-    // draw mouse drag visual indicators
+    // draw mouse drag arrow
     if (dragging && canFling) {
-        sf::Vector2f dir = mouseDragStart -  mouse;
+        sf::Vector2f dir = mouse - mouseDragStart;
         float mag = util::len(dir) / 15.f;
         float scale = fmin(mag / BALL_MAX_LAUNCH_SPEED, 1.f);
         float ang = atan2f(dir.y, dir.x) * (180.f / PI_F);
-        // draw red line
-        draw_vector(mouseDragStart, -dir, fmin(util::len(mouseDragStart - mouse), BALL_MAX_LAUNCH_SPEED * 15.f), sf::Color::Red, window);
         // draw arrow
         sf::Sprite sprArrow(txtArrow);
         sprArrow.setOrigin(sf::Vector2f(0.f, (float)txtArrow.getSize().y / 2.f));
