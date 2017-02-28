@@ -11,6 +11,7 @@
 #include "tnt_entity.h"
 #include "debug_draw.h"
 #include "imgui.h"
+#include <algorithm>
 
 EntityTerrain::EntityTerrain(float scale, std::string filename) {
     // load map image
@@ -100,7 +101,6 @@ void EntityTerrain::set_solid(sf::Vector2f pos, bool solid) {
         terrain[base + 2] = 0;
         terrain[base + 3] = 255;
     }
-    notify(EVENT_TERRAIN_CHANGE, NULL);
 }
 
 void EntityTerrain::remove_flood_fill(sf::Vector2f pos) {
@@ -358,9 +358,16 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
 
 void EntityTerrain::on_notify(Event event, void *data) {
     if (event == EVENT_TERRAIN_CHANGE) {
-        // TODO -> optimise to only update part of the texture that's changed
+        // update part of the terrain texture from terrain data data
         sf::Rect<unsigned int> updateBounds = *(sf::Rect<unsigned int>*)data;
-        // need to construct an array of pixels that is exactly the reigion we want to copy over into the texture
-        txtTerrainData.update(terrain); // update data texture
+        sf::Uint8 *terrainUpdate = new sf::Uint8[updateBounds.width * updateBounds.height * 4];
+        sf::Uint8 *terrainStart = &terrain[(updateBounds.top * size.x + updateBounds.left) * 4];
+        for (int row = 0; row < updateBounds.height; ++row) { // create continuous buffer for update reigion
+            memcpy( &terrainUpdate[row * updateBounds.width * 4],
+                    &terrainStart [row * size.x * 4],
+                    updateBounds.width * 4);
+        }
+        txtTerrainData.update(terrainUpdate, updateBounds.width, updateBounds.height, updateBounds.left, updateBounds.top); // update data texture
+        delete[] terrainUpdate;
     }
 }
