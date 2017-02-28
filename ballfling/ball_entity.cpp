@@ -250,6 +250,8 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                 float impactSpeed = util::len(velocity);
                 if (impactSpeed > 9.f) {
                     terrain->remove_flood_fill(contactPoint);
+                    sf::Rect<unsigned int> updateRect((unsigned int)position.x - 96, (unsigned int)position.y - 96, 96 * 2, 96 * 2);
+                    notify(EVENT_TERRAIN_CHANGE, &updateRect);
                     velocity = util::normalize(velocity) * fmax(0.f, impactSpeed - 7.f);
                     notify(EVENT_SMASH_DOOR, NULL);
                     return;
