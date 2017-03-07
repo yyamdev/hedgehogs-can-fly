@@ -11,7 +11,7 @@ namespace _cursors {
 void load_cursor_textures() {
     _cursors::txtCursorReticle.loadFromFile("data/cursor_drag.png");
     _cursors::txtCursorCross.loadFromFile("data/cursor_nudge.png");
-    _cursors::txtCursorPointer.loadFromFile("");
+    _cursors::txtCursorPointer.loadFromFile("data/cursor_pointer.png");
     _cursors::txtCursorStop.loadFromFile("data/cursor_stop.png");
     _cursors::sprCursor.setOrigin(13.f, 13.f); // 26 X 26 px cursors
 }
