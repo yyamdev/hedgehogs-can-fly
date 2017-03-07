@@ -6,7 +6,7 @@
 #include "build_options.h"
 
 StateMenu::StateMenu(World *world) : State(world) {
-    txtTitle.setString("Endangered Panda");
+    txtTitle.setString("Title Here");
     txtTitle.setFont(fntUi);
     txtTitle.setCharacterSize(100);
     txtTitle.setColor(sf::Color::Black);
