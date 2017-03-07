@@ -126,6 +126,9 @@
     <ClInclude Include="shared_res.h">
       <Filter>Header Files\game</Filter>
     </ClInclude>
+    <ClInclude Include="gui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="subject.cpp">

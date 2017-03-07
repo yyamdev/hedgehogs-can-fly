@@ -10,8 +10,13 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 #include "debug_draw.h"
+#include "SFGUI/SFGUI.hpp"
+#include "SFGUI/Button.hpp"
+#include "SFGUI/Window.hpp"
+#include "SFGUI/Desktop.hpp"
+#include "gui.h"
 
-#define GO_TO_TEST_LEVEL 1
+#define GO_TO_TEST_LEVEL 0
 
 // frame time profiler
 #define PBUFLEN 16
@@ -20,6 +25,8 @@ int pbufi = 0;
 float framePercent = 0.f;
 float framePercentBuf[PBUFLEN];
 int fbufi = 0;
+
+sfg::Desktop gui; // SFGUI global Desktop object
 
 void print_debug_controls();
 
@@ -33,6 +40,10 @@ int main() {
     print_debug_controls();
 
     World world(window);
+
+    sfg::SFGUI guiManager;
+    auto guiButton = sfg::Button::Create("Hello");
+    gui.Add(guiButton);
 
     if (GO_TO_TEST_LEVEL)
         State::change_state(new StatePlay(&world, "data/map.png"));
@@ -48,6 +59,7 @@ int main() {
         sf::Event e;
         while (window.pollEvent(e)) {
             ImGui::SFML::ProcessEvent(e);
+            gui.HandleEvent(e);
 
             if (e.type == sf::Event::Closed) {
                 window.close();
@@ -74,6 +86,7 @@ int main() {
         }
 
         ImGui::SFML::Update(window, imguiDelta.restart());
+        gui.Update(1.f / 60.f);
         window.setMouseCursorVisible(edit);
         world.tick();
         State::tick_current();
@@ -88,6 +101,7 @@ int main() {
             ImGui::PlotLines("frame time", framePercentBuf, PBUFLEN, 0, 0, 95.f, 140.f, sf::Vector2f(0, 70.f), 4);
         }
         ImGui::Render();
+        guiManager.Display(window);
         window.display();
 
         pbuf[pbufi] = clkProfile.getElapsedTime().asMilliseconds();
