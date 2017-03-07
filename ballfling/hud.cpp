@@ -6,15 +6,13 @@
 #include "build_options.h"
 #include "ball_entity.h"
 #include "imgui.h"
+#include "cursor.h"
 
 Hud::Hud() {
     Subject::add_observer(this); // register for events
     dragging = false;
     canFling = canNudge = false;
     txtArrow.loadFromFile("data/arrow.png");
-    txtCursorDrag.loadFromFile("data/cursor_drag.png");
-    txtCursorStop.loadFromFile("data/cursor_stop.png");
-    txtCursorNudge.loadFromFile("data/cursor_nudge.png");
     txtBallNudge.loadFromFile("data/ball_nudge.png");
     moveCount = 0;
     fntCounter.loadFromFile("data/VCR_OSD_MONO.ttf");
@@ -83,14 +81,10 @@ void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera) {
     // wind
     draw_vector(sf::Vector2f(WINDOW_WIDTH / 2.f, 64.f), currentWind, util::len(currentWind) * 600.f, sf::Color::Blue, window);
 
-    // draw cursors
-    sf::Sprite sprCursor;
-    if (canNudge) sprCursor.setTexture(txtCursorNudge);
-    if (canFling) sprCursor.setTexture(txtCursorDrag);
-    if (!canNudge && !canFling) sprCursor.setTexture(txtCursorStop);
-    sprCursor.setOrigin(sf::Vector2f(13.f, 13.f));
-    sprCursor.setPosition(mouse);
-    window.draw(sprCursor);
+    // set cursors
+    if (canNudge) set_cursor(CURSOR_CROSS);
+    if (canFling) set_cursor(CURSOR_RETICLE);
+    if (!canNudge && !canFling) set_cursor(CURSOR_STOP);
 
     sf::Text txtCounter(util::to_string(moveCount), fntCounter);
     txtCounter.setPosition(sf::Vector2f(20.f, 10.f));

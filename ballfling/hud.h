@@ -20,9 +20,6 @@ private:
     sf::Vector2f mouseDragStart;
     sf::Vector2f ballRestPos;
     sf::Texture txtArrow;
-    sf::Texture txtCursorDrag;
-    sf::Texture txtCursorStop;
-    sf::Texture txtCursorNudge;
     sf::Texture txtBallNudge;
     int moveCount;
     sf::Font fntCounter;
