@@ -15,6 +15,7 @@
 #include "SFGUI/Window.hpp"
 #include "SFGUI/Desktop.hpp"
 #include "gui.h"
+#include "cursor.h"
 
 #define GO_TO_TEST_LEVEL 0
 
@@ -35,6 +36,7 @@ int main() {
     window.setFramerateLimit(60);
 
     load_shared_res();
+    load_cursor_textures();
 
     std::cout << "OpenGL version " << window.getSettings().majorVersion << "." << window.getSettings().minorVersion << std::endl;
     print_debug_controls();
@@ -94,6 +96,9 @@ int main() {
         window.clear(sf::Color(153, 217, 234));
         world.draw();
         State::draw_current(window);
+        State::draw_ui_current(window);
+        guiManager.Display(window);
+        draw_cursor(window);
         if (edit && ImGui::CollapsingHeader("Performance")) {
             sf::Color frameCol = sf::Color::Green;
             if (framePercent > 100.f) frameCol = sf::Color::Red;
@@ -101,7 +106,6 @@ int main() {
             ImGui::PlotLines("frame time", framePercentBuf, PBUFLEN, 0, 0, 95.f, 140.f, sf::Vector2f(0, 70.f), 4);
         }
         ImGui::Render();
-        guiManager.Display(window);
         window.display();
 
         pbuf[pbufi] = clkProfile.getElapsedTime().asMilliseconds();

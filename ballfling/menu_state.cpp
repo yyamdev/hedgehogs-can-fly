@@ -4,6 +4,7 @@
 #include "select_state.h"
 #include "shared_res.h"
 #include "build_options.h"
+#include "cursor.h"
 
 StateMenu::StateMenu(World *world) : State(world) {
     txtTitle.setString("Title Here");
@@ -12,6 +13,7 @@ StateMenu::StateMenu(World *world) : State(world) {
     txtTitle.setColor(sf::Color::Black);
     txtTitle.setOrigin(sf::Vector2f(txtTitle.getLocalBounds().width / 2.f, txtTitle.getLocalBounds().height / 2.f));
     txtTitle.setPosition(WINDOW_WIDTH / 2.f, 60.f);
+    set_cursor(CURSOR_STOP);
 }
 
 void StateMenu::on_event(sf::Event &event) {

@@ -135,6 +135,7 @@
     <ClCompile Include="..\..\..\..\dev\imgui\imgui_draw.cpp" />
     <ClCompile Include="audio.cpp" />
     <ClCompile Include="ball_entity.cpp" />
+    <ClCompile Include="cursor.cpp" />
     <ClCompile Include="debug_draw.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="hud.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="audio.h" />
     <ClInclude Include="ball_entity.h" />
     <ClInclude Include="build_options.h" />
+    <ClInclude Include="cursor.h" />
     <ClInclude Include="debug_draw.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="events.h" />

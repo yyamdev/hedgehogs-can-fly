@@ -33,6 +33,7 @@ public:
     static void event_current(sf::Event &event);
     static void tick_current();
     static void draw_current(sf::RenderWindow &window);
+    static void draw_ui_current(sf::RenderWindow &window);
 
 protected:
     World *world;
