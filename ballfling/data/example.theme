@@ -1,0 +1,17 @@
+/*
+    Widget States:
+    NORMAL
+    ACTIVE
+    PRELIGHT
+    SELECTED
+    INSENSITIVE
+*/
+
+Button:PRELIGHT, Button{
+	Color: #00ffffff;
+}
+
+Button:ACTIVE {
+    BackgroundColor: #00ffffff;
+    Color: #ff00ffff;
+}

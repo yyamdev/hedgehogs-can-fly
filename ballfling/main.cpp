@@ -45,7 +45,12 @@ int main() {
 
     sfg::SFGUI guiManager;
     auto guiButton = sfg::Button::Create("Hello");
+    guiButton->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([] (void) {
+        std::cout << "Click!\n";
+    }));
+    gui.LoadThemeFromFile("data/example.theme");
     gui.Add(guiButton);
+    
 
     if (GO_TO_TEST_LEVEL)
         State::change_state(new StatePlay(&world, "data/map.png"));
