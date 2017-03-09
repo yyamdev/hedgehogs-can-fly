@@ -1,0 +1,29 @@
+/*
+    Widget States:
+    NORMAL
+    ACTIVE
+    PRELIGHT
+    SELECTED
+    INSENSITIVE
+*/
+
+/* Default button style */
+Button {
+    /* Normal */
+    BorderWidth: 0;
+    BackgroundColor: #999999ff;
+    Color: #000000ff;
+    FontSize: 24;
+    FontName: data/square-dal.ttf;
+    Padding: 15;
+}
+Button:PRELIGHT {
+    /* Hover */
+    BackgroundColor: #444444ff;
+    Color: #ffffffff;
+}
+Button:ACTIVE {
+    /* Click */
+    BackgroundColor: #666666ff;
+    Color: #eeeeeeff;
+}

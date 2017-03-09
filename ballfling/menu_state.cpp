@@ -5,6 +5,10 @@
 #include "shared_res.h"
 #include "build_options.h"
 #include "cursor.h"
+#include "SFGUI/Button.hpp"
+#include "gui.h"
+#include "world.h"
+#include "build_options.h"
 
 StateMenu::StateMenu(World *world) : State(world) {
     txtTitle.setString("Title Here");
@@ -17,9 +21,6 @@ StateMenu::StateMenu(World *world) : State(world) {
 }
 
 void StateMenu::on_event(sf::Event &event) {
-    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return) {
-        State::push_state(new StateSelect(world));
-    }
 }
 
 void StateMenu::on_tick() {
@@ -33,10 +34,27 @@ void StateMenu::on_draw_ui(sf::RenderWindow &window) {
 }
 
 void StateMenu::on_gain_focus() {
-    // remove all entities in world
+    // remove all entities in world & clear ui
     world->remove_entity(ENTITY_TAG_ALL);
+    gui.RemoveAll();
 
-    std::cout << "press enter to go to level select\n";
+    // create ui
+    auto guiButtonPlay = sfg::Button::Create("Play");
+    guiButtonPlay->SetId("btnMenuPlay");
+    guiButtonPlay->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonPlay->GetRequisition().x / 2.f, 225.f));
+    gui.Add(guiButtonPlay);
+    guiButtonPlay->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
+        std::cout << "Play pressed.\n";
+        State::push_state(new StateSelect(world));
+    }));
+
+    auto guiButtonOptions = sfg::Button::Create("Options");
+    guiButtonOptions->SetId("btnMenuOptions");
+    guiButtonOptions->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonOptions->GetRequisition().x / 2.f, 325.f));
+    gui.Add(guiButtonOptions);
+    guiButtonOptions->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([] (void) {
+        std::cout << "Options pressed.\n";
+    }));
 }
 
 void StateMenu::on_lose_focus() {

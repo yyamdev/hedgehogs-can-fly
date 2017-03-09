@@ -26,7 +26,7 @@ StatePlay::StatePlay(World *world, std::string filename) : State(world) {
 }
 
 void StatePlay::on_event(sf::Event &event) {
-    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::B) {
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::F5) {
         world->toggle_pause();
     }
 }

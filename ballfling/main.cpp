@@ -16,8 +16,7 @@
 #include "SFGUI/Desktop.hpp"
 #include "gui.h"
 #include "cursor.h"
-
-#define GO_TO_TEST_LEVEL 0
+#include <fstream>
 
 // frame time profiler
 #define PBUFLEN 16
@@ -30,6 +29,9 @@ int fbufi = 0;
 sfg::Desktop gui; // SFGUI global Desktop object
 
 void print_debug_controls();
+
+#define CSS_BUF_SIZE 8192
+char cssBuf[CSS_BUF_SIZE];
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), TITLE, sf::Style::Close);
@@ -44,18 +46,9 @@ int main() {
     World world(window);
 
     sfg::SFGUI guiManager;
-    auto guiButton = sfg::Button::Create("Hello");
-    guiButton->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([] (void) {
-        std::cout << "Click!\n";
-    }));
-    gui.LoadThemeFromFile("data/example.theme");
-    gui.Add(guiButton);
-    
+    gui.LoadThemeFromFile("data/ui.css");
 
-    if (GO_TO_TEST_LEVEL)
-        State::change_state(new StatePlay(&world, "data/map.png"));
-    else
-        State::change_state(new StateMenu(&world));
+    State::change_state(new StateMenu(&world));
 
     ImGui::SFML::Init(window);
     window.setMouseCursorVisible(false);
@@ -72,20 +65,20 @@ int main() {
                 window.close();
             }
 
-            if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::E) {
+            if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::F2) {
                 edit = !edit;
+                std::ifstream fileTheme("data/ui.css");
+                fileTheme.get(cssBuf, CSS_BUF_SIZE, 0);
+                fileTheme.close();
             }
 
             if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::F1)
                 window.capture().saveToFile(util::to_string(time(NULL)) + ".png");
 
-            if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::R)
+            if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::F3)
                 State::change_state(new StatePlay(&world, "data/map.png"));
 
-            if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::H)
-                print_debug_controls();
-
-            if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::C)
+            if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::F4)
                 system("cls");
             
             world.event(e);
@@ -110,6 +103,18 @@ int main() {
             ImGui::TextColored(frameCol, "frame time: %f%", framePercent);
             ImGui::PlotLines("frame time", framePercentBuf, PBUFLEN, 0, 0, 95.f, 140.f, sf::Vector2f(0, 70.f), 4);
         }
+        if (edit && ImGui::CollapsingHeader("CSS")) {
+            if (ImGui::Button("Update")) {
+                std::ofstream fileTheme("data/ui.css");
+                for (int i = 0; i < CSS_BUF_SIZE; ++i) {
+                    if (cssBuf[i] == 0) break;
+                    fileTheme.put(cssBuf[i]);
+                }
+                fileTheme.close();
+                gui.LoadThemeFromFile("data/ui.css");
+            }
+            ImGui::InputTextMultiline("css", cssBuf, CSS_BUF_SIZE, sf::Vector2f(400.f, 250.f), ImGuiInputTextFlags_AllowTabInput);
+        }
         ImGui::Render();
         window.display();
 
@@ -133,10 +138,9 @@ int main() {
 
 void print_debug_controls() {
     std::cout << "debug controls:\n";
-    std::cout << "B - toggle pause\n";
+    std::cout << "F5 - toggle pause\n";
     std::cout << "F1 - screenshot\n";
-    std::cout << "R - restart game\n";
-    std::cout << "H - print this message\n";
-    std::cout << "E - toggle tools mode\n";
-    std::cout << "C - clear console\n";
+    std::cout << "F2 - toggle tools mode\n";
+    std::cout << "F3 - go to test level\n";
+    std::cout << "F4 - clear console\n";
 }
