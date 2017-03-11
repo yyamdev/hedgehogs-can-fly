@@ -44,7 +44,6 @@ void StateMenu::on_gain_focus() {
     guiButtonPlay->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonPlay->GetRequisition().x / 2.f, 225.f));
     gui.Add(guiButtonPlay);
     guiButtonPlay->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
-        std::cout << "Play pressed.\n";
         State::push_state(new StateSelect(world));
     }));
 

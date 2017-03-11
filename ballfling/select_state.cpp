@@ -32,7 +32,6 @@ void StateSelect::on_gain_focus() {
     float yOffset = 200.f;
     float xOffset = WINDOW_WIDTH / 2 - (2 * w) - (2 * g);
     sf::Vector2f position = sf::Vector2f(xOffset, yOffset);
-    std::cout << util::vec2_to_str(position) << std::endl;
     sf::Vector2f right = sf::Vector2f(w + g, 0.f);
     sf::Vector2f down = sf::Vector2f(0.f, h + g);
     for (int y = 0; y < 3; ++y) {
@@ -50,6 +49,14 @@ void StateSelect::on_gain_focus() {
         position += down;
         position.x = xOffset;
     }
+
+    auto guiButtonBack = sfg::Button::Create("Back");
+    guiButtonBack->SetId("btnSelectBack");
+    guiButtonBack->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonBack->GetRequisition().x / 2.f, 500.f));
+    gui.Add(guiButtonBack);
+    guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([] (void) {
+        State::pop_state();
+    }));
 }
 
 void StateSelect::on_lose_focus() {
