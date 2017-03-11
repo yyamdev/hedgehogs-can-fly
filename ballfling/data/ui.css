@@ -14,7 +14,6 @@ Button {
     BackgroundColor: #999999ff;
     Color: #000000ff;
     FontSize: 24;
-    FontName: data/square-dal.ttf;
     Padding: 15;
 }
 Button:PRELIGHT {
@@ -26,4 +25,15 @@ Button:ACTIVE {
     /* Click */
     BackgroundColor: #666666ff;
     Color: #eeeeeeff;
+}
+
+/* Default label style */
+Label {
+    Color: #000000ff;
+}
+
+/* Main menu style */
+#lblMenuTitle {
+    FontSize: 64;
+    FontName: data/square-deal.ttf;
 }

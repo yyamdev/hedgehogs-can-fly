@@ -23,5 +23,4 @@ public:
     void on_notify(Event event, void *data);
 
 private:
-    sf::Text txtTitle;
 };

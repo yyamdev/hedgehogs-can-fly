@@ -6,17 +6,12 @@
 #include "build_options.h"
 #include "cursor.h"
 #include "SFGUI/Button.hpp"
+#include "SFGUI/Label.hpp"
 #include "gui.h"
 #include "world.h"
 #include "build_options.h"
 
 StateMenu::StateMenu(World *world) : State(world) {
-    txtTitle.setString("Title Here");
-    txtTitle.setFont(fntUi);
-    txtTitle.setCharacterSize(100);
-    txtTitle.setColor(sf::Color::Black);
-    txtTitle.setOrigin(sf::Vector2f(txtTitle.getLocalBounds().width / 2.f, txtTitle.getLocalBounds().height / 2.f));
-    txtTitle.setPosition(WINDOW_WIDTH / 2.f, 60.f);
     set_cursor(CURSOR_POINTER);
 }
 
@@ -30,7 +25,6 @@ void StateMenu::on_draw(sf::RenderWindow &window) {
 }
 
 void StateMenu::on_draw_ui(sf::RenderWindow &window) {
-    window.draw(txtTitle);
 }
 
 void StateMenu::on_gain_focus() {
@@ -39,6 +33,11 @@ void StateMenu::on_gain_focus() {
     gui.RemoveAll();
 
     // create ui
+    auto guiLabelTitle = sfg::Label::Create("Title Here");
+    guiLabelTitle->SetId("lblMenuTitle");
+    guiLabelTitle->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiLabelTitle->GetRequisition().x / 2.f, 50.f));
+    gui.Add(guiLabelTitle);
+
     auto guiButtonPlay = sfg::Button::Create("Play");
     guiButtonPlay->SetId("btnMenuPlay");
     guiButtonPlay->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonPlay->GetRequisition().x / 2.f, 225.f));

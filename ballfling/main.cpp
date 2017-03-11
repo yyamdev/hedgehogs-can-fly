@@ -87,7 +87,6 @@ int main() {
 
         ImGui::SFML::Update(window, imguiDelta.restart());
         gui.Update(1.f / 60.f);
-        window.setMouseCursorVisible(edit);
         world.tick();
         State::tick_current();
         
@@ -96,7 +95,6 @@ int main() {
         State::draw_current(window);
         State::draw_ui_current(window);
         guiManager.Display(window);
-        draw_cursor(window);
         if (edit && ImGui::CollapsingHeader("Performance")) {
             sf::Color frameCol = sf::Color::Green;
             if (framePercent > 100.f) frameCol = sf::Color::Red;
@@ -116,6 +114,7 @@ int main() {
             ImGui::InputTextMultiline("css", cssBuf, CSS_BUF_SIZE, sf::Vector2f(400.f, 250.f), ImGuiInputTextFlags_AllowTabInput);
         }
         ImGui::Render();
+        draw_cursor(window);
         window.display();
 
         pbuf[pbufi] = clkProfile.getElapsedTime().asMilliseconds();
