@@ -29,20 +29,22 @@ void StateSelect::on_gain_focus() {
     // create ui
     float w = 64.f, h = 64.f; // dimensions of buttons
     float g = 32.f; // xy gap between buttons
-    float yOffset = 200.f;
-    float xOffset = WINDOW_WIDTH / 2 - (2 * w) - (2 * g);
+    int rows = 3, cols = 5;
+    float sub = cols / 2.f - 0.5f;
+    float yOffset = 150.f;
+    float xOffset = WINDOW_WIDTH / 2 - sub * (w + g);
     sf::Vector2f position = sf::Vector2f(xOffset, yOffset);
     sf::Vector2f right = sf::Vector2f(w + g, 0.f);
     sf::Vector2f down = sf::Vector2f(0.f, h + g);
-    for (int y = 0; y < 3; ++y) {
-        for (int x = 0; x < 5; ++x) {
-            auto guiButtonLvl = sfg::Button::Create(util::to_string((y * 5 + x) + 1));
+    for (int y = 0; y < rows; ++y) {
+        for (int x = 0; x < cols; ++x) {
+            auto guiButtonLvl = sfg::Button::Create(util::to_string((y * cols + x) + 1));
             guiButtonLvl->SetId("btnSelectLevel");
             guiButtonLvl->SetRequisition(sf::Vector2f(w, h));
             guiButtonLvl->SetPosition(position - sf::Vector2f(w / 2, h / 2));
             gui.Add(guiButtonLvl);
-            guiButtonLvl->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this, x, y] (void) {
-                std::cout << (y * 5 + x) + 1 << std::endl;
+            guiButtonLvl->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this, x, y, cols] (void) {
+                std::cout << (y * cols + x) + 1 << std::endl;
             }));
             position += right;
         }
