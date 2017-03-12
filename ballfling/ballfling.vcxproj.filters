@@ -130,7 +130,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cursor.h">
-      <Filter>Header Files\game</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
