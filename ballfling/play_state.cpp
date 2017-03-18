@@ -6,6 +6,7 @@
 #include "ball_entity.h"
 #include "debug_draw.h"
 #include "build_options.h"
+#include "gui.h"
 
 StatePlay::StatePlay(World *world, std::string filename) : State(world) {
     // remove all entities in world
@@ -55,6 +56,7 @@ void StatePlay::on_draw_ui(sf::RenderWindow &window) {
 }
 
 void StatePlay::on_gain_focus() {
+    gui.RemoveAll();
 }
 
 void StatePlay::on_lose_focus() {

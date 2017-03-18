@@ -77,6 +77,7 @@ void World::draw() {
         entity->draw(*window);
     }
 
+    /*
     if (edit && ImGui::CollapsingHeader("World")) {
         sf::Vector2f oldGrav = gravity;
         ImGui::InputFloat("Gravity.x", &gravity.x);
@@ -107,6 +108,7 @@ void World::draw() {
         ImGui::TreePop();
         }
     }
+    */
 }
 
 sf::Vector2i World::get_mouse_position() {

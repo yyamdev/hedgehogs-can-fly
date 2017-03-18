@@ -54,6 +54,7 @@ int main() {
     window.setMouseCursorVisible(false);
     sf::Clock imguiDelta;
     sf::Clock clkProfile;
+    window.resetGLStates();
     while (window.isOpen()) {
         clkProfile.restart();
         sf::Event e;
@@ -67,6 +68,7 @@ int main() {
 
             if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::F2) {
                 edit = !edit;
+                window.setMouseCursorVisible(edit);
                 std::ifstream fileTheme("data/ui.css");
                 fileTheme.get(cssBuf, CSS_BUF_SIZE, 0);
                 fileTheme.close();
@@ -85,16 +87,19 @@ int main() {
             State::event_current(e);
         }
 
-        ImGui::SFML::Update(window, imguiDelta.restart());
         gui.Update(1.f / 60.f);
         world.tick();
         State::tick_current();
         
         window.clear(sf::Color(153, 217, 234));
+        ImGui::SFML::Update(window, imguiDelta.restart());
         world.draw();
         State::draw_current(window);
         State::draw_ui_current(window);
         guiManager.Display(window);
+        if (edit) ImGui::LabelText("test", "asdf");
+        
+        /*
         if (edit && ImGui::CollapsingHeader("Performance")) {
             sf::Color frameCol = sf::Color::Green;
             if (framePercent > 100.f) frameCol = sf::Color::Red;
@@ -113,6 +118,7 @@ int main() {
             }
             ImGui::InputTextMultiline("css", cssBuf, CSS_BUF_SIZE, sf::Vector2f(400.f, 250.f), ImGuiInputTextFlags_AllowTabInput);
         }
+        */
         ImGui::Render();
         draw_cursor(window);
         window.display();
@@ -130,7 +136,7 @@ int main() {
         }
     }
 
-    ImGui::SFML::Shutdown();
+    //ImGui::SFML::Shutdown();
     State::free_memory();
     return 0;
 }

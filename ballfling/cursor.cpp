@@ -20,6 +20,7 @@ void load_cursor_textures() {
 
 void draw_cursor(sf::RenderWindow &window) {
     sf::Vector2i mouseI = sf::Mouse::getPosition(window);
+    _cursors::sprCursor.setTexture(*_cursors::sprCursor.getTexture());
     _cursors::sprCursor.setPosition((float)mouseI.x, (float)mouseI.y);
     std::cout << util::vec2_to_str(_cursors::sprCursor.getPosition()) << ", " << _cursors::sprCursor.getTexture() << std::endl;
     window.draw(_cursors::sprCursor);
