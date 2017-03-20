@@ -29,7 +29,7 @@ void StateOptions::on_gain_focus() {
 
     // create ui
     auto guiButtonBack = sfg::Button::Create("Back");
-    guiButtonBack->SetId("btnSelectBack");
+    guiButtonBack->SetId("btnOptionsBack");
     guiButtonBack->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonBack->GetRequisition().x / 2.f, 500.f));
     gui.Add(guiButtonBack);
     guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([] (void) {
