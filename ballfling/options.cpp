@@ -1,15 +1,14 @@
 #include "options.h"
 
-namespace options {
-    void save() {
-    }
+Options options; // global options
 
-    void load() {
-        // TODO -> Load from file.
-        musicVolume = .3f;
-        sfxVolume = .7f;
-    }
+Options::Options() {
+    musicVolume = .3f;
+    sfxVolume = .7f;
+}
 
-    float musicVolume;
-    float sfxVolume;
-};
+void Options::load() {
+}
+
+void Options::save() {
+}
