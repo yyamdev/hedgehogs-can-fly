@@ -7,4 +7,5 @@ namespace options {
     void load();
 
     extern float musicVolume;
+    extern float sfxVolume;
 };

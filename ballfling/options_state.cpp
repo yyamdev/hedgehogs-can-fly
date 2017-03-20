@@ -7,6 +7,10 @@
 #include "build_options.h"
 #include "util.h"
 #include "options.h"
+#include "SFGUI/Label.hpp"
+#include "SFGUI/Frame.hpp"
+#include "SFGUI/Window.hpp"
+#include "SFGUI/Box.hpp"
 
 StateOptions::StateOptions(World *world) : State(world) {
 }
@@ -31,24 +35,57 @@ void StateOptions::on_gain_focus() {
     options::load();
 
     // create ui
+    sf::Vector2f sliderSize(200.f, 32.f);
+
+    auto guiWinMain = sfg::Window::Create(sfg::Window::Style::NO_STYLE);
+    gui.Add(guiWinMain);
+
+    auto guiBoxMain = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 10.f);
+    guiWinMain->Add(guiBoxMain);
+
+    auto guiBoxMusic = sfg::Box::Create();
+    guiBoxMain->Pack(guiBoxMusic);
+
+    auto guiLblMusic = sfg::Label::Create("Music");
+    guiBoxMusic->Pack(guiLblMusic);
+
     auto guiSliderMusic = sfg::Scale::Create(0.f, 1.f, 0.01f);
     guiSliderMusic->SetId("sclOptionsMusic");
-    guiSliderMusic->SetRequisition(sf::Vector2f(200.f, 32.f));
-    guiSliderMusic->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2 - guiSliderMusic->GetRequisition().x / 2.f, 200.f));
+    guiSliderMusic->SetRequisition(sliderSize);
     guiSliderMusic->SetValue(options::musicVolume);
-    gui.Add(guiSliderMusic);
     guiSliderMusic->GetSignal(sfg::Scale::OnMouseLeftRelease).Connect(std::bind([guiSliderMusic] (void) {
         options::musicVolume = guiSliderMusic->GetValue();
     }));
+    guiBoxMusic->Pack(guiSliderMusic);
+
+    auto guiBoxSfx = sfg::Box::Create();
+    guiBoxMain->Pack(guiBoxSfx);
+
+    auto guiLblSfx = sfg::Label::Create("SFX");
+    guiBoxSfx->Pack(guiLblSfx);
+
+    auto guiSliderSfx = sfg::Scale::Create(0.f, 1.f, 0.01f);
+    guiSliderSfx->SetId("sclOptionsSfx");
+    guiSliderSfx->SetRequisition(sliderSize);
+    guiSliderSfx->SetValue(options::sfxVolume);
+    guiSliderSfx->GetSignal(sfg::Scale::OnMouseLeftRelease).Connect(std::bind([guiSliderSfx] (void) {
+        options::musicVolume = guiSliderSfx->GetValue();
+    }));
+    guiBoxSfx->Pack(guiSliderSfx);
 
     auto guiButtonBack = sfg::Button::Create("Back");
     guiButtonBack->SetId("btnOptionsBack");
     guiButtonBack->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonBack->GetRequisition().x / 2.f, 500.f));
     gui.Add(guiButtonBack);
-    guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([guiSliderMusic] (void) {
+    guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([guiSliderMusic, guiSliderSfx] (void) {
         guiSliderMusic->Show(false); // neccessary to stop this widget from displaying in other menus, possibly an SFGUI bug?
+        guiSliderSfx->Show(false);   // ""
         State::pop_state();
     }));
+
+    // position window at centre of screen
+    // needs to be done at the end so SFGUI knows how big it has to be
+    guiWinMain->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2 - guiWinMain->GetRequisition().x / 2.f, WINDOW_HEIGHT / 2 - guiWinMain->GetRequisition().y / 2.f - 75.f));
 }
 
 void StateOptions::on_lose_focus() {
