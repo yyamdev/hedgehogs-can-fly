@@ -8,9 +8,9 @@
 #include "util.h"
 #include "options.h"
 #include "SFGUI/Label.hpp"
-#include "SFGUI/Frame.hpp"
 #include "SFGUI/Window.hpp"
 #include "SFGUI/Box.hpp"
+#include "SFGUI/Separator.hpp"
 
 StateOptions::StateOptions(World *world) : State(world) {
 }
@@ -42,6 +42,14 @@ void StateOptions::on_gain_focus() {
 
     auto guiBoxMain = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 10.f);
     guiWinMain->Add(guiBoxMain);
+
+    auto guiLblTitle = sfg::Label::Create("Options");
+    guiLblTitle->SetId("lblOptionsTitle");
+    guiBoxMain->Pack(guiLblTitle);
+
+    auto guiBoxSpace = sfg::Box::Create();
+    guiBoxSpace->SetRequisition(sf::Vector2f(1.f, 50.f));
+    guiBoxMain->Pack(guiBoxSpace);
 
     auto guiBoxMusic = sfg::Box::Create();
     guiBoxMain->Pack(guiBoxMusic);

@@ -39,6 +39,9 @@ Label {
 }
 
 /* Options screen style */
+#lblOptionsTitle {
+    FontSize: 48;
+}
 #lblOptionsMusic, #lblOptionsSfx {
     FontSize: 16;
 }
