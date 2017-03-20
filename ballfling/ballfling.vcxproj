@@ -142,6 +142,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu_state.cpp" />
     <ClCompile Include="observer.cpp" />
+    <ClCompile Include="options_state.cpp" />
     <ClCompile Include="play_state.cpp" />
     <ClCompile Include="select_state.cpp" />
     <ClCompile Include="shared_res.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="hud.h" />
     <ClInclude Include="menu_state.h" />
     <ClInclude Include="observer.h" />
+    <ClInclude Include="options_state.h" />
     <ClInclude Include="play_state.h" />
     <ClInclude Include="select_state.h" />
     <ClInclude Include="shared_res.h" />

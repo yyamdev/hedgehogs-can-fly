@@ -132,6 +132,9 @@
     <ClInclude Include="cursor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="options_state.h">
+      <Filter>Header Files\game\state</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="subject.cpp">
@@ -196,6 +199,9 @@
     </ClCompile>
     <ClCompile Include="cursor.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="options_state.cpp">
+      <Filter>Source Files\game\state</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
