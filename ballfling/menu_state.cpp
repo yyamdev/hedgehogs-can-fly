@@ -6,6 +6,7 @@
 #include "build_options.h"
 #include "cursor.h"
 #include "SFGUI/Button.hpp"
+#include "SFGUI/Scale.hpp"
 #include "SFGUI/Label.hpp"
 #include "gui.h"
 #include "world.h"

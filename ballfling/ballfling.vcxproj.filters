@@ -135,6 +135,9 @@
     <ClInclude Include="options_state.h">
       <Filter>Header Files\game\state</Filter>
     </ClInclude>
+    <ClInclude Include="options.h">
+      <Filter>Header Files\game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="subject.cpp">
@@ -202,6 +205,9 @@
     </ClCompile>
     <ClCompile Include="options_state.cpp">
       <Filter>Source Files\game\state</Filter>
+    </ClCompile>
+    <ClCompile Include="options.cpp">
+      <Filter>Source Files\game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
