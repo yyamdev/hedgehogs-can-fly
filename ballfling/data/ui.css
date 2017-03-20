@@ -37,3 +37,8 @@ Label {
     FontSize: 64;
     FontName: data/square-deal.ttf;
 }
+
+/* Options screen style */
+#lblOptionsMusic, #lblOptionsSfx {
+    FontSize: 16;
+}

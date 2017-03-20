@@ -47,6 +47,7 @@ void StateOptions::on_gain_focus() {
     guiBoxMain->Pack(guiBoxMusic);
 
     auto guiLblMusic = sfg::Label::Create("Music");
+    guiLblMusic->SetId("lblOptionsMusic");
     guiBoxMusic->Pack(guiLblMusic);
 
     auto guiSliderMusic = sfg::Scale::Create(0.f, 1.f, 0.01f);
@@ -62,6 +63,7 @@ void StateOptions::on_gain_focus() {
     guiBoxMain->Pack(guiBoxSfx);
 
     auto guiLblSfx = sfg::Label::Create("SFX");
+    guiLblSfx->SetId("lblOptionsSfx");
     guiBoxSfx->Pack(guiLblSfx);
 
     auto guiSliderSfx = sfg::Scale::Create(0.f, 1.f, 0.01f);
