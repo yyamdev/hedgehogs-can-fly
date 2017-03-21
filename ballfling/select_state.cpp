@@ -5,6 +5,7 @@
 #include "SFGUI/Button.hpp"
 #include "build_options.h"
 #include "util.h"
+#include "play_state.h"
 
 StateSelect::StateSelect(World *world) : State(world) {
 }
@@ -44,7 +45,9 @@ void StateSelect::on_gain_focus() {
             guiButtonLvl->SetPosition(position - sf::Vector2f(w / 2, h / 2));
             gui.Add(guiButtonLvl);
             guiButtonLvl->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this, x, y, cols] (void) {
-                std::cout << (y * cols + x) + 1 << std::endl;
+                std::string filename = "lvl" + util::to_string((y * cols + x) + 1) + ".png";
+                State::push_state(new StatePlay(world, filename));
+                std::cout << filename << std::endl;
             }));
             position += right;
         }

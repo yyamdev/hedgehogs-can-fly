@@ -16,7 +16,10 @@
 EntityTerrain::EntityTerrain(float scale, std::string filename) {
     // load map image
     sf::Image imgMap;
-    imgMap.loadFromFile(filename);
+    if (!imgMap.loadFromFile(filename)) {
+        _error = true;
+        return;
+    }
     this->filename = filename;
     // properties
     size = imgMap.getSize();
@@ -371,3 +374,5 @@ void EntityTerrain::on_notify(Event event, void *data) {
         delete[] terrainUpdate;
     }
 }
+
+bool EntityTerrain::error() { return _error; }

@@ -17,6 +17,9 @@ StatePlay::StatePlay(World *world, std::string filename) : State(world) {
 
     // create terrain
     terrain = new EntityTerrain(2.f, filename);
+    if (terrain->error()) {
+        return;
+    }
     world->add_entity(terrain);
 
     // add ball & centre camera
@@ -33,6 +36,7 @@ void StatePlay::on_event(sf::Event &event) {
 }
 
 void StatePlay::on_tick() {
+    if (terrain->error()) State::pop_state(); 
 }
 
 void StatePlay::on_draw(sf::RenderWindow &window) {

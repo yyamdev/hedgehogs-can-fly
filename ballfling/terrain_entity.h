@@ -58,6 +58,8 @@ public:
 
     sf::Vector2f playerSpawn;
 
+    bool error();
+
 private:
     std::string filename;
     sf::Vector2u size; // terrain texture size
@@ -77,4 +79,5 @@ private:
     bool render;
     void data_pass();
     bool editMode;
+    bool _error;
 };
