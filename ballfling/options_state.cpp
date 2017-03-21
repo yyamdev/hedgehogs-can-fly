@@ -29,7 +29,7 @@ void StateOptions::on_draw_ui(sf::RenderWindow &window) {
 
 void StateOptions::on_gain_focus() {
     // remove all entities in world & clear ui
-    world->remove_entity(ENTITY_TAG_ALL);
+    //world->remove_entity(ENTITY_TAG_ALL);
     gui.RemoveAll();
 
     options.load();
@@ -37,7 +37,8 @@ void StateOptions::on_gain_focus() {
     // create ui
     sf::Vector2f sliderSize(200.f, 32.f);
 
-    auto guiWinMain = sfg::Window::Create(sfg::Window::Style::NO_STYLE);
+    auto guiWinMain = sfg::Window::Create(sfg::Window::Style::BACKGROUND);
+    guiWinMain->SetId("winOptionsMain");
     gui.Add(guiWinMain);
 
     auto guiBoxMain = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 10.f);

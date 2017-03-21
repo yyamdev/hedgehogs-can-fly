@@ -7,23 +7,23 @@
 #include "debug_draw.h"
 #include "build_options.h"
 #include "gui.h"
+#include "options_state.h"
 
 StatePlay::StatePlay(World *world, std::string filename) : State(world) {
-    // remove all entities in world
+    this->filename = filename;
+
+    gui.RemoveAll();
     world->remove_entity(ENTITY_TAG_ALL);
-    
+
     // create terrain
     terrain = new EntityTerrain(2.f, filename);
     world->add_entity(terrain);
-    
+
     // add ball & centre camera
     player = new EntityBall(terrain->playerSpawn, sf::Vector2f());
     world->add_entity(player);
     sf::Vector2f screenSize((float)WINDOW_WIDTH, (float)WINDOW_HEIGHT);
     world->camera = (player->position - screenSize / 2.f);
-
-    // reset wind change clock
-    windClock.restart();
 }
 
 void StatePlay::on_event(sf::Event &event) {
@@ -33,11 +33,6 @@ void StatePlay::on_event(sf::Event &event) {
 }
 
 void StatePlay::on_tick() {
-    if (windClock.getElapsedTime().asSeconds() > 5.f) {
-        world->wind = sf::Vector2f(util::rnd(-0.03f, 0.03f), 0.f);
-        notify(EVENT_WIND_CHANGE, (void*)&world->wind);
-        windClock.restart();
-    }
 }
 
 void StatePlay::on_draw(sf::RenderWindow &window) {
@@ -57,6 +52,7 @@ void StatePlay::on_draw_ui(sf::RenderWindow &window) {
 
 void StatePlay::on_gain_focus() {
     gui.RemoveAll();
+    if (world->is_paused()) world->toggle_pause();
 }
 
 void StatePlay::on_lose_focus() {

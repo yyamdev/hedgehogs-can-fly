@@ -27,10 +27,11 @@ public:
     void on_notify(Event event, void *data);
 
 private:
+    std::string filename;
+
     EntityBall *player;
 
     Hud hud; // hud renderer
     Audio audio; // audio player
     EntityTerrain *terrain;
-    sf::Clock windClock;
 };

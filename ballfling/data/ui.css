@@ -39,6 +39,10 @@ Label {
 }
 
 /* Options screen style */
+#winOptionsMain {
+    BackgroundColor: #999999aa;
+    BorderWidth: 0;
+}
 #lblOptionsTitle {
     FontSize: 48;
 }
