@@ -37,7 +37,7 @@ void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera) {
         sprInstructionDrag.setPosition(sf::Vector2f(200.f - camera.x, 2200.f - camera.y));
         sprInstructionSpace.setPosition(sf::Vector2f(950.f - camera.x, 2260.f - camera.y));
         window.draw(sprInstructionDrag);
-        window.draw(sprInstructionSpace);
+        //window.draw(sprInstructionSpace);
     }
 
     // draw mouse drag arrow

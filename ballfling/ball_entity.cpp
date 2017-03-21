@@ -37,8 +37,9 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
     reactToInput = true;
     canFling = false;
     canNudge = false;
-    nudgeStr = 0.05f;
+    nudgeStr = 0.04f;
     maxFlingVelocity = 1.4f;
+    resetEnabled = false;
 }
 
 void EntityBall::event(sf::Event &e) {
@@ -49,10 +50,12 @@ void EntityBall::event(sf::Event &e) {
         mouse.y = (float)e.mouseMove.y;
     }
     if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Space) {
-        reset_to_rest();
-        rest = true;
-        record_new_rest_pos();
-        notify(EVENT_PRESS_SPACE, NULL);
+        if (resetEnabled) {
+            reset_to_rest();
+            rest = true;
+            record_new_rest_pos();
+            notify(EVENT_PRESS_SPACE, NULL);
+        }
     }
     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
         if (!dragging && (canFling)) {
@@ -127,6 +130,7 @@ void EntityBall::draw(sf::RenderWindow &window) {
             ImGui::DragFloat("nudge strength", &nudgeStr, 0.01f, 0.f, 1.f);
         }
         ImGui::Separator();
+        ImGui::Checkbox("Space to reset", &resetEnabled);
     }
 }
 

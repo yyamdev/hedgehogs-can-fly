@@ -31,6 +31,7 @@ private:
     static bool textureLoaded;
     sf::Sprite spr, sprPoint;
     sf::Vector2f mouse;
+    bool resetEnabled;
 
     EntityTerrain *terrain;
 
