@@ -78,7 +78,7 @@ int main() {
                 window.capture().saveToFile(util::to_string(time(NULL)) + ".png");
 
             if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::F3)
-                State::change_state(new StatePlay(&world, "data/map.png"));
+                State::pop_state();
 
             if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::F4)
                 system("cls");
@@ -141,9 +141,9 @@ int main() {
 
 void print_debug_controls() {
     std::cout << "debug controls:\n";
-    std::cout << "F5 - toggle pause\n";
     std::cout << "F1 - screenshot\n";
     std::cout << "F2 - toggle tools mode\n";
-    std::cout << "F3 - go to test level\n";
+    std::cout << "F3 - pop current state\n";
     std::cout << "F4 - clear console\n";
+    std::cout << "F5 - toggle pause\n";
 }

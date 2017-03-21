@@ -45,9 +45,8 @@ void StateSelect::on_gain_focus() {
             guiButtonLvl->SetPosition(position - sf::Vector2f(w / 2, h / 2));
             gui.Add(guiButtonLvl);
             guiButtonLvl->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this, x, y, cols] (void) {
-                std::string filename = "lvl" + util::to_string((y * cols + x) + 1) + ".png";
+                std::string filename = "data/lvl" + util::to_string((y * cols + x) + 1) + ".png";
                 State::push_state(new StatePlay(world, filename));
-                std::cout << filename << std::endl;
             }));
             position += right;
         }
