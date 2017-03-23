@@ -8,6 +8,7 @@
 #include "build_options.h"
 #include "gui.h"
 #include "options_state.h"
+#include "win_state.h"
 
 StatePlay::StatePlay(World *world, std::string filename) : State(world) {
     this->filename = filename;
