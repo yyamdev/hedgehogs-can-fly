@@ -24,6 +24,7 @@ Hud::Hud() {
     sprInstructionSpace.setOrigin(sf::Vector2f(txtInstructionSpace.getSize().x / 2.f, txtInstructionSpace.getSize().y / 2.f));
     sprInstructionSpace.setScale(sf::Vector2f(0.7f, 0.7f));
     drawArrowOnBall = true;
+    drawMoveCount = false;
 }
 
 void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera) {
@@ -86,13 +87,17 @@ void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera) {
     if (canFling) set_cursor(CURSOR_RETICLE);
     if (!canNudge && !canFling) set_cursor(CURSOR_STOP);
 
-    sf::Text txtCounter(util::to_string(moveCount), fntCounter);
-    txtCounter.setPosition(sf::Vector2f(20.f, 10.f));
-    txtCounter.setColor(sf::Color::Black);
-    window.draw(txtCounter);
+    if (drawMoveCount) {
+        sf::Text txtCounter(util::to_string(moveCount), fntCounter);
+        txtCounter.setPosition(sf::Vector2f(20.f, 10.f));
+        txtCounter.setColor(sf::Color::Black);
+        window.draw(txtCounter);
+    }
 
+    //window.resetGLStates();
     if (edit && ImGui::CollapsingHeader("Hud")) {
         ImGui::Checkbox("draw arrow on ball", &drawArrowOnBall);
+        ImGui::Checkbox("draw move count", &drawMoveCount);
     }
 }
 

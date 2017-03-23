@@ -97,7 +97,8 @@ int main() {
         State::draw_current(window);
         State::draw_ui_current(window);
         guiManager.Display(window);
-        //if (edit) ImGui::LabelText("test", "asdf");
+        
+        window.resetGLStates();
         
         if (edit && ImGui::CollapsingHeader("Performance")) {
             sf::Color frameCol = sf::Color::Green;

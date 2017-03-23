@@ -24,6 +24,7 @@ private:
     int moveCount;
     sf::Font fntCounter;
     bool drawArrowOnBall;
+    bool drawMoveCount;
 
     // wind
     sf::Vector2f currentWind;
