@@ -28,6 +28,8 @@ StatePlay::StatePlay(World *world, std::string filename) : State(world) {
     world->add_entity(player);
     sf::Vector2f screenSize((float)WINDOW_WIDTH, (float)WINDOW_HEIGHT);
     world->camera = (player->position - screenSize / 2.f);
+
+    completed = false;
 }
 
 void StatePlay::on_event(sf::Event &event) {
@@ -38,6 +40,10 @@ void StatePlay::on_event(sf::Event &event) {
 
 void StatePlay::on_tick() {
     if (terrain->error()) State::pop_state(); 
+    if (completed) {
+        if (!world->is_paused()) world->toggle_pause(); // pause world
+        State::push_state(new StateWin(world));
+    }
 }
 
 void StatePlay::on_draw(sf::RenderWindow &window) {
@@ -64,4 +70,7 @@ void StatePlay::on_lose_focus() {
 }
 
 void StatePlay::on_notify(Event event, void *data) {
+    if (event == EVENT_BALL_HIT_FINISH) {
+        completed = true;
+    }
 }

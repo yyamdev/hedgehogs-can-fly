@@ -30,4 +30,5 @@ enum Event {
     EVENT_TNT_EXPLODE, // sf::Vector3f* pointer to explosion position. z = explosion radius
     EVENT_TNT_BEEP, // NULL
     EVENT_NEW_WORLD_GRAVITY, // NULL
+    EVENT_BALL_HIT_FINISH, // NULL
 };

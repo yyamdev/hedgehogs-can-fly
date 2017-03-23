@@ -175,6 +175,10 @@ TerrainType EntityTerrain::get_pos(sf::Vector2f pos) {
         terrain[base + 1] == 242 &&
         terrain[base + 2] == 0) return T_THIN;
 
+    if (terrain[base + 0] == 237 &&
+        terrain[base + 1] == 28 &&
+        terrain[base + 2] == 36) return T_WIN;
+
     return T_BLANK;
 }
 

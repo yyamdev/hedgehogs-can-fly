@@ -15,6 +15,7 @@ enum TerrainType {
     T_STICKY,
     T_WEAK,
     T_THIN,
+    T_WIN,
 };
 
 class EntityTerrain : public Entity, public Observer {

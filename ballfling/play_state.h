@@ -34,4 +34,6 @@ private:
     Hud hud; // hud renderer
     Audio audio; // audio player
     EntityTerrain *terrain;
+
+    bool completed;
 };

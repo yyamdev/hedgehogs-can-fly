@@ -239,6 +239,9 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             contactPoint = contact;
 
             TerrainType t = terrain->get_pos(contactPoint);
+            if (t == T_WIN) {
+                notify(EVENT_BALL_HIT_FINISH, NULL);
+            }
 
             clkWallTouch.restart();
 
