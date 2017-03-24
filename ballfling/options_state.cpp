@@ -32,7 +32,7 @@ void StateOptions::on_gain_focus() {
     //world->remove_entity(ENTITY_TAG_ALL);
     gui.RemoveAll();
 
-    options.load();
+    options.load(CONFIG_FILENAME);
 
     // create ui
     sf::Vector2f sliderSize(200.f, 32.f);
@@ -59,12 +59,12 @@ void StateOptions::on_gain_focus() {
     guiLblMusic->SetId("lblOptionsMusic");
     guiBoxMusic->Pack(guiLblMusic);
 
-    auto guiSliderMusic = sfg::Scale::Create(0.f, 1.f, 0.01f);
+    auto guiSliderMusic = sfg::Scale::Create(0.f, 1.f, 1/64.f);
     guiSliderMusic->SetId("sclOptionsMusic");
     guiSliderMusic->SetRequisition(sliderSize);
     guiSliderMusic->SetValue(options.musicVolume);
     guiSliderMusic->GetSignal(sfg::Scale::OnMouseLeftRelease).Connect(std::bind([guiSliderMusic] (void) {
-        options.musicVolume = guiSliderMusic->GetValue();
+        options.musicVolume = (double)guiSliderMusic->GetValue();
     }));
     guiBoxMusic->Pack(guiSliderMusic);
 
@@ -75,12 +75,12 @@ void StateOptions::on_gain_focus() {
     guiLblSfx->SetId("lblOptionsSfx");
     guiBoxSfx->Pack(guiLblSfx);
 
-    auto guiSliderSfx = sfg::Scale::Create(0.f, 1.f, 0.01f);
+    auto guiSliderSfx = sfg::Scale::Create(0.f, 1.f, 1/64.f);
     guiSliderSfx->SetId("sclOptionsSfx");
     guiSliderSfx->SetRequisition(sliderSize);
     guiSliderSfx->SetValue(options.sfxVolume);
     guiSliderSfx->GetSignal(sfg::Scale::OnMouseLeftRelease).Connect(std::bind([guiSliderSfx] (void) {
-        options.musicVolume = guiSliderSfx->GetValue();
+        options.sfxVolume = (double)guiSliderSfx->GetValue();
     }));
     guiBoxSfx->Pack(guiSliderSfx);
 
@@ -100,6 +100,7 @@ void StateOptions::on_gain_focus() {
 }
 
 void StateOptions::on_lose_focus() {
+    options.save(CONFIG_FILENAME);
 }
 
 void StateOptions::on_notify(Event event, void *data) {

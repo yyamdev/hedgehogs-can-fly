@@ -19,3 +19,5 @@
 // hp
 #define START_HP_DUDE 110
 #define START_HP_GRENADE 20
+
+#define CONFIG_FILENAME "data/config.cfg"

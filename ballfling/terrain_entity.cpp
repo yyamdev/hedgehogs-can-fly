@@ -369,7 +369,7 @@ void EntityTerrain::on_notify(Event event, void *data) {
         sf::Rect<unsigned int> updateBounds = *(sf::Rect<unsigned int>*)data;
         sf::Uint8 *terrainUpdate = new sf::Uint8[updateBounds.width * updateBounds.height * 4];
         sf::Uint8 *terrainStart = &terrain[(updateBounds.top * size.x + updateBounds.left) * 4];
-        for (int row = 0; row < updateBounds.height; ++row) { // create continuous buffer for update reigion
+        for (int row = 0; row < (int)updateBounds.height; ++row) { // create continuous buffer for update reigion
             memcpy( &terrainUpdate[row * updateBounds.width * 4],
                     &terrainStart [row * size.x * 4],
                     updateBounds.width * 4);
