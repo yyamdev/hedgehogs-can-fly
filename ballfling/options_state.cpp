@@ -64,7 +64,7 @@ void StateOptions::on_gain_focus() {
     guiSliderMusic->SetRequisition(sliderSize);
     guiSliderMusic->SetValue(options.musicVolume);
     guiSliderMusic->GetSignal(sfg::Scale::OnMouseLeftRelease).Connect(std::bind([guiSliderMusic] (void) {
-        options.musicVolume = (double)guiSliderMusic->GetValue();
+        //options.musicVolume = (double)guiSliderMusic->GetValue();
     }));
     guiBoxMusic->Pack(guiSliderMusic);
 
@@ -79,8 +79,9 @@ void StateOptions::on_gain_focus() {
     guiSliderSfx->SetId("sclOptionsSfx");
     guiSliderSfx->SetRequisition(sliderSize);
     guiSliderSfx->SetValue(options.sfxVolume);
-    guiSliderSfx->GetSignal(sfg::Scale::OnMouseLeftRelease).Connect(std::bind([guiSliderSfx] (void) {
-        options.sfxVolume = (double)guiSliderSfx->GetValue();
+    guiSliderSfx->GetSignal(sfg::Scale::On).Connect(std::bind([guiSliderSfx] (void) {
+        //options.sfxVolume = (double)guiSliderSfx->GetValue();
+        //std::cout << "sfx: " << options.sfxVolume << std::endl;
     }));
     guiBoxSfx->Pack(guiSliderSfx);
 
@@ -100,6 +101,7 @@ void StateOptions::on_gain_focus() {
 }
 
 void StateOptions::on_lose_focus() {
+    options.musicVolume = (double)guiSliderMusic->GetValue();
     options.save(CONFIG_FILENAME);
 }
 
