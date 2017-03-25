@@ -62,7 +62,7 @@ void StateOptions::on_gain_focus() {
     guiSliderMusic = sfg::Scale::Create(0.f, 1.f, 1/64.f);
     guiSliderMusic->SetId("sclOptionsMusic");
     guiSliderMusic->SetRequisition(sliderSize);
-    guiSliderMusic->SetValue(options.musicVolume);
+    guiSliderMusic->SetValue((float)options.musicVolume);
     guiBoxMusic->Pack(guiSliderMusic);
 
     auto guiBoxSfx = sfg::Box::Create();
@@ -75,7 +75,7 @@ void StateOptions::on_gain_focus() {
     guiSliderSfx = sfg::Scale::Create(0.f, 1.f, 1/64.f);
     guiSliderSfx->SetId("sclOptionsSfx");
     guiSliderSfx->SetRequisition(sliderSize);
-    guiSliderSfx->SetValue(options.sfxVolume);
+    guiSliderSfx->SetValue((float)options.sfxVolume);
     guiBoxSfx->Pack(guiSliderSfx);
 
     auto guiButtonBack = sfg::Button::Create("Back");

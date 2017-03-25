@@ -1,5 +1,6 @@
 #include "audio.h"
 #include <iostream>
+#include "options.h"
 
 Audio::Audio() {
     bufSplash.loadFromFile("data/splash.wav");
@@ -20,22 +21,27 @@ Audio::Audio() {
 
 void Audio::on_notify(Event event, void *data) {
     if (event == EVENT_HIT_WATER) {
+        sndSplash.setVolume((float)options.sfxVolume * 100.f);
         sndSplash.play();
     }
 
     if (event == EVENT_BOUNCE_DOOR) {
+        sndBounce.setVolume((float)options.sfxVolume * 100.f);
         sndBounce.play();
     }
 
     if (event == EVENT_SMASH_DOOR) {
+        sndSmash.setVolume((float)options.sfxVolume * 100.f);
         sndSmash.play();
     }
 
     if (event == EVENT_TNT_EXPLODE) {
+        sndExplode.setVolume((float)options.sfxVolume * 100.f);
         sndExplode.play();
     }
 
     if (event == EVENT_TNT_BEEP) {
+        sndTbeep.setVolume((float)options.sfxVolume * 100.f);
         sndTbeep.play();
     }
 }
