@@ -5,6 +5,7 @@
 #include "state.h"
 #include "observer.h"
 #include "subject.h"
+#include "SFGUI/Scale.hpp"
 
 class World;
 
@@ -20,6 +21,9 @@ public:
     void on_lose_focus();
 
     void on_notify(Event event, void *data);
+
+    std::shared_ptr<sfg::Scale> guiSliderMusic;
+    std::shared_ptr<sfg::Scale> guiSliderSfx;
 
 private:
 };

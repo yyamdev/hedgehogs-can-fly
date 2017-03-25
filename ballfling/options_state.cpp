@@ -59,13 +59,10 @@ void StateOptions::on_gain_focus() {
     guiLblMusic->SetId("lblOptionsMusic");
     guiBoxMusic->Pack(guiLblMusic);
 
-    auto guiSliderMusic = sfg::Scale::Create(0.f, 1.f, 1/64.f);
+    guiSliderMusic = sfg::Scale::Create(0.f, 1.f, 1/64.f);
     guiSliderMusic->SetId("sclOptionsMusic");
     guiSliderMusic->SetRequisition(sliderSize);
     guiSliderMusic->SetValue(options.musicVolume);
-    guiSliderMusic->GetSignal(sfg::Scale::OnMouseLeftRelease).Connect(std::bind([guiSliderMusic] (void) {
-        //options.musicVolume = (double)guiSliderMusic->GetValue();
-    }));
     guiBoxMusic->Pack(guiSliderMusic);
 
     auto guiBoxSfx = sfg::Box::Create();
@@ -75,21 +72,17 @@ void StateOptions::on_gain_focus() {
     guiLblSfx->SetId("lblOptionsSfx");
     guiBoxSfx->Pack(guiLblSfx);
 
-    auto guiSliderSfx = sfg::Scale::Create(0.f, 1.f, 1/64.f);
+    guiSliderSfx = sfg::Scale::Create(0.f, 1.f, 1/64.f);
     guiSliderSfx->SetId("sclOptionsSfx");
     guiSliderSfx->SetRequisition(sliderSize);
     guiSliderSfx->SetValue(options.sfxVolume);
-    guiSliderSfx->GetSignal(sfg::Scale::On).Connect(std::bind([guiSliderSfx] (void) {
-        //options.sfxVolume = (double)guiSliderSfx->GetValue();
-        //std::cout << "sfx: " << options.sfxVolume << std::endl;
-    }));
     guiBoxSfx->Pack(guiSliderSfx);
 
     auto guiButtonBack = sfg::Button::Create("Back");
     guiButtonBack->SetId("btnOptionsBack");
     guiButtonBack->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonBack->GetRequisition().x / 2.f, 500.f));
     gui.Add(guiButtonBack);
-    guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([guiSliderMusic, guiSliderSfx] (void) {
+    guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
         guiSliderMusic->Show(false); // neccessary to stop this widget from displaying in other menus, possibly an SFGUI bug?
         guiSliderSfx->Show(false);   // ""
         State::pop_state();
@@ -102,6 +95,7 @@ void StateOptions::on_gain_focus() {
 
 void StateOptions::on_lose_focus() {
     options.musicVolume = (double)guiSliderMusic->GetValue();
+    options.sfxVolume = (double)guiSliderSfx->GetValue();
     options.save(CONFIG_FILENAME);
 }
 
