@@ -141,6 +141,9 @@
     <ClInclude Include="win_state.h">
       <Filter>Header Files\game\state</Filter>
     </ClInclude>
+    <ClInclude Include="pause_state.h">
+      <Filter>Header Files\game\state\play</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="subject.cpp">
@@ -214,6 +217,9 @@
     </ClCompile>
     <ClCompile Include="win_state.cpp">
       <Filter>Source Files\game\state</Filter>
+    </ClCompile>
+    <ClCompile Include="pause_state.cpp">
+      <Filter>Source Files\game\state\play</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

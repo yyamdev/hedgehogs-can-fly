@@ -9,6 +9,7 @@
 #include "gui.h"
 #include "options_state.h"
 #include "win_state.h"
+#include "pause_state.h"
 
 StatePlay::StatePlay(World *world, std::string filename) : State(world) {
     this->filename = filename;
@@ -33,8 +34,8 @@ StatePlay::StatePlay(World *world, std::string filename) : State(world) {
 }
 
 void StatePlay::on_event(sf::Event &event) {
-    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::F5) {
-        world->toggle_pause();
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape | event.key.code == sf::Keyboard::P) {
+        State::push_state(new StatePause(world));
     }
 }
 

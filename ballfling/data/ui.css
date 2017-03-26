@@ -49,3 +49,12 @@ Label {
 #lblOptionsMusic, #lblOptionsSfx {
     FontSize: 16;
 }
+
+/* Pause screen style */
+#winPauseMain {
+    BackgroundColor: #555555ee;
+    BorderWidth: 0;
+}
+#lblPauseTitle {
+    FontSize: 48;
+}
