@@ -11,6 +11,7 @@
 #include "SFGUI/Window.hpp"
 #include "SFGUI/Box.hpp"
 #include "SFGUI/Separator.hpp"
+#include "options_state.h"
 
 StatePause::StatePause(World *world) : State(world) {
 }
@@ -52,6 +53,23 @@ void StatePause::on_gain_focus() {
     guiBoxSpace->SetRequisition(sf::Vector2f(1.f, 50.f));
     guiBoxMain->Pack(guiBoxSpace);
 
+    auto guiButtonOptions = sfg::Button::Create("Options");
+    guiButtonOptions->SetId("btnPauseOptions");
+    guiButtonOptions->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonOptions->GetRequisition().x / 2.f, 500.f));
+    guiButtonOptions->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
+        State::push_state(new StateOptions(world)); 
+    }));
+    guiBoxMain->Pack(guiButtonOptions);
+
+    auto guiButtonSelect = sfg::Button::Create("Level Select");
+    guiButtonSelect->SetId("btnPauseSelect");
+    guiButtonSelect->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonSelect->GetRequisition().x / 2.f, 500.f));
+    guiButtonSelect->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
+        State::pop_state();
+        State::pop_state(); // pop state back to level select 
+    }));
+    guiBoxMain->Pack(guiButtonSelect);
+
     auto guiButtonBack = sfg::Button::Create("Resume");
     guiButtonBack->SetId("btnPauseBack");
     guiButtonBack->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonBack->GetRequisition().x / 2.f, 500.f));
@@ -59,15 +77,6 @@ void StatePause::on_gain_focus() {
         State::pop_state();
     }));
     guiBoxMain->Pack(guiButtonBack);
-
-    auto guiButtonSelect = sfg::Button::Create("Level Select");
-    guiButtonSelect->SetId("btnPauseSelect");
-    guiButtonSelect->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonBack->GetRequisition().x / 2.f, 500.f));
-    guiButtonSelect->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
-        State::pop_state();
-        State::pop_state(); // pop state back to level select 
-    }));
-    guiBoxMain->Pack(guiButtonSelect);
 
     // position window at centre of screen
     // needs to be done at the end so SFGUI knows how big it has to be
