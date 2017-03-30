@@ -65,6 +65,7 @@ void StatePause::on_gain_focus() {
     guiButtonSelect->SetId("btnPauseSelect");
     guiButtonSelect->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonSelect->GetRequisition().x / 2.f, 500.f));
     guiButtonSelect->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
+        if (world->is_paused()) world->toggle_pause();
         State::pop_state();
         State::pop_state(); // pop state back to level select 
     }));
@@ -74,6 +75,7 @@ void StatePause::on_gain_focus() {
     guiButtonBack->SetId("btnPauseBack");
     guiButtonBack->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonBack->GetRequisition().x / 2.f, 500.f));
     guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
+        if (world->is_paused()) world->toggle_pause();
         State::pop_state();
     }));
     guiBoxMain->Pack(guiButtonBack);
@@ -85,7 +87,6 @@ void StatePause::on_gain_focus() {
 }
 
 void StatePause::on_lose_focus() {
-    if (world->is_paused()) world->toggle_pause();
 }
 
 void StatePause::on_notify(Event event, void *data) {
