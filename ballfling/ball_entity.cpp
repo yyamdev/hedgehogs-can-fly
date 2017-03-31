@@ -40,6 +40,7 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
     nudgeStr = 0.04f;
     maxFlingVelocity = 1.4f;
     resetEnabled = false;
+    angle = 0.f;
 }
 
 void EntityBall::event(sf::Event &e) {
@@ -109,6 +110,7 @@ void EntityBall::draw(sf::RenderWindow &window) {
     spr.setTexture(txt);
     spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
     spr.setPosition(position - world->camera);
+    spr.setRotation(angle);
     window.draw(spr);
 
     if (edit && ImGui::CollapsingHeader("Ball")) {
@@ -148,6 +150,9 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     sf::Vector2f oldPos = position;
     position += velocity;
     notify(EVENT_BALL_MOVE, (void*)(&position));
+
+    // set angle
+    angle += velocity.x * 2.f;
 
     // handle nudging
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && dragMode == DM_NUDGE && canNudge && !canFling) {
