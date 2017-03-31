@@ -9,8 +9,10 @@
 #include "SFGUI/Window.hpp"
 #include "SFGUI/Box.hpp"
 #include "SFGUI/Separator.hpp"
+#include "play_state.h"
 
-StateWin::StateWin(World *world) : State(world) {
+StateWin::StateWin(World *world, int levelNum) : State(world) {
+    this->levelNum = levelNum;
 }
 
 void StateWin::on_event(sf::Event &event) {
@@ -50,11 +52,10 @@ void StateWin::on_gain_focus() {
 
     auto guiBoxButtons = sfg::Box::Create();
     guiBoxMain->Pack(guiBoxButtons);
-
     auto guiButtonBack = sfg::Button::Create("Next");
     guiButtonBack->SetId("btnWinNext");
-    guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([] (void) {
-        std::cout << "Next.\n";
+    guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
+        State::push_state(new StatePlay(world, levelNum + 1));
     }));
     guiBoxButtons->Pack(guiButtonBack);
 

@@ -11,8 +11,13 @@
 #include "win_state.h"
 #include "pause_state.h"
 
-StatePlay::StatePlay(World *world, std::string filename) : State(world) {
-    this->filename = filename;
+std::string level_num_to_filename(int levelNum) {
+    return std::string("data/lvl" + util::to_string(levelNum) + ".png");
+}
+
+StatePlay::StatePlay(World *world, int levelNum) : State(world) {
+    this->levelNum = levelNum;
+    filename = level_num_to_filename(levelNum);
 
     gui.RemoveAll();
     world->remove_entity(ENTITY_TAG_ALL);
@@ -34,7 +39,7 @@ StatePlay::StatePlay(World *world, std::string filename) : State(world) {
 }
 
 void StatePlay::on_event(sf::Event &event) {
-    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape | event.key.code == sf::Keyboard::P) {
+    if (event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::P)) {
         State::push_state(new StatePause(world));
     }
 }
@@ -43,7 +48,7 @@ void StatePlay::on_tick() {
     if (terrain->error()) State::pop_state(); 
     if (completed) {
         if (!world->is_paused()) world->toggle_pause(); // pause world
-        State::push_state(new StateWin(world));
+        State::push_state(new StateWin(world, levelNum));
     }
 }
 

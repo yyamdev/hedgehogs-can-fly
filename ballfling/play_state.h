@@ -11,11 +11,13 @@
 #include "ball_entity.h"
 #include "audio.h"
 
+std::string level_num_to_filename(int levelNum);
+
 class EntityTerrain;
 
 class StatePlay : public State, public Observer, public Subject {
 public:
-    StatePlay(World *world, std::string filename);
+    StatePlay(World *world, int levelNum);
 
     void on_event(sf::Event &event);
     void on_tick();
@@ -36,4 +38,5 @@ private:
     EntityTerrain *terrain;
 
     bool completed;
+    int levelNum;
 };
