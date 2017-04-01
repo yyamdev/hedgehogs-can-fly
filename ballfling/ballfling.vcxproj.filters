@@ -144,6 +144,9 @@
     <ClInclude Include="pause_state.h">
       <Filter>Header Files\game\state\play</Filter>
     </ClInclude>
+    <ClInclude Include="particle.h">
+      <Filter>Header Files\game\state\play</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="subject.cpp">
@@ -219,6 +222,9 @@
       <Filter>Source Files\game\state</Filter>
     </ClCompile>
     <ClCompile Include="pause_state.cpp">
+      <Filter>Source Files\game\state\play</Filter>
+    </ClCompile>
+    <ClCompile Include="particle.cpp">
       <Filter>Source Files\game\state\play</Filter>
     </ClCompile>
   </ItemGroup>

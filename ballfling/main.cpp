@@ -17,6 +17,7 @@
 #include "gui.h"
 #include "cursor.h"
 #include <fstream>
+#include "particle.h"
 
 // frame time profiler
 #define PBUFLEN 16
@@ -90,6 +91,8 @@ int main() {
         gui.Update(1.f / 60.f);
         world.tick();
         State::tick_current();
+        particleSystem.add_particle(Particle(sf::Vector2f(300.f, 400.f), util::choose(sf::Color::Blue, sf::Color::Red), sf::Vector2f(util::choose(2.f, -2.f), -4.f)));
+        particleSystem.tick();
         
         window.clear(sf::Color(153, 217, 234));
         ImGui::SFML::Update(window, imguiDelta.restart());
@@ -97,6 +100,7 @@ int main() {
         State::draw_current(window);
         State::draw_ui_current(window);
         guiManager.Display(window);
+        particleSystem.draw(window);
         
         window.resetGLStates();
         

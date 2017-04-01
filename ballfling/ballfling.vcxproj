@@ -144,6 +144,7 @@
     <ClCompile Include="observer.cpp" />
     <ClCompile Include="options.cpp" />
     <ClCompile Include="options_state.cpp" />
+    <ClCompile Include="particle.cpp" />
     <ClCompile Include="pause_state.cpp" />
     <ClCompile Include="play_state.cpp" />
     <ClCompile Include="select_state.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="observer.h" />
     <ClInclude Include="options.h" />
     <ClInclude Include="options_state.h" />
+    <ClInclude Include="particle.h" />
     <ClInclude Include="pause_state.h" />
     <ClInclude Include="play_state.h" />
     <ClInclude Include="select_state.h" />
