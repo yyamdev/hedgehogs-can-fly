@@ -16,13 +16,13 @@ struct Particle {
     bool active;
 };
 
-#define PARTICLE_NUM 8
+#define PARTICLE_NUM 128
 
 class ParticleSystem {
 public:
     ParticleSystem();
-    void tick();
-    void draw(sf::RenderWindow &window);
+    void tick(sf::Vector2f camera);
+    void draw(sf::RenderWindow &window, sf::Vector2f camera);
     void add_particle(Particle part);
 private:
     int index; // index of next particle to be created

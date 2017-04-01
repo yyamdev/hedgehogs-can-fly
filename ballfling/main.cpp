@@ -91,9 +91,7 @@ int main() {
         gui.Update(1.f / 60.f);
         world.tick();
         State::tick_current();
-        float pSize = util::rnd(2.f, 8.f);
-        particleSystem.add_particle(Particle(sf::Vector2f(300.f, 400.f), util::choose(sf::Color(255, 127, 0), sf::Color::Yellow, sf::Color::Red), sf::Vector2f(util::rnd(-2.f, 2.f), util::rnd(-6.f, -4.f)), sf::Vector2f(pSize, pSize)));
-        particleSystem.tick();
+        particleSystem.tick(world.camera);
         
         window.clear(sf::Color(153, 217, 234));
         ImGui::SFML::Update(window, imguiDelta.restart());
@@ -101,7 +99,7 @@ int main() {
         State::draw_current(window);
         State::draw_ui_current(window);
         guiManager.Display(window);
-        particleSystem.draw(window);
+        particleSystem.draw(window, world.camera);
         
         window.resetGLStates();
         

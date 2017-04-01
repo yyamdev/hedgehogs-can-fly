@@ -8,6 +8,7 @@
 #include "debug_draw.h"
 #include "tnt_entity.h"
 #include "imgui.h"
+#include "particle.h"
 
 sf::Texture EntityBall::txt;
 sf::Texture EntityBall::txtPoint;
@@ -145,6 +146,9 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     }
 
     if (rest) return;
+
+    // add particle
+    particleSystem.add_particle(Particle(position, sf::Color::Red, sf::Vector2f(util::rnd(-2.f, 2.f), util::rnd(-6.f, -4.f)), sf::Vector2f(4.f, 4.f)));
         
     // move
     sf::Vector2f oldPos = position;

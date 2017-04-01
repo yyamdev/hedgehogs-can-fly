@@ -24,13 +24,13 @@ ParticleSystem::ParticleSystem() {
     gravity = sf::Vector2f(0.f, GRAVITY);
 }
 
-void ParticleSystem::draw(sf::RenderWindow &window) {
+void ParticleSystem::draw(sf::RenderWindow &window, sf::Vector2f camera) {
     for (unsigned int i = 0; i < PARTICLE_NUM; ++i) {
         Particle &p = parts[i];
         if (!p.active) continue;
         sf::RectangleShape pixel(p.size);
         pixel.setOrigin(pixel.getSize() / 2.f);
-        pixel.setPosition(p.position);
+        pixel.setPosition(p.position - camera);
         pixel.setFillColor(p.colour);
         window.draw(pixel);
     }
@@ -42,13 +42,13 @@ void ParticleSystem::add_particle(Particle part) {
     index = (index + 1) % PARTICLE_NUM;
 }
 
-void ParticleSystem::tick() {
+void ParticleSystem::tick(sf::Vector2f camera) {
     for (unsigned int i = 0; i < PARTICLE_NUM; ++i) {
         Particle &p = parts[i];
         if (!p.active) continue;
         p.position += p.velocity;
         p.velocity += gravity;
-        if (p.position.x < 0.f || p.position.x > WINDOW_WIDTH || p.position.y < 0.f || p.position.y > WINDOW_HEIGHT)
+        if (p.position.x < camera.x || p.position.x > camera.x + WINDOW_WIDTH || p.position.y < camera.y || p.position.y > camera.y + WINDOW_HEIGHT)
             p.active = false;
     }
 }
