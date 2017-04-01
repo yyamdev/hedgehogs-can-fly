@@ -17,7 +17,7 @@ StatePause::StatePause(World *world) : State(world) {
 }
 
 void StatePause::on_event(sf::Event &event) {
-    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape | event.key.code == sf::Keyboard::P) {
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::P) {
         State::pop_state();
     }
 }

@@ -16,7 +16,7 @@ struct Particle {
     bool active;
 };
 
-#define PARTICLE_NUM 256
+#define PARTICLE_NUM 8
 
 class ParticleSystem {
 public:

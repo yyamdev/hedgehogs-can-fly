@@ -35,6 +35,24 @@ namespace util {
         return choice == 0 ? a : b;
     }
 
+    template <typename T>
+    inline const T& choose(const T &a, const T &b, const T &c) {
+        int choice = rnd(0, 2);
+        switch (choice) {
+        case 0:
+            return a;
+            break;
+        case 1:
+            return b;
+            break;
+        case 2:
+            return c;
+            break;
+        default: // to stop warnings
+            return a;
+        }
+    }
+
     // inclusive
     template <typename T>
     inline bool in_range(T x, T min, T max) {

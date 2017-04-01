@@ -91,8 +91,8 @@ int main() {
         gui.Update(1.f / 60.f);
         world.tick();
         State::tick_current();
-        float pSize = util::rnd(1.f, 15.f);
-        particleSystem.add_particle(Particle(sf::Vector2f(300.f, 400.f), util::choose(sf::Color::Blue, sf::Color::Red), sf::Vector2f(util::rnd(-2.f, 2.f), util::rnd(-6.f, -4.f)), sf::Vector2f(pSize, pSize)));
+        float pSize = util::rnd(2.f, 8.f);
+        particleSystem.add_particle(Particle(sf::Vector2f(300.f, 400.f), util::choose(sf::Color(255, 127, 0), sf::Color::Yellow, sf::Color::Red), sf::Vector2f(util::rnd(-2.f, 2.f), util::rnd(-6.f, -4.f)), sf::Vector2f(pSize, pSize)));
         particleSystem.tick();
         
         window.clear(sf::Color(153, 217, 234));
