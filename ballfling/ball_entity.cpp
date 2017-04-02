@@ -148,7 +148,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     if (rest) return;
 
     // add particle
-    particleSystem.add_particle(Particle(position, sf::Color::Red, sf::Vector2f(util::rnd(-2.f, 2.f), util::rnd(-6.f, -4.f)), sf::Vector2f(4.f, 4.f)));
+    particleSystem.add_particle(Particle(position, sf::Color::Yellow, sf::Vector2f(0.f, 0.f), sf::Vector2f(3.f, 3.f)));
         
     // move
     sf::Vector2f oldPos = position;
