@@ -21,7 +21,7 @@ Particle::Particle(sf::Vector2f position, sf::Color colour, sf::Vector2f velocit
 
 ParticleSystem::ParticleSystem() {
     index = 0;
-    gravity = sf::Vector2f(0.f, 0.f);
+    gravity = sf::Vector2f(0.f, GRAVITY);
 }
 
 void ParticleSystem::draw(sf::RenderWindow &window, sf::Vector2f camera) {

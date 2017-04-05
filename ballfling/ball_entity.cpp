@@ -22,7 +22,7 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
     position = prevRest = pos;
     velocity = vel;
     tag = "ball";
-    collisionRadius = 8.f;
+    collisionRadius = 10.f;
     invulnerable = true;
     hp = maxHp = 10;
     if (!textureLoaded) {
@@ -236,6 +236,9 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     if (terrain) {
         // test if hit water
         if (terrain->get_pos(position) == T_KILL) {
+            for (int p = 0; p < 25; ++p) {
+                particleSystem.add_particle(Particle(position, sf::Color::Blue, sf::Vector2f(0.f, -3.f) + sf::Vector2f(util::rnd(-1.f, 1.f), util::rnd(-1.f, 1.f)), sf::Vector2f(2.f, 2.f)));
+            }
             reset_to_rest();
             notify(EVENT_HIT_WATER, NULL);
         }
@@ -252,12 +255,20 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             clkWallTouch.restart();
 
             float bounceFactor = .6f;
-            if (t == T_BOUNCY) bounceFactor = 1.2f;
-            if (t == T_SLOW) bounceFactor = 0.3f;
+            sf::Color particleColour = sf::Color(100, 50, 0);
+            if (t == T_BOUNCY) {
+                bounceFactor = 1.2f;
+                particleColour = sf::Color::Red;
+            }
+            if (t == T_SLOW) {
+                particleColour = sf::Color::Yellow;
+                bounceFactor = 0.3f;
+            }
             if (t == T_STICKY) {
                 rest = true;
                 record_new_rest_pos();
                 bounceFactor = 0.0f;
+                particleColour = sf::Color(255, 0, 255);
             }
             if (t == T_THIN) {
                 float impactSpeed = util::len(velocity);
@@ -272,6 +283,11 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                     notify(EVENT_BOUNCE_DOOR, NULL);
                 }
             }
+
+            for (int p = 0; p < util::rnd(0, (int)util::len(velocity)); ++p) {
+                particleSystem.add_particle(Particle(contact, particleColour, -velocity * .6f + sf::Vector2f(util::rnd(-1.f, 1.f), util::rnd(-1.f, 1.f)), sf::Vector2f(2.f, 2.f)));
+            }
+            
 
             bounce(bounceFactor, terrain->get_normal(contact));
         }
