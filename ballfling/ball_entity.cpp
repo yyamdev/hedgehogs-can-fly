@@ -22,7 +22,7 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
     position = prevRest = pos;
     velocity = vel;
     tag = "ball";
-    collisionRadius = 10.f;
+    collisionRadius = 8.f;
     invulnerable = true;
     hp = maxHp = 10;
     if (!textureLoaded) {
