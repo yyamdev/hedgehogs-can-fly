@@ -286,7 +286,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             }
 
             for (int p = 0; p < util::rnd(0, (int)util::len(velocity)); ++p) {
-                particleSystem.add_particle(Particle(contact, particleColour, -velocity * .6f + sf::Vector2f(util::rnd(-1.f, 1.f), util::rnd(-1.f, 1.f)), sf::Vector2f(2.f, 2.f)));
+                particleSystem.add_particle(Particle(contact, util::choose(particleColour, sf::Color(0, 255, 255)), -velocity * .6f + sf::Vector2f(util::rnd(-1.f, 1.f), util::rnd(-1.f, 1.f)), sf::Vector2f(2.f, 2.f)));
             }
             
 
