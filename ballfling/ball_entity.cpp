@@ -111,7 +111,8 @@ void EntityBall::draw(sf::RenderWindow &window) {
     spr.setTexture(txt);
     spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
     spr.setPosition(position - world->camera);
-    spr.setRotation(angle);
+    spr.setColor(sf::Color::Cyan);
+    //spr.setRotation(angle);
     window.draw(spr);
 
     if (edit && ImGui::CollapsingHeader("Ball")) {

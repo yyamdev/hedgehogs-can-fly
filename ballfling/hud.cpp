@@ -73,7 +73,7 @@ void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera) {
         sprNudge.setRotation(ang);
         sprNudge.setColor(sf::Color::Black);
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-            sprNudge.setColor(sf::Color::Red);
+            sprNudge.setColor(sf::Color::Cyan);
             sprNudge.setScale(sf::Vector2f(1.2f, 1.2f));
         }
         window.draw(sprNudge);

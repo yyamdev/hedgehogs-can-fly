@@ -93,7 +93,7 @@ int main() {
         State::tick_current();
         particleSystem.tick(world.camera);
         
-        window.clear(sf::Color(153, 217, 234));
+        window.clear(sf::Color(16, 16, 16));
         ImGui::SFML::Update(window, imguiDelta.restart());
         world.draw();
         State::draw_current(window);
