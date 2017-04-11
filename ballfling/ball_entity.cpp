@@ -256,7 +256,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             clkWallTouch.restart();
 
             float bounceFactor = .6f;
-            sf::Color particleColour = sf::Color(100, 50, 0);
+            sf::Color particleColour = sf::Color(255, 255, 255);
             if (t == T_BOUNCY) {
                 bounceFactor = 1.2f;
                 particleColour = sf::Color::Red;

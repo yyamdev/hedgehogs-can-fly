@@ -36,6 +36,7 @@ Label {
 #lblMenuTitle {
     FontSize: 64;
     FontName: data/square-deal.ttf;
+    Color: #00ffffff;
 }
 
 /* Options screen style */
