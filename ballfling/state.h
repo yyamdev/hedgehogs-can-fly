@@ -34,6 +34,9 @@ public:
     static void tick_current();
     static void draw_current(sf::RenderWindow &window);
     static void draw_ui_current(sf::RenderWindow &window);
+    static State* get_current();
+
+    virtual sf::Color get_clear_colour();
 
 protected:
     World *world;

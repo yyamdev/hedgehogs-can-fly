@@ -1,9 +1,14 @@
 #include "state.h"
+#include "build_options.h"
 
 std::stack<State*> State::states;
 
 State::State(World *world) {
     this->world = world;
+}
+
+sf::Color State::get_clear_colour() {
+    return DEFAULT_CLEAR_COLOUR;
 }
 
 void State::free_memory() {
@@ -63,3 +68,8 @@ void State::draw_ui_current(sf::RenderWindow &window) {
         State::states.top()->on_draw_ui(window);
 }
 
+State* State::get_current() {
+    if (!State::states.empty())
+        return State::states.top();
+    return NULL;
+}

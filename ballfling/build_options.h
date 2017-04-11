@@ -15,6 +15,8 @@
 
 #define DRAW_TERRAIN_NORMALS false
 
+#define DEFAULT_CLEAR_COLOUR sf::Color(16, 16, 16)
+
 // balancing
 // hp
 #define START_HP_DUDE 110
