@@ -1,2 +1,0 @@
-Micro Todo:
- > make tnt boxes loaded in level
