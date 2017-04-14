@@ -9,7 +9,7 @@
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 1
 
-#define TITLE "Grenadudes"
+#define TITLE "Disc Fling"
 
 #define GRAVITY 0.15f
 
