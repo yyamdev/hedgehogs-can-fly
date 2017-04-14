@@ -147,6 +147,9 @@
     <ClInclude Include="particle.h">
       <Filter>Header Files\game\state\play</Filter>
     </ClInclude>
+    <ClInclude Include="animation.h">
+      <Filter>Header Files\framework\world</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="subject.cpp">
@@ -226,6 +229,9 @@
     </ClCompile>
     <ClCompile Include="particle.cpp">
       <Filter>Source Files\game\state\play</Filter>
+    </ClCompile>
+    <ClCompile Include="animation.cpp">
+      <Filter>Source Files\framework\world</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
