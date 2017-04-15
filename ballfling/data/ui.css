@@ -11,15 +11,15 @@
 Button {
     /* Normal */
     BorderWidth: 0;
-    BackgroundColor: #999999ff;
-    Color: #000000ff;
+    BackgroundColor: #444444ff;
+    Color: #008888ff;
     FontSize: 24;
-    Padding: 15;
+    Padding: 14;
 }
 Button:PRELIGHT {
     /* Hover */
-    BackgroundColor: #444444ff;
-    Color: #ffffffff;
+    BackgroundColor: #999999ff;
+    Color: #000000ff;
 }
 Button:ACTIVE {
     /* Click */
@@ -39,23 +39,44 @@ Label {
     Color: #00ffffff;
 }
 
+/* Select screen style */
+#btnSelectLevel {
+    Padding: 2;
+}
+
 /* Options screen style */
 #winOptionsMain {
-    BackgroundColor: #999999aa;
+    BackgroundColor: #333333f0;
     BorderWidth: 0;
 }
 #lblOptionsTitle {
+    Color: #00ffffff;
     FontSize: 48;
 }
 #lblOptionsMusic, #lblOptionsSfx {
+    Color: #008888ff;
     FontSize: 16;
+}
+Scale {
+    Color: #ff0000ff;
 }
 
 /* Pause screen style */
 #winPauseMain {
-    BackgroundColor: #555555ee;
+    BackgroundColor: #333333f0;
     BorderWidth: 0;
 }
 #lblPauseTitle {
+    Color: #00ffffff;
+    FontSize: 48;
+}
+
+/* Win screen style */
+#winWinMain {
+    BackgroundColor: #333333f0;
+    BorderWidth: 0;
+}
+#lblWinTitle {
+    Color: #00ffffff;
     FontSize: 48;
 }
