@@ -3,6 +3,7 @@
 #include <iostream>
 #include "gui.h"
 #include "SFGUI/Button.hpp"
+#include "SFGUI/Label.hpp"
 #include "build_options.h"
 #include "util.h"
 #include "play_state.h"
@@ -28,11 +29,16 @@ void StateSelect::on_gain_focus() {
     gui.RemoveAll();
 
     // create ui
+    auto guiLblTitle = sfg::Label::Create("Select Level");
+    guiLblTitle->SetId("lblSelectTitle");
+    guiLblTitle->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiLblTitle->GetRequisition().x / 2.f, 35.f));
+    gui.Add(guiLblTitle);
+
     float w = 64.f, h = 64.f; // dimensions of buttons
     float g = 32.f; // xy gap between buttons
     int rows = 3, cols = 5;
     float sub = cols / 2.f - 0.5f;
-    float yOffset = 150.f;
+    float yOffset = 200.f;
     float xOffset = WINDOW_WIDTH / 2 - sub * (w + g);
     sf::Vector2f position = sf::Vector2f(xOffset, yOffset);
     sf::Vector2f right = sf::Vector2f(w + g, 0.f);

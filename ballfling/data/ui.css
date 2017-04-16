@@ -29,17 +29,22 @@ Button:ACTIVE {
 
 /* Default label style */
 Label {
-    Color: #000000ff;
+    Color: #ffffffff;
 }
 
 /* Main menu style */
 #lblMenuTitle {
-    FontSize: 72;
+    FontSize: 100;
     FontName: data/Ticketing.ttf;
     Color: #00ffffff;
 }
 
 /* Select screen style */
+#lblSelectTitle {
+    FontSize: 72;
+    FontName: data/Ticketing.ttf;
+    Color: #00ffffff;
+}
 #btnSelectLevel {
     Padding: 0;
 }
