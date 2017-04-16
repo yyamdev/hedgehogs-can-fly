@@ -118,9 +118,11 @@ int main() {
                 }
                 fileTheme.close();
                 gui.LoadThemeFromFile("data/ui.css");
+                gui.Refresh();
             }
             if (ImGui::Button("Reload")) {
                 gui.LoadThemeFromFile("data/ui.css");
+                gui.Refresh();
             }
             ImGui::InputTextMultiline("css", cssBuf, CSS_BUF_SIZE, sf::Vector2f(400.f, 250.f), ImGuiInputTextFlags_AllowTabInput);
         }
