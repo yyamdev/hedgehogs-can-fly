@@ -261,17 +261,17 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                 bounceFactor = 1.2f;
                 particleColour = sf::Color::Red;
             }
-            if (t == T_SLOW) {
+            else if (t == T_SLOW) {
                 particleColour = sf::Color::Yellow;
                 bounceFactor = 0.3f;
             }
-            if (t == T_STICKY) {
+            else if (t == T_STICKY) {
                 rest = true;
                 record_new_rest_pos();
                 bounceFactor = 0.0f;
                 particleColour = sf::Color(255, 0, 255);
             }
-            if (t == T_THIN) {
+            else if (t == T_THIN) {
                 float impactSpeed = util::len(velocity);
                 if (impactSpeed > 9.f) {
                     terrain->remove_flood_fill(contactPoint);
@@ -283,6 +283,9 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                 } else {
                     notify(EVENT_BOUNCE_DOOR, NULL);
                 }
+            }
+            else {
+                notify(EVENT_BALL_HIT_SOLID, NULL);
             }
 
             for (int p = 0; p < util::rnd(0, (int)util::len(velocity)); ++p) {

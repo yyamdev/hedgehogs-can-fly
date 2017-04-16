@@ -23,4 +23,8 @@ private:
     
     sf::SoundBuffer bufTbeep;
     sf::Sound sndTbeep;
+
+    sf::SoundBuffer bufHit;
+    sf::Sound sndHit;
+    sf::Clock clkHit;
 };

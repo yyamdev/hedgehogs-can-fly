@@ -17,6 +17,9 @@ Audio::Audio() {
 
     bufTbeep.loadFromFile("data/tntbeep.wav");
     sndTbeep.setBuffer(bufTbeep);
+
+    bufHit.loadFromFile("data/hit.wav");
+    sndHit.setBuffer(bufHit);
 }
 
 void Audio::on_notify(Event event, void *data) {
@@ -43,5 +46,13 @@ void Audio::on_notify(Event event, void *data) {
     if (event == EVENT_TNT_BEEP) {
         sndTbeep.setVolume((float)options.sfxVolume * 100.f);
         sndTbeep.play();
+    }
+
+    if (event == EVENT_BALL_HIT_SOLID) {
+        if (clkHit.getElapsedTime().asSeconds() > .1f) {
+            sndHit.setVolume((float)options.sfxVolume * 100.f);
+            sndHit.play();
+            clkHit.restart();
+        }
     }
 }
