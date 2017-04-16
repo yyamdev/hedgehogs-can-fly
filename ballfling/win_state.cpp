@@ -42,7 +42,7 @@ void StateWin::on_gain_focus() {
     auto guiBoxMain = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 10.f);
     guiWinMain->Add(guiBoxMain);
 
-    auto guiLblTitle = sfg::Label::Create("Level Complete!");
+    auto guiLblTitle = sfg::Label::Create("Level Complete");
     guiLblTitle->SetId("lblWinTitle");
     guiBoxMain->Pack(guiLblTitle);
 

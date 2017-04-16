@@ -34,14 +34,14 @@ Label {
 
 /* Main menu style */
 #lblMenuTitle {
-    FontSize: 64;
-    FontName: data/square-deal.ttf;
+    FontSize: 72;
+    FontName: data/Ticketing.ttf;
     Color: #00ffffff;
 }
 
 /* Select screen style */
 #btnSelectLevel {
-    Padding: 2;
+    Padding: 0;
 }
 
 /* Options screen style */
@@ -51,7 +51,8 @@ Label {
 }
 #lblOptionsTitle {
     Color: #00ffffff;
-    FontSize: 48;
+    FontSize: 64;
+    FontName: data/Ticketing.ttf;
 }
 #lblOptionsMusic, #lblOptionsSfx {
     Color: #008888ff;
@@ -68,7 +69,8 @@ Scale {
 }
 #lblPauseTitle {
     Color: #00ffffff;
-    FontSize: 48;
+    FontSize: 64;
+    FontName: data/Ticketing.ttf;
 }
 
 /* Win screen style */
@@ -78,5 +80,6 @@ Scale {
 }
 #lblWinTitle {
     Color: #00ffffff;
-    FontSize: 48;
+    FontSize: 72;
+    FontName: data/Ticketing.ttf;
 }
