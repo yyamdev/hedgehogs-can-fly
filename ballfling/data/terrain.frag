@@ -15,6 +15,7 @@ uniform float screenWidth;    // width of the screen in pixels
 uniform float screenHeight;   // ^
 uniform float cameraX;
 uniform float cameraY;
+uniform bool grid;            // Render grid effect.
 
 void main() { 
     // calculate texture lookup coordinates 
@@ -76,5 +77,13 @@ void main() {
         }
         else
             gl_FragColor.a = 0;
-   }
+    }
+
+    if (grid) { // grid effect
+        int s = 4;
+        if (floor(gl_FragCoord.y) / s == floor(floor(gl_FragCoord.y) / s)) {
+            vec4 pixel = vec4(0.0, 0.5, 0.0, 0.5);
+            gl_FragColor = gl_Color * pixel;
+        }
+    }
 }

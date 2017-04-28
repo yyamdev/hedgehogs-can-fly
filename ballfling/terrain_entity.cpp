@@ -333,6 +333,7 @@ void EntityTerrain::tick(std::vector<Entity*> &entities) {
 }
 
 void EntityTerrain::draw(sf::RenderWindow &window) {
+    static bool drawGrid = false;
     if (render) {
         // create terrain image sprite
         sf::Sprite sprTerrain(txtSolid); // I think this has to be set for size only?
@@ -353,6 +354,7 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
         shdTerrain.setParameter("screenHeight", (float)WINDOW_HEIGHT);
         shdTerrain.setParameter("cameraX", world->camera.x);
         shdTerrain.setParameter("cameraY", world->camera.y);
+        shdTerrain.setParameter("grid", drawGrid);
         sprTerrain.setPosition(-world->camera);
         window.draw(sprTerrain, &shdTerrain); // draw
     }
@@ -360,6 +362,7 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
     if (edit && ImGui::CollapsingHeader("Terrain")) {
         ImGui::TextDisabled(filename.c_str());
         ImGui::Checkbox("render", &render);
+        ImGui::Checkbox("grid effect", &drawGrid);
     }
 }
 
