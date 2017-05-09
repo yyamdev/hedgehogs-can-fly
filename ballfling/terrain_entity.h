@@ -77,6 +77,7 @@ private:
     sf::Texture txtSlow;
     sf::Texture txtSticky;
     sf::Texture txtFinish;
+    sf::Texture txtEdge;
     bool render;
     void data_pass();
     bool editMode;
