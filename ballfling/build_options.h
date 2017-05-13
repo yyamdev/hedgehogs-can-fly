@@ -16,8 +16,8 @@
 #define DRAW_TERRAIN_NORMALS false
 
 //#define DEFAULT_CLEAR_COLOUR sf::Color(69, 40, 60)
-//#define DEFAULT_CLEAR_COLOUR sf::Color(0, 0, 0)
-#define DEFAULT_CLEAR_COLOUR sf::Color(34, 32, 52)
+#define DEFAULT_CLEAR_COLOUR sf::Color(0, 0, 0)
+//#define DEFAULT_CLEAR_COLOUR sf::Color(34, 32, 52)
 
 // balancing
 // hp

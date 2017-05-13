@@ -24,7 +24,7 @@ vec4 texture_coordinate(vec4 dataCoord) {
 
 bool edge(vec4 pos) {
     // Is pos near empty space?
-    float rad = 4.0;
+    float rad = 3.0;
     for (float y = -rad; y < rad + 1.0; ++y) {
         for (float x = -rad; x < rad + 1.0; ++x) {
             vec4 probe;
@@ -33,8 +33,12 @@ bool edge(vec4 pos) {
             probe.z = pos.z;
             probe.a = pos.a;
             vec4 dataPixel = texture2D(txtData, probe.xy);
-            if ((dataPixel.r == 0 && dataPixel.g == 0   && dataPixel.b == 0  ) ||
-                (dataPixel.r == 0 && dataPixel.g == 128 && dataPixel.b == 128)) {
+            dataPixel.x *= 255;
+            dataPixel.y *= 255;
+            dataPixel.z *= 255;
+            dataPixel.a *= 255;
+            if ((dataPixel.r == 0 && dataPixel.g == 128 && dataPixel.b == 128) ||
+                (dataPixel.r == 0 && dataPixel.g == 0 && dataPixel.b == 0)) {
                 // Probed empty space.
                 return true;
             }
@@ -62,17 +66,17 @@ void main() {
         vec4 pixel = vec4(0.0, 0.0, 0.0, 1.0);
         
         // sample from correct terrain texture 
-        if (dataPixel.r == 255 && dataPixel.g == 255 && dataPixel.b == 255) {
+        if (dataPixel.r == 0 && dataPixel.g == 128 && dataPixel.b == 128) {
+            pixel = texture2D(txtKill, gl_TexCoord[0].xy);
+            gl_FragColor = gl_Color * pixel;
+            gl_FragColor.a = 0.5;
+        }
+        else if (dataPixel.r == 255 && dataPixel.g == 255 && dataPixel.b == 255) {
             if (edge(dataTexCoord))
                 pixel = texture2D(txtEdge, gl_TexCoord[0].xy);
             else
                 pixel = texture2D(txtSolid, gl_TexCoord[0].xy);
             gl_FragColor = gl_Color * pixel;
-        }
-        else if (dataPixel.r == 0 && dataPixel.g == 128 && dataPixel.b == 128) {
-            pixel = texture2D(txtKill, gl_TexCoord[0].xy);
-            gl_FragColor = gl_Color * pixel;
-            gl_FragColor.a = 0.5;
         }
         else if (dataPixel.r == 127 && dataPixel.g == 127 && dataPixel.b == 127) {
             pixel = texture2D(txtWeak, gl_TexCoord[0].xy);

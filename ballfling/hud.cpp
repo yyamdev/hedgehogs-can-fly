@@ -71,9 +71,9 @@ void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera) {
         sprNudge.setOrigin(sf::Vector2f((float)txtBallNudge.getSize().x / 2.f, (float)txtBallNudge.getSize().y / 2.f));
         sprNudge.setPosition(ballRestPos - camera);
         sprNudge.setRotation(ang);
-        sprNudge.setColor(sf::Color(0,255,255,128));
+        sprNudge.setColor(sf::Color(99, 155, 255, 128));
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-            sprNudge.setColor(sf::Color::Cyan);
+            sprNudge.setColor(sf::Color(99, 155, 255));
             sprNudge.setScale(sf::Vector2f(1.2f, 1.2f));
         }
         window.draw(sprNudge);
