@@ -15,7 +15,7 @@ class EntityTerrain;
 class EntityBall : public Entity, public Observer {
 public:
     EntityBall();
-    EntityBall(sf::Vector2f pos, sf::Vector2f vel);
+    EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour);
 
     void event(sf::Event &e);
     void tick(std::vector<Entity*> &entities);
@@ -31,6 +31,7 @@ private:
     static bool textureLoaded;
     sf::Sprite spr, sprPoint;
     float angle;
+    sf::Color colour;
     sf::Vector2f mouse;
     bool resetEnabled;
 

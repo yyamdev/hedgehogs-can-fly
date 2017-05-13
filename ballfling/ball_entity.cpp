@@ -15,10 +15,11 @@ sf::Texture EntityBall::txtPoint;
 bool EntityBall::textureLoaded = false;
 
 EntityBall::EntityBall() {
-    EntityBall(sf::Vector2f(0.f, 0.f), sf::Vector2f(0.f, 0.f));
+    EntityBall(sf::Vector2f(0.f, 0.f), sf::Vector2f(0.f, 0.f), sf::Color::White);
 }
 
-EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel){
+EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour) {
+    this->colour = colour;
     position = prevRest = pos;
     velocity = vel;
     tag = "ball";
@@ -111,7 +112,7 @@ void EntityBall::draw(sf::RenderWindow &window) {
     spr.setTexture(txt);
     spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
     spr.setPosition(position - world->camera);
-    spr.setColor(sf::Color(99, 155, 255));
+    spr.setColor(colour);
     //spr.setRotation(angle);
     window.draw(spr);
 

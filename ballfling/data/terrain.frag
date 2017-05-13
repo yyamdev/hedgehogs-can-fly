@@ -9,7 +9,7 @@ uniform sampler2D txtSlow;    // ^
 uniform sampler2D txtSticky;  // ^
 uniform sampler2D txtFinish;  // ^
 uniform sampler2D txtData;    // terrain data texture
-uniform sampler2D txtEdge;
+uniform vec4 edgeColour;
 uniform float sizeX;          // size of rendering space
 uniform float sizeY;          // ^
 uniform float screenWidth;    // width of the screen in pixels
@@ -73,7 +73,7 @@ void main() {
         }
         else if (dataPixel.r == 255 && dataPixel.g == 255 && dataPixel.b == 255) {
             if (edge(dataTexCoord))
-                pixel = texture2D(txtEdge, gl_TexCoord[0].xy);
+                pixel = edgeColour;
             else
                 pixel = texture2D(txtSolid, gl_TexCoord[0].xy);
             gl_FragColor = gl_Color * pixel;

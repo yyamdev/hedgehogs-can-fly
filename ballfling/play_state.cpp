@@ -19,18 +19,21 @@ StatePlay::StatePlay(World *world, int levelNum) : State(world) {
     this->levelNum = levelNum;
     filename = level_num_to_filename(levelNum);
 
+    //levelColour = sf::Color::Red;
+    levelColour = sf::Color(99, 155, 255);
+
     gui.RemoveAll();
     world->remove_entity(ENTITY_TAG_ALL);
 
     // create terrain
-    terrain = new EntityTerrain(2.f, filename);
+    terrain = new EntityTerrain(2.f, filename, levelColour);
     if (terrain->error()) {
         return;
     }
     world->add_entity(terrain);
 
     // add ball & centre camera
-    player = new EntityBall(terrain->playerSpawn, sf::Vector2f());
+    player = new EntityBall(terrain->playerSpawn, sf::Vector2f(), levelColour);
     world->add_entity(player);
     sf::Vector2f screenSize((float)WINDOW_WIDTH, (float)WINDOW_HEIGHT);
     world->camera = (player->position - screenSize / 2.f);
@@ -64,7 +67,7 @@ void StatePlay::on_draw(sf::RenderWindow &window) {
 }
 
 void StatePlay::on_draw_ui(sf::RenderWindow &window) {
-    hud.draw(window, world->camera);
+    hud.draw(window, world->camera, levelColour);
 }
 
 void StatePlay::on_gain_focus() {

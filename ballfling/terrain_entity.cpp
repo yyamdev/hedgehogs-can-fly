@@ -13,7 +13,8 @@
 #include "imgui.h"
 #include <algorithm>
 
-EntityTerrain::EntityTerrain(float scale, std::string filename) {
+EntityTerrain::EntityTerrain(float scale, std::string filename, sf::Color colour) {
+    this->colour = colour;
     // load map image
     sf::Image imgMap;
     if (!imgMap.loadFromFile(filename)) {
@@ -349,7 +350,6 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
         shdTerrain.setParameter("txtSlow", txtSlow);
         shdTerrain.setParameter("txtSticky", txtSticky);
         shdTerrain.setParameter("txtFinish", txtFinish);
-        shdTerrain.setParameter("txtEdge", txtEdge);
         shdTerrain.setParameter("txtData", txtTerrainData);
         shdTerrain.setParameter("sizeX", (float)size.x);
         shdTerrain.setParameter("sizeY", (float)size.y);
@@ -358,6 +358,7 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
         shdTerrain.setParameter("cameraX", world->camera.x);
         shdTerrain.setParameter("cameraY", world->camera.y);
         shdTerrain.setParameter("grid", drawGrid);
+        shdTerrain.setParameter("edgeColour", colour);
         sprTerrain.setPosition(-world->camera);
         window.draw(sprTerrain, &shdTerrain); // draw
     }

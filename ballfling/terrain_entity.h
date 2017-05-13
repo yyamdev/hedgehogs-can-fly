@@ -20,7 +20,7 @@ enum TerrainType {
 
 class EntityTerrain : public Entity, public Observer {
 public:
-    EntityTerrain(float scale, std::string filename);
+    EntityTerrain(float scale, std::string filename, sf::Color colour);
     ~EntityTerrain(); // free all memory
 
     void on_notify(Event event, void *data);
@@ -68,6 +68,7 @@ private:
     sf::Shader shdTerrain;
     sf::Uint8 *terrain; // terrain data
     sf::Texture txtTerrainData; // terrain data as a texture (updated at draw time)
+    sf::Color colour;
     // terrain textures that are drawn
     sf::Texture txtBg;
     sf::Texture txtSolid;

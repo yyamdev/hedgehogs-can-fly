@@ -13,7 +13,7 @@ public:
 
     void on_notify(Event event, void *data);
 
-    void draw(sf::RenderWindow &window, sf::Vector2f camera);
+    void draw(sf::RenderWindow &window, sf::Vector2f camera, sf::Color levelColour);
 private:
     // mouse & dragging
     bool dragging, canFling, canNudge;
