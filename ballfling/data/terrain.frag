@@ -1,9 +1,7 @@
 // fragment shader for rendering terrain
 
-uniform sampler2D txtBg;      // cave background texture
 uniform sampler2D txtSolid;   // solid terrain image texture
 uniform sampler2D txtKill;    // ^
-uniform sampler2D txtWeak;    // ^
 uniform sampler2D txtBouncy;  // ^
 uniform sampler2D txtSlow;    // ^
 uniform sampler2D txtSticky;  // ^
@@ -78,10 +76,6 @@ void main() {
                 pixel = texture2D(txtSolid, gl_TexCoord[0].xy);
             gl_FragColor = gl_Color * pixel;
         }
-        else if (dataPixel.r == 127 && dataPixel.g == 127 && dataPixel.b == 127) {
-            pixel = texture2D(txtWeak, gl_TexCoord[0].xy);
-            gl_FragColor = gl_Color * pixel;
-        }
         else if (dataPixel.r == 67 && dataPixel.g == 191 && dataPixel.b == 6) {
             pixel = texture2D(txtBouncy, gl_TexCoord[0].xy);
             gl_FragColor = gl_Color * pixel;
@@ -92,14 +86,6 @@ void main() {
         }
         else if (dataPixel.r == 255 && dataPixel.g == 174 && dataPixel.b == 201) {
             pixel = texture2D(txtSticky, gl_TexCoord[0].xy);
-            gl_FragColor = gl_Color * pixel;
-        }
-        else if (dataPixel.r == 185 && dataPixel.g == 122 && dataPixel.b == 87) {
-            pixel = texture2D(txtBg, gl_TexCoord[0].xy);
-            gl_FragColor = gl_Color * pixel;
-        }
-        else if (dataPixel.r == 255 && dataPixel.g == 242 && dataPixel.b == 0) {
-            pixel = texture2D(txtBg, gl_TexCoord[0].xy);
             gl_FragColor = gl_Color * pixel;
         }
         else if (dataPixel.r == 237 && dataPixel.g == 28 && dataPixel.b == 36) {

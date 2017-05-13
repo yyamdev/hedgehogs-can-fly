@@ -114,9 +114,6 @@
     <ClInclude Include="audio.h">
       <Filter>Header Files\game\state\play</Filter>
     </ClInclude>
-    <ClInclude Include="tnt_entity.h">
-      <Filter>Header Files\game\world</Filter>
-    </ClInclude>
     <ClInclude Include="menu_state.h">
       <Filter>Header Files\game\state</Filter>
     </ClInclude>
@@ -187,9 +184,6 @@
     </ClCompile>
     <ClCompile Include="audio.cpp">
       <Filter>Source Files\game\state\play</Filter>
-    </ClCompile>
-    <ClCompile Include="tnt_entity.cpp">
-      <Filter>Source Files\game\world</Filter>
     </ClCompile>
     <ClCompile Include="menu_state.cpp">
       <Filter>Source Files\game\state</Filter>

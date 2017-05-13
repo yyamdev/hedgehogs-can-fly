@@ -13,7 +13,6 @@ enum TerrainType {
     T_SLOW,
     T_BOUNCY,
     T_STICKY,
-    T_WEAK,
     T_THIN,
     T_WIN,
 };
@@ -45,7 +44,6 @@ public:
     
     void set_rectangle(sf::FloatRect rect, bool solid); // set a rectangular block
     void set_circle(sf::Vector2f center, float rad, bool solid); // set a circular block
-    void set_weak_terrain_circle(sf::Vector2f center, float rad, bool solid); // sets the weak terrain im a circular block
 
     sf::Vector2f get_normal(sf::Vector2f pos); // get surface normal (unit)
     sf::Vector2f get_normal_ground(sf::Vector2f pos); // get surface normal (unit) at nearest downwards ground
@@ -59,7 +57,7 @@ public:
 
     sf::Vector2f playerSpawn;
 
-    bool error();
+    bool error;
 
 private:
     std::string filename;
@@ -70,17 +68,13 @@ private:
     sf::Texture txtTerrainData; // terrain data as a texture (updated at draw time)
     sf::Color colour;
     // terrain textures that are drawn
-    sf::Texture txtBg;
     sf::Texture txtSolid;
     sf::Texture txtWater;
-    sf::Texture txtWeak;
     sf::Texture txtBouncy;
     sf::Texture txtSlow;
     sf::Texture txtSticky;
     sf::Texture txtFinish;
-    sf::Texture txtEdge;
     bool render;
     void data_pass();
     bool editMode;
-    bool _error;
 };

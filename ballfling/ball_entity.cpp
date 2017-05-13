@@ -6,7 +6,6 @@
 #include <iostream>
 #include "util.h"
 #include "debug_draw.h"
-#include "tnt_entity.h"
 #include "imgui.h"
 #include "particle.h"
 
@@ -220,12 +219,6 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             sf::Vector2f normal = util::normalize(position - e->position);
             sf::Vector2f reflect = impactDirection - 2.f * normal * (util::dot(impactDirection, normal));
             velocity = reflect * impactSpeed * .6f;
-        }
-        if (e->get_tag() == "tnt" && ((EntityTnt*)e)->intersects_with_circle(position, collisionRadius)) {
-            EntityTnt *tnt = (EntityTnt*)e;
-            tnt->touch();
-            position -= velocity * 1.5f;
-            bounce(.6f, tnt->get_normal(position, velocity));
         }
     }
 

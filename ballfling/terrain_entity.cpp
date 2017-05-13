@@ -8,7 +8,6 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "world.h"
-#include "tnt_entity.h"
 #include "debug_draw.h"
 #include "imgui.h"
 #include <algorithm>
@@ -18,7 +17,7 @@ EntityTerrain::EntityTerrain(float scale, std::string filename, sf::Color colour
     // load map image
     sf::Image imgMap;
     if (!imgMap.loadFromFile(filename)) {
-        _error = true;
+        error = true;
         return;
     }
     this->filename = filename;
@@ -34,14 +33,10 @@ EntityTerrain::EntityTerrain(float scale, std::string filename, sf::Color colour
     data_pass();
     txtTerrainData.update(terrain); // update data texture
     // load front-end textures
-    txtBg.loadFromFile("data/bg.png");
-    txtBg.setRepeated(true);
     txtSolid.loadFromFile("data/solid.png");
     txtSolid.setRepeated(true);
     txtWater.loadFromFile("data/water.png");
     txtWater.setRepeated(true);
-    txtWeak.loadFromFile("data/weak.png");
-    txtWeak.setRepeated(true);
     txtBouncy.loadFromFile("data/bouncy.png");
     txtBouncy.setRepeated(true);
     txtSlow.loadFromFile("data/slow.png");
@@ -50,8 +45,6 @@ EntityTerrain::EntityTerrain(float scale, std::string filename, sf::Color colour
     txtSticky.setRepeated(true);
     txtFinish.loadFromFile("data/finish.png");
     txtFinish.setRepeated(true);
-    txtEdge.loadFromFile("data/edge.png");
-    txtEdge.setRepeated(true);
     // load fragment shader
     shdTerrain.loadFromFile("data/terrain.frag", sf::Shader::Fragment);
     editMode = false;
@@ -158,10 +151,6 @@ TerrainType EntityTerrain::get_pos(sf::Vector2f pos) {
         terrain[base + 1] == 128 &&
         terrain[base + 2] == 128) return T_KILL;
 
-    if (terrain[base + 0] == 127 &&
-        terrain[base + 1] == 127 &&
-        terrain[base + 2] == 127) return T_WEAK;
-
     if (terrain[base + 0] == 67 &&
         terrain[base + 1] == 191 &&
         terrain[base + 2] == 6) return T_BOUNCY;
@@ -221,19 +210,6 @@ void EntityTerrain::set_circle(sf::Vector2f center, float rad, bool solid) {
             float dy = center.y - y;
             if ((dx * dx + dy * dy) < (rad * rad))
                 set_solid(sf::Vector2f(x, y), solid);
-        }
-    }
-}
-
-void EntityTerrain::set_weak_terrain_circle(sf::Vector2f center, float rad, bool solid) {
-    sf::FloatRect bound(center.x - rad, center.y - rad, rad * 2.f, rad * 2);
-    for (float y=bound.top; y<bound.top + bound.height; ++y) {
-        for (float x=bound.left; x<bound.left + bound.width; ++x) {
-            float dx = center.x - x;
-            float dy = center.y - y;
-            if ((dx * dx + dy * dy) < (rad * rad) && get_pos(sf::Vector2f(x, y)) == T_WEAK) {
-                set_solid(sf::Vector2f(x, y), solid);
-            }
         }
     }
 }
@@ -327,7 +303,6 @@ void EntityTerrain::event(sf::Event &e) {
     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Right && !sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
         //std::cout << "TODO -> EVENT_TERRAIN_CHANGED if this code uses set_circle\n";
         //set_circle(sf::Vector2f((float)e.mouseButton.x + world->camera.x, (float)e.mouseButton.y + world->camera.y), 25, false);
-        world->add_entity(new EntityTnt(sf::Vector2f((float)e.mouseButton.x + world->camera.x, (float)e.mouseButton.y + world->camera.y)));
     }
 }
 
@@ -342,10 +317,8 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
         sf::Sprite sprTerrain(txtSolid); // I think this has to be set for size only?
         sprTerrain.setTextureRect(sf::IntRect(0, 0, (int)size.x, (int)size.y));
         // pass parameters into shader
-        shdTerrain.setParameter("txtBg", txtBg);
         shdTerrain.setParameter("txtSolid", txtSolid);
         shdTerrain.setParameter("txtKill", txtWater);
-        shdTerrain.setParameter("txtWeak", txtWeak);
         shdTerrain.setParameter("txtBouncy", txtBouncy);
         shdTerrain.setParameter("txtSlow", txtSlow);
         shdTerrain.setParameter("txtSticky", txtSticky);
@@ -386,4 +359,4 @@ void EntityTerrain::on_notify(Event event, void *data) {
     }
 }
 
-bool EntityTerrain::error() { return _error; }
+//bool EntityTerrain::error() { return _error; }

@@ -27,7 +27,7 @@ StatePlay::StatePlay(World *world, int levelNum) : State(world) {
 
     // create terrain
     terrain = new EntityTerrain(2.f, filename, levelColour);
-    if (terrain->error()) {
+    if (terrain->error) {
         return;
     }
     world->add_entity(terrain);
@@ -48,7 +48,7 @@ void StatePlay::on_event(sf::Event &event) {
 }
 
 void StatePlay::on_tick() {
-    if (terrain->error()) State::pop_state(); 
+    if (terrain->error) State::pop_state(); 
     if (completed) {
         if (!world->is_paused()) world->toggle_pause(); // pause world
         State::push_state(new StateWin(world, levelNum));
