@@ -30,7 +30,6 @@ private:
     static sf::Texture txtPoint;
     static bool textureLoaded;
     sf::Sprite spr, sprPoint;
-    float angle;
     sf::Color colour;
     sf::Vector2f mouse;
     bool resetEnabled;

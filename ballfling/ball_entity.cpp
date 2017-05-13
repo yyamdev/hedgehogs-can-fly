@@ -24,8 +24,6 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour) {
     velocity = vel;
     tag = "ball";
     collisionRadius = 8.f;
-    invulnerable = true;
-    hp = maxHp = 10;
     if (!textureLoaded) {
         txt.loadFromFile("data/ball.png");
         txtPoint.loadFromFile("data/point.png");
@@ -42,7 +40,6 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour) {
     nudgeStr = 0.04f;
     maxFlingVelocity = 1.4f;
     resetEnabled = false;
-    angle = 0.f;
 }
 
 void EntityBall::event(sf::Event &e) {
@@ -153,9 +150,6 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     sf::Vector2f oldPos = position;
     position += velocity;
     notify(EVENT_BALL_MOVE, (void*)(&position));
-
-    // set angle
-    angle += velocity.x * 2.f;
 
     // handle nudging
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && dragMode == DM_NUDGE && canNudge && !canFling) {
