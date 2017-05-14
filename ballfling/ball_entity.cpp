@@ -36,8 +36,6 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour) {
     terrain = NULL;
     dragging = false;
     rest = false;
-    dragMode = DM_NUDGE;
-    flingTimerValue = 1000;
     reactToInput = true;
     canFling = false;
     canNudge = false;
@@ -75,24 +73,10 @@ void EntityBall::event(sf::Event &e) {
                 dir = dir / util::len(dir) * speed;
 
                 if (canFling || canNudge) {
-                    switch (dragMode) {
-                    case DM_REST:
+                    if (canFling) {
                         record_new_rest_pos();
                         velocity = dir;
                         stop_resting();
-                        break;
-                    case DM_TIME:
-                        clkFlingTimer.restart();
-                        velocity = dir;
-                        stop_resting();
-                        break;
-                    case DM_NUDGE:
-                        if (canFling) {
-                            record_new_rest_pos();
-                            velocity = dir;
-                            stop_resting();
-                        }
-                        break;
                     }
                 }
             }
@@ -112,19 +96,6 @@ void EntityBall::draw(sf::RenderWindow &window) {
         ImGui::Separator();
         ImGui::Text("wall clock: %d", clkWallTouch.getElapsedTime().asMilliseconds());
         ImGui::Text("speed: %f", util::len(velocity));
-        ImGui::Separator();
-        sf::Color dragCol = sf::Color::White;
-        ImGui::TextColored(dragCol, "Drag Mode");
-        ImGui::RadioButton("rest", (int*)(&dragMode), 0); ImGui::SameLine();
-        ImGui::RadioButton("timer", (int*)(&dragMode), 1); ImGui::SameLine();
-        ImGui::RadioButton("nudge", (int*)(&dragMode), 2);
-        ImGui::DragFloat("max fling velocity", &maxFlingVelocity, 0.01f, 0.f, 4.f);
-        if (dragMode == DM_TIME) {
-            ImGui::DragInt("fling timer threshold (ms)", &flingTimerValue, 0, 10000);
-        }
-        if (dragMode == DM_NUDGE) {
-            ImGui::DragFloat("nudge strength", &nudgeStr, 0.01f, 0.f, 1.f);
-        }
     }
 }
 
@@ -144,7 +115,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     notify(EVENT_BALL_MOVE, (void*)(&position));
 
     // handle nudging
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && dragMode == DM_NUDGE && canNudge && !canFling) {
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && canNudge && !canFling) {
         sf::Vector2f dir = util::normalize(mouse - (position - world->camera));
         velocity += dir * nudgeStr;
     }
@@ -158,27 +129,14 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     }
 
     // update canFling
-    if (dragMode == DM_REST || dragMode == DM_NUDGE) {
-        if (util::len(velocity) < maxFlingVelocity && touching_wall() && !canFling)
-            canFling = true;
-        else if (util::len(velocity) > 2.f * maxFlingVelocity && !touching_wall() && canFling)
-            canFling = false;
-    }
-    else if (dragMode == DM_TIME) {
-        if (clkFlingTimer.getElapsedTime().asMilliseconds() > flingTimerValue)
-            canFling = true;
-        else
-            canFling = false;
-    }
+    if (util::len(velocity) < maxFlingVelocity && touching_wall() && !canFling)
+        canFling = true;
+    else if (util::len(velocity) > 2.f * maxFlingVelocity && !touching_wall() && canFling)
+        canFling = false;
     notify(EVENT_BALL_CHANGE_CAN_FLING, (void*)(&canFling));
 
     // update canNudge
-    if (dragMode == DM_NUDGE) {
-        if (1)
-            canNudge = true;
-        else
-            canNudge = false;
-    } else canNudge = false;
+    canNudge = true;
     notify(EVENT_BALL_CHANGE_CAN_NUDGE, (void*)(&canNudge));
 
     // apply gravity
@@ -314,10 +272,8 @@ void EntityBall::record_new_rest_pos() {
     // called when ball is at rest
     prevRest = position;
     notify(EVENT_BALL_REST_POS, (void*)(&position));
-    if (dragMode == DM_REST || dragMode == DM_NUDGE) {
-        canFling = true;
-        notify(EVENT_BALL_CHANGE_CAN_FLING, &canFling);
-    }
+    canFling = true;
+    notify(EVENT_BALL_CHANGE_CAN_FLING, &canFling);
 }
 
 void EntityBall::stop_resting() {

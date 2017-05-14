@@ -52,12 +52,6 @@ private:
     sf::Vector2f dragStart;
     bool canFling;
     bool canNudge;
-    enum DragMode {
-        DM_REST = 0,
-        DM_TIME = 1,
-        DM_NUDGE = 2,
-    } dragMode;
-    int flingTimerValue;
     sf::Clock clkFlingTimer;
     float nudgeStr;
     float maxFlingVelocity;
