@@ -13,21 +13,26 @@ sf::Texture EntityBall::txt;
 sf::Texture EntityBall::txtPoint;
 bool EntityBall::textureLoaded = false;
 
+const float BALL_TERM_VEL = 9.f;
+const float BALL_MAX_LAUNCH_SPEED = 14.f;
+const float BALL_MAX_SPEED = 14.f;
+
 EntityBall::EntityBall() {
     EntityBall(sf::Vector2f(0.f, 0.f), sf::Vector2f(0.f, 0.f), sf::Color::White);
 }
 
 EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour) {
-    this->colour = colour;
-    position = prevRest = pos;
-    velocity = vel;
-    tag = "ball";
-    collisionRadius = 8.f;
     if (!textureLoaded) {
         txt.loadFromFile("data/ball.png");
         txtPoint.loadFromFile("data/point.png");
         textureLoaded = true;
     }
+
+    this->colour = colour;
+    position = prevRest = pos;
+    velocity = vel;
+    tag = "ball";
+    collisionRadius = 8.f;
     terrain = NULL;
     dragging = false;
     rest = false;
@@ -38,7 +43,6 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour) {
     canNudge = false;
     nudgeStr = 0.04f;
     maxFlingVelocity = 1.4f;
-    resetEnabled = false;
 }
 
 void EntityBall::event(sf::Event &e) {
@@ -47,14 +51,6 @@ void EntityBall::event(sf::Event &e) {
     if (e.type == sf::Event::MouseMoved) {
         mouse.x = (float)e.mouseMove.x;
         mouse.y = (float)e.mouseMove.y;
-    }
-    if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Space) {
-        if (resetEnabled) {
-            reset_to_rest();
-            rest = true;
-            record_new_rest_pos();
-            notify(EVENT_PRESS_SPACE, NULL);
-        }
     }
     if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
         if (!dragging && (canFling)) {
@@ -109,7 +105,6 @@ void EntityBall::draw(sf::RenderWindow &window) {
     spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
     spr.setPosition(position - world->camera);
     spr.setColor(colour);
-    //spr.setRotation(angle);
     window.draw(spr);
 
     if (edit && ImGui::CollapsingHeader("Ball")) {
@@ -130,8 +125,6 @@ void EntityBall::draw(sf::RenderWindow &window) {
         if (dragMode == DM_NUDGE) {
             ImGui::DragFloat("nudge strength", &nudgeStr, 0.01f, 0.f, 1.f);
         }
-        ImGui::Separator();
-        ImGui::Checkbox("Space to reset", &resetEnabled);
     }
 }
 
@@ -206,33 +199,26 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     velocity *= .995f;
 
     // find terrain
-    for (Entity *e : entities) {
-        if (!terrain && e->get_tag() == "terrain") { // get terrain entity
-            terrain = (EntityTerrain*)e;
-            break;
-        }
-        if (e->get_tag() == "ball" && e != this && intersects(*e)) {
-            float impactSpeed = util::len(velocity);
-            impactSpeed += 0.1f;
-            sf::Vector2f impactDirection = util::normalize(velocity);
-            position -= velocity * 1.1f;
-            sf::Vector2f normal = util::normalize(position - e->position);
-            sf::Vector2f reflect = impactDirection - 2.f * normal * (util::dot(impactDirection, normal));
-            velocity = reflect * impactSpeed * .6f;
+    if (!terrain) {
+        for (Entity *e : entities) {
+            if (e->get_tag() == "terrain") { // get terrain entity
+                terrain = (EntityTerrain*)e;
+                break;
+            }
         }
     }
 
     if (terrain) {
-        // test if hit water
+        // test if hit lava
         if (terrain->get_pos(position) == T_KILL) {
             for (int p = 0; p < 25; ++p) {
-                particleSystem.add_particle(Particle(position, sf::Color::Blue, sf::Vector2f(0.f, -3.f) + sf::Vector2f(util::rnd(-1.f, 1.f), util::rnd(-1.f, 1.f)), sf::Vector2f(2.f, 2.f)));
+                particleSystem.add_particle(Particle(position, colour, sf::Vector2f(0.f, -3.f) + sf::Vector2f(util::rnd(-1.f, 1.f), util::rnd(-1.f, 1.f)), sf::Vector2f(2.f, 2.f)));
             }
             reset_to_rest();
             notify(EVENT_HIT_WATER, NULL);
         }
 
-        sf::Vector2f contact = sf::Vector2f(50.f, 50.f);
+        sf::Vector2f contact;
         if (terrain->intersects_with_circle(position, velocity, collisionRadius, &contact, &position)) { // collision with terrain
             contactPoint = contact;
 
@@ -244,7 +230,8 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             clkWallTouch.restart();
 
             float bounceFactor = .6f;
-            sf::Color particleColour = sf::Color(255, 255, 255);
+            sf::Color particleColour = colour;
+            // TODO -> Update particle colours.
             if (t == T_BOUNCY) {
                 bounceFactor = 1.2f;
                 particleColour = sf::Color::Red;
@@ -262,6 +249,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             else if (t == T_THIN) {
                 float impactSpeed = util::len(velocity);
                 if (impactSpeed > 9.f) {
+                    // TODO -> Increase updateRect or actualy calculate it using flood fill data? (Currently can be too small)
                     terrain->remove_flood_fill(contactPoint);
                     sf::Rect<unsigned int> updateRect((unsigned int)position.x - 96, (unsigned int)position.y - 96, 96 * 2, 96 * 2);
                     notify(EVENT_TERRAIN_CHANGE, &updateRect);
@@ -277,10 +265,9 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             }
 
             for (int p = 0; p < util::rnd(0, (int)util::len(velocity)); ++p) {
-                particleSystem.add_particle(Particle(contact, util::choose(particleColour, sf::Color(0, 255, 255)), -velocity * .6f + sf::Vector2f(util::rnd(-1.f, 1.f), util::rnd(-1.f, 1.f)), sf::Vector2f(2.f, 2.f)));
+                particleSystem.add_particle(Particle(contact, particleColour, util::normalize(-velocity) * util::rnd(1.5f, 2.5f) + sf::Vector2f(util::rnd(-1.f, 1.f), util::rnd(-1.f, 1.f)), sf::Vector2f(2.f, 2.f)));
             }
             
-
             bounce(bounceFactor, terrain->get_normal(contact));
         }
     }
@@ -292,21 +279,15 @@ void EntityBall::bounce(float bounceFactor, sf::Vector2f norm) {
     if (impactSpeed != 0.f)
         impactDirection = util::normalize(velocity);
 
-    // calculate vectors
     sf::Vector2f normal = util::normalize(norm);
     sf::Vector2f reflect = velocity - 2.f * normal * (util::dot(velocity, normal));
-    sf::Vector2f bounce = sf::Vector2f();
+    sf::Vector2f bounce;
 
-    if (impactSpeed > 0.2f && impactSpeed < 3.1f) { // bounce a little
+    if (impactSpeed > 0.2f)
         bounce = reflect * bounceFactor;
-    }
-    else if (impactSpeed >= 3.1f) { // bounce a lot
-        bounce = reflect * bounceFactor;
-    }
 
-    if (util::dot(normal, util::normalize(reflect)) < 0.3f) {
+    if (util::dot(normal, util::normalize(reflect)) < 0.3f)
         bounce += normal;
-    }
 
     velocity = bounce;
 }
@@ -315,14 +296,6 @@ void EntityBall::on_notify(Event event, void *data) {
     if (event == EVENT_TERRAIN_CHANGE) {
         rest = false;
         clkRest.restart();
-    }
-    if (event == EVENT_TNT_EXPLODE) {
-        sf::Vector3f *info = (sf::Vector3f*)data;
-        sf::Vector2f centre(info->x, info->y);
-        sf::Vector2f tntToBall = position - centre;
-        float maxSpeed = 18.f;
-        float speed = maxSpeed * (1.f -  fmin(1.f, util::len(tntToBall) / info->z));
-        velocity += util::normalize(tntToBall) * speed;
     }
     if (event == EVENT_NEW_WORLD_GRAVITY) {
         stop_resting();

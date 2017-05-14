@@ -39,7 +39,6 @@ public:
     sf::Vector2f clampPos, clampSize;
 
     sf::Vector2f gravity;
-    sf::Vector2f wind;
 
 private:
     sf::RenderWindow *window;

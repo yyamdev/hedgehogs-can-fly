@@ -11,9 +11,7 @@ World::World(sf::RenderWindow &window) {
     this->window = &window;
     paused = false;
     gravity = sf::Vector2f(0.f, GRAVITY);
-    wind = sf::Vector2f (0.f, 0.f);
     clamp = false;
-    notify(EVENT_WIND_CHANGE, (void*)&wind);
 }
 
 World::~World() {

@@ -18,12 +18,6 @@ private:
     sf::SoundBuffer bufSmash;
     sf::Sound sndSmash;
 
-    sf::SoundBuffer bufExplode;
-    sf::Sound sndExplode;
-    
-    sf::SoundBuffer bufTbeep;
-    sf::Sound sndTbeep;
-
     sf::SoundBuffer bufHit;
     sf::Sound sndHit;
     sf::Clock clkHit;

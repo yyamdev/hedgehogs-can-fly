@@ -12,12 +12,6 @@ Audio::Audio() {
     bufSmash.loadFromFile("data/smash.wav");
     sndSmash.setBuffer(bufSmash);
 
-    bufExplode.loadFromFile("data/asplode.ogg");
-    sndExplode.setBuffer(bufExplode);
-
-    bufTbeep.loadFromFile("data/tntbeep.wav");
-    sndTbeep.setBuffer(bufTbeep);
-
     bufHit.loadFromFile("data/hit.wav");
     sndHit.setBuffer(bufHit);
 }
@@ -36,16 +30,6 @@ void Audio::on_notify(Event event, void *data) {
     if (event == EVENT_SMASH_DOOR) {
         sndSmash.setVolume((float)options.sfxVolume * 100.f);
         sndSmash.play();
-    }
-
-    if (event == EVENT_TNT_EXPLODE) {
-        sndExplode.setVolume((float)options.sfxVolume * 100.f);
-        sndExplode.play();
-    }
-
-    if (event == EVENT_TNT_BEEP) {
-        sndTbeep.setVolume((float)options.sfxVolume * 100.f);
-        sndTbeep.play();
     }
 
     if (event == EVENT_BALL_HIT_SOLID) {

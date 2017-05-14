@@ -107,8 +107,7 @@ void Hud::on_notify(Event event, void *data) {
     if (event == EVENT_BALL_CHANGE_CAN_NUDGE) {
         canNudge = *((bool*)data);
     }
-    if (event == EVENT_PLAYER_END_DRAG)
+    if (event == EVENT_PLAYER_END_DRAG) {
         sprInstructionDrag.setColor(sf::Color(255,255,255,0));
-    if (event == EVENT_PRESS_SPACE)
-        sprInstructionSpace.setColor(sf::Color(255,255,255,0));
+    }
 }

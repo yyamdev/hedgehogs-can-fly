@@ -6,11 +6,12 @@
 #include "subject.h"
 #include "observer.h"
 
-#define BALL_TERM_VEL 9.f
-#define BALL_MAX_LAUNCH_SPEED 14.f
-#define BALL_MAX_SPEED 14.f
-
 class EntityTerrain;
+
+extern const float BALL_TERM_VEL;
+extern const float BALL_MAX_LAUNCH_SPEED;
+extern const float BALL_MAX_SPEED;
+
 
 class EntityBall : public Entity, public Observer {
 public:
@@ -32,7 +33,6 @@ private:
     sf::Sprite spr, sprPoint;
     sf::Color colour;
     sf::Vector2f mouse;
-    bool resetEnabled;
 
     EntityTerrain *terrain;
 
