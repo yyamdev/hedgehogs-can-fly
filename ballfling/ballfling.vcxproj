@@ -139,6 +139,7 @@
     <ClCompile Include="cursor.cpp" />
     <ClCompile Include="debug_draw.cpp" />
     <ClCompile Include="entity.cpp" />
+    <ClCompile Include="gate.cpp" />
     <ClCompile Include="hud.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu_state.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="debug_draw.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="events.h" />
+    <ClInclude Include="gate.h" />
     <ClInclude Include="gui.h" />
     <ClInclude Include="hud.h" />
     <ClInclude Include="menu_state.h" />

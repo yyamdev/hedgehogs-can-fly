@@ -1,0 +1,23 @@
+#pragma once
+
+// Boost gate.
+
+#include "entity.h"
+#include <SFML/Graphics.hpp>
+
+class Gate : public Entity {
+public:
+    Gate();
+    Gate(sf::Vector2f position, float angle, float size, float strength);
+
+    void event(sf::Event &e);
+    void tick(std::vector<Entity*> &entities);
+    void draw(sf::RenderWindow &window);
+
+    bool intersects_circle(sf::Vector2f position, float radius);
+private:
+    sf::Vector2f position;
+    float angle;
+    float size;
+    float strength;
+};

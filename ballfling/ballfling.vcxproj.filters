@@ -64,9 +64,6 @@
     <Filter Include="Source Files\game\state\play">
       <UniqueIdentifier>{11debbbe-53fe-4104-a1a9-6def65660b8d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\game\world\ball">
-      <UniqueIdentifier>{b39de2f2-08a1-4f15-8062-775057e59992}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\imgui">
       <UniqueIdentifier>{faa6d357-6856-4bec-a4cb-3dad583f4510}</UniqueIdentifier>
     </Filter>
@@ -147,6 +144,9 @@
     <ClInclude Include="animation.h">
       <Filter>Header Files\framework\world</Filter>
     </ClInclude>
+    <ClInclude Include="gate.h">
+      <Filter>Header Files\game\world</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="subject.cpp">
@@ -178,9 +178,6 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ball_entity.cpp">
-      <Filter>Source Files\game\world\ball</Filter>
     </ClCompile>
     <ClCompile Include="audio.cpp">
       <Filter>Source Files\game\state\play</Filter>
@@ -226,6 +223,12 @@
     </ClCompile>
     <ClCompile Include="animation.cpp">
       <Filter>Source Files\framework\world</Filter>
+    </ClCompile>
+    <ClCompile Include="gate.cpp">
+      <Filter>Source Files\game\world</Filter>
+    </ClCompile>
+    <ClCompile Include="ball_entity.cpp">
+      <Filter>Source Files\game\world</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
