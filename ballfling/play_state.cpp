@@ -2,14 +2,13 @@
 #include "world.h"
 #include "terrain_entity.h"
 #include "util.h"
-#include <iostream>
 #include "ball_entity.h"
-#include "debug_draw.h"
 #include "build_options.h"
 #include "gui.h"
 #include "options_state.h"
 #include "win_state.h"
 #include "pause_state.h"
+#include <string>
 
 std::string level_num_to_filename(int levelNum) {
     return std::string("data/lvl" + util::to_string(levelNum) + ".png");
@@ -56,14 +55,6 @@ void StatePlay::on_tick() {
 }
 
 void StatePlay::on_draw(sf::RenderWindow &window) {
-    if (DRAW_TERRAIN_NORMALS) {
-        sf::Vector2i mouseI = sf::Mouse::getPosition(window);
-        sf::Vector2f mouse;
-        mouse.x = (float)mouseI.x;
-        mouse.y = (float)mouseI.y;
-        sf::Vector2f normal = terrain->get_normal(mouse + world->camera);
-        draw_vector(mouse, normal, 50.f, sf::Color::Yellow, window);
-    }
 }
 
 void StatePlay::on_draw_ui(sf::RenderWindow &window) {

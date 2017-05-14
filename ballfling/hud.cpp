@@ -1,5 +1,4 @@
 #include "hud.h"
-#include "subject.h"
 #include <SFML/Graphics.hpp>
 #include "debug_draw.h"
 #include "util.h"
@@ -7,6 +6,8 @@
 #include "ball_entity.h"
 #include "imgui.h"
 #include "cursor.h"
+
+const float PI_F = 3.1415927f;
 
 Hud::Hud() {
     Subject::add_observer(this); // register for events
@@ -24,7 +25,6 @@ Hud::Hud() {
     sprInstructionSpace.setOrigin(sf::Vector2f(txtInstructionSpace.getSize().x / 2.f, txtInstructionSpace.getSize().y / 2.f));
     sprInstructionSpace.setScale(sf::Vector2f(0.7f, 0.7f));
     drawArrowOnBall = true;
-    drawMoveCount = false;
 }
 
 void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera, sf::Color levelColour) {
@@ -79,25 +79,13 @@ void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera, sf::Color levelCol
         window.draw(sprNudge);
     }
 
-    // wind
-    draw_vector(sf::Vector2f(WINDOW_WIDTH / 2.f, 64.f), currentWind, util::len(currentWind) * 600.f, sf::Color::Blue, window);
-
     // set cursors
     if (canNudge) set_cursor(CURSOR_CROSS);
     if (canFling) set_cursor(CURSOR_RETICLE);
     if (!canNudge && !canFling) set_cursor(CURSOR_STOP);
 
-    if (drawMoveCount) {
-        sf::Text txtCounter(util::to_string(moveCount), fntCounter);
-        txtCounter.setPosition(sf::Vector2f(20.f, 10.f));
-        txtCounter.setColor(sf::Color::Black);
-        window.draw(txtCounter);
-    }
-
-    //window.resetGLStates();
     if (edit && ImGui::CollapsingHeader("Hud")) {
         ImGui::Checkbox("draw arrow on ball", &drawArrowOnBall);
-        ImGui::Checkbox("draw move count", &drawMoveCount);
     }
 }
 

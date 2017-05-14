@@ -77,4 +77,5 @@ private:
     bool render;
     void data_pass();
     bool editMode;
+    bool drawTerrainNormals;
 };

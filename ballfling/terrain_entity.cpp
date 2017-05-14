@@ -48,6 +48,7 @@ EntityTerrain::EntityTerrain(float scale, std::string filename, sf::Color colour
     // load fragment shader
     shdTerrain.loadFromFile("data/terrain.frag", sf::Shader::Fragment);
     editMode = false;
+    drawTerrainNormals = false;
 }
 
 void EntityTerrain::data_pass() {
@@ -340,7 +341,18 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
         ImGui::TextDisabled(filename.c_str());
         ImGui::Checkbox("render", &render);
         ImGui::Checkbox("grid effect", &drawGrid);
+        ImGui::Checkbox("Draw terrain normals", &drawTerrainNormals);
     }
+
+    if (drawTerrainNormals) {
+        sf::Vector2i mouseI = sf::Mouse::getPosition(window);
+        sf::Vector2f mouse;
+        mouse.x = (float)mouseI.x;
+        mouse.y = (float)mouseI.y;
+        sf::Vector2f normal = get_normal(mouse + world->camera);
+        draw_vector(mouse, normal, 50.f, sf::Color::Yellow, window);
+    }
+
 }
 
 void EntityTerrain::on_notify(Event event, void *data) {
@@ -358,5 +370,3 @@ void EntityTerrain::on_notify(Event event, void *data) {
         delete[] terrainUpdate;
     }
 }
-
-//bool EntityTerrain::error() { return _error; }
