@@ -16,10 +16,10 @@ public:
 
     bool intersects_circle(sf::Vector2f pos, float radius);
 
+    sf::Vector2f get_boost_vector();
+
     sf::Vector2f position;
     float angle;
     float size;
     float strength;
-
-    sf::Vector2f circlePosDraw, toGateDraw, tangentDraw, int1, int2;
 };

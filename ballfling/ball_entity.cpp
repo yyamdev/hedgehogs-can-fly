@@ -165,7 +165,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         if (e->get_tag() == "gate") {
             Gate *gate = (Gate*)e;
             if (gate->intersects_circle(position, collisionRadius)) {
-                std::cout << "!";
+                velocity += gate->get_boost_vector();
             }
         }
     }

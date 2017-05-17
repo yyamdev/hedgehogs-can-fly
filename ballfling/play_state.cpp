@@ -41,7 +41,7 @@ StatePlay::StatePlay(World *world, int levelNum) : State(world) {
     world->camera = (player->position - screenSize / 2.f);
 
     // add gate
-    gate = new Gate(sf::Vector2f(650.f, 750.f), 25.f, 64.f, 4.f);
+    gate = new Gate(sf::Vector2f(650.f, 750.f), 25.f, 64.f, 2.f);
     world->add_entity(gate);
 
     completed = false;

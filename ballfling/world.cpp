@@ -90,12 +90,12 @@ void World::draw() {
                 if (ImGui::TreeNode(e->get_tag().c_str())) {
                     // posiiton
                     float pos[2] = {e->position.x, e->position.y};
-                    ImGui::InputFloat2("position", pos);
+                    ImGui::DragFloat2("position", pos);
                     e->position.x = pos[0];
                     e->position.y = pos[1];
                     // velocity
                     float vel[2] = {e->velocity.x, e->velocity.y};
-                    ImGui::InputFloat2("velocity", vel);
+                    ImGui::DragFloat2("velocity", vel);
                     e->velocity.x = vel[0];
 
                     e->velocity.y = vel[1];
