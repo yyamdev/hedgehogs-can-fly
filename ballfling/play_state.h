@@ -42,5 +42,5 @@ private:
     bool completed;
     int levelNum;
 
-    Gate gate;
+    Gate *gate;
 };

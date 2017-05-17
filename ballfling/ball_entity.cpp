@@ -8,6 +8,7 @@
 #include "debug_draw.h"
 #include "imgui.h"
 #include "particle.h"
+#include "gate.h"
 
 sf::Texture EntityBall::txt;
 sf::Texture EntityBall::txtPoint;
@@ -156,12 +157,15 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     // apply air resistance
     velocity *= .995f;
 
-    // find terrain
-    if (!terrain) {
-        for (Entity *e : entities) {
-            if (e->get_tag() == "terrain") { // get terrain entity
-                terrain = (EntityTerrain*)e;
-                break;
+    for (Entity *e : entities) {
+        if (!terrain && e->get_tag() == "terrain") { // get terrain entity
+            terrain = (EntityTerrain*)e;
+            break;
+        }
+        if (e->get_tag() == "gate") {
+            Gate *gate = (Gate*)e;
+            if (gate->intersects_circle(position, collisionRadius)) {
+                std::cout << "!";
             }
         }
     }

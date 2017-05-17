@@ -18,11 +18,6 @@ std::string level_num_to_filename(int levelNum) {
 }
 
 StatePlay::StatePlay(World *world, int levelNum) : State(world) {
-    gate.position = sf::Vector2f();
-    gate.angle = 0.f;
-    gate.size = 128.f;
-    gate.strength = 8.f;
-
     this->levelNum = levelNum;
     filename = level_num_to_filename(levelNum);
 
@@ -45,6 +40,10 @@ StatePlay::StatePlay(World *world, int levelNum) : State(world) {
     sf::Vector2f screenSize((float)WINDOW_WIDTH, (float)WINDOW_HEIGHT);
     world->camera = (player->position - screenSize / 2.f);
 
+    // add gate
+    gate = new Gate(sf::Vector2f(650.f, 750.f), 25.f, 64.f, 4.f);
+    world->add_entity(gate);
+
     completed = false;
 }
 
@@ -64,11 +63,11 @@ void StatePlay::on_tick() {
 
 void StatePlay::on_draw(sf::RenderWindow &window) {
     if (edit && ImGui::CollapsingHeader("Gates")) {
-        ImGui::DragFloat("x", &gate.position.x);
-        ImGui::DragFloat("y", &gate.position.y);
-        ImGui::DragFloat("angle", &gate.angle);
+        ImGui::DragFloat("x", &gate->position.x);
+        ImGui::DragFloat("y", &gate->position.y);
+        ImGui::DragFloat("angle", &gate->angle);
     }
-    gate.draw(window);
+    gate->draw(window);
 }
 
 void StatePlay::on_draw_ui(sf::RenderWindow &window) {
