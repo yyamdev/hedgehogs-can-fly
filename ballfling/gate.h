@@ -15,7 +15,7 @@ public:
     void draw(sf::RenderWindow &window);
 
     bool intersects_circle(sf::Vector2f position, float radius);
-private:
+
     sf::Vector2f position;
     float angle;
     float size;

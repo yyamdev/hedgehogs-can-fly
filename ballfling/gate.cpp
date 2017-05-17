@@ -1,4 +1,5 @@
 #include "gate.h"
+#include <SFML/Graphics.hpp>
 
 Gate::Gate() {
     Gate(sf::Vector2f(), 0.f, 0.f, 0.f);
@@ -20,4 +21,17 @@ bool Gate::intersects_circle(sf::Vector2f position, float radius) {
 }
 
 void Gate::draw(sf::RenderWindow &window) {
+    sf::RectangleShape shape(sf::Vector2f(size, 4.f));
+    shape.setOrigin(shape.getSize() / 2.f);
+    shape.setPosition(position);
+    shape.setRotation(angle);
+    shape.setFillColor(sf::Color::Red);
+    window.draw(shape);
+
+    sf::RectangleShape dir(sf::Vector2f(2.f, 32.f));
+    dir.setOrigin(sf::Vector2f(1.f, 32.f));
+    dir.setPosition(position);
+    dir.setRotation(angle);
+    dir.setFillColor(sf::Color::Red);
+    window.draw(dir);
 }

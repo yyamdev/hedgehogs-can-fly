@@ -3,18 +3,26 @@
 #include "terrain_entity.h"
 #include "util.h"
 #include "ball_entity.h"
+#include "gate.h"
 #include "build_options.h"
 #include "gui.h"
 #include "options_state.h"
 #include "win_state.h"
 #include "pause_state.h"
 #include <string>
+#include "imgui.h"
+#include "debug_draw.h"
 
 std::string level_num_to_filename(int levelNum) {
     return std::string("data/lvl" + util::to_string(levelNum) + ".png");
 }
 
 StatePlay::StatePlay(World *world, int levelNum) : State(world) {
+    gate.position = sf::Vector2f();
+    gate.angle = 0.f;
+    gate.size = 128.f;
+    gate.strength = 8.f;
+
     this->levelNum = levelNum;
     filename = level_num_to_filename(levelNum);
 
@@ -55,6 +63,12 @@ void StatePlay::on_tick() {
 }
 
 void StatePlay::on_draw(sf::RenderWindow &window) {
+    if (edit && ImGui::CollapsingHeader("Gates")) {
+        ImGui::DragFloat("x", &gate.position.x);
+        ImGui::DragFloat("y", &gate.position.y);
+        ImGui::DragFloat("angle", &gate.angle);
+    }
+    gate.draw(window);
 }
 
 void StatePlay::on_draw_ui(sf::RenderWindow &window) {
