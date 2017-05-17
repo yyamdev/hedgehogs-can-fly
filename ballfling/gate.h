@@ -14,10 +14,12 @@ public:
     void tick(std::vector<Entity*> &entities);
     void draw(sf::RenderWindow &window);
 
-    bool intersects_circle(sf::Vector2f position, float radius);
+    bool intersects_circle(sf::Vector2f pos, float radius);
 
     sf::Vector2f position;
     float angle;
     float size;
     float strength;
+
+    sf::Vector2f circlePosDraw, toGateDraw, tangentDraw, int1, int2;
 };
