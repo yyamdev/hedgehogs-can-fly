@@ -174,7 +174,8 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         // test if hit lava
         if (terrain->get_pos(position) == T_KILL) {
             for (int p = 0; p < 25; ++p) {
-                particleSystem.add_particle(Particle(position, colour, sf::Vector2f(0.f, -3.f) + sf::Vector2f(util::rnd(-1.f, 1.f), util::rnd(-1.f, 1.f)), sf::Vector2f(2.f, 2.f)));
+                // TODO -> add particles back in
+                // particleSystem.add_particle(Particle(position, colour, sf::Vector2f(0.f, -3.f) + sf::Vector2f(util::rnd(-1.f, 1.f), util::rnd(-1.f, 1.f)), sf::Vector2f(2.f, 2.f)));
             }
             reset_to_rest();
             notify(EVENT_HIT_WATER, NULL);
@@ -227,7 +228,8 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             }
 
             for (int p = 0; p < util::rnd(0, (int)util::len(velocity)); ++p) {
-                particleSystem.add_particle(Particle(contact, particleColour, util::normalize(-velocity) * util::rnd(1.5f, 2.5f) + sf::Vector2f(util::rnd(-1.f, 1.f), util::rnd(-1.f, 1.f)), sf::Vector2f(2.f, 2.f)));
+                // TODO -> add particles back in
+                // particleSystem.add_particle(Particle(contact, particleColour, util::normalize(-velocity) * util::rnd(1.5f, 2.5f) + sf::Vector2f(util::rnd(-1.f, 1.f), util::rnd(-1.f, 1.f)), sf::Vector2f(2.f, 2.f)));
             }
             
             bounce(bounceFactor, terrain->get_normal(contact));

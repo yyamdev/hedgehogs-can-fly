@@ -66,6 +66,7 @@ void StatePlay::on_draw(sf::RenderWindow &window) {
         ImGui::DragFloat("x", &gate->position.x);
         ImGui::DragFloat("y", &gate->position.y);
         ImGui::DragFloat("angle", &gate->angle);
+        ImGui::DragFloat("strength", &gate->strength, .002f, 0.f, 16.f);
     }
     gate->draw(window);
 }

@@ -3,6 +3,7 @@
 #include "world.h"
 #include "util.h"
 #include "debug_draw.h"
+#include "particle.h"
 
 Gate::Gate() {
     Gate(sf::Vector2f(), 0.f, 0.f, 0.f);
@@ -46,7 +47,32 @@ sf::Vector2f Gate::get_boost_vector() {
     return strength * sf::Vector2f(cos(adjustedAngle * rtd), sin(adjustedAngle * rtd));
 }
 
+sf::Vector2f Gate::get_boost_vector_normalised() {
+    const float rtd = 3.14159f / 180.f;
+    float adjustedAngle = angle - 90.f;
+    return sf::Vector2f(cos(adjustedAngle * rtd), sin(adjustedAngle * rtd));
+}
+
 void Gate::draw(sf::RenderWindow &window) {
+    // Get vector down the line
+    const float rtd = 3.14159f / 180.f;
+    sf::Vector2f gateLine = sf::Vector2f(cos(angle * rtd), sin(angle * rtd));
+    int particlesPerFrame = 4;
+    while (particlesPerFrame > 0) {
+        --particlesPerFrame;
+        float step = util::rnd(0.f, size);
+        Particle p;
+        p.position = (position - gateLine * (size / 2.f)) + step * gateLine;
+        float dist = 1.f;
+        p.velocity = get_boost_vector() + sf::Vector2f(util::rnd(-dist, dist), util::rnd(-dist, dist));
+        p.size = sf::Vector2f(1.f, 1.f);
+        p.colour = sf::Color::Red;
+        p.gravity = sf::Vector2f();
+        p.lifetime = 4 * 60; // 2 seconds
+        particleSystem.add_particle(p);
+    }
+    
+
     sf::RectangleShape shape(sf::Vector2f(size, 4.f));
     shape.setOrigin(shape.getSize() / 2.f);
     shape.setPosition(position - world->camera);
@@ -54,10 +80,12 @@ void Gate::draw(sf::RenderWindow &window) {
     shape.setFillColor(sf::Color::Red);
     window.draw(shape);
 
+    /*
     sf::RectangleShape dir(sf::Vector2f(2.f, 32.f));
     dir.setOrigin(sf::Vector2f(1.f, 32.f));
     dir.setPosition(position - world->camera);
     dir.setRotation(angle);
     dir.setFillColor(sf::Color::Red);
     window.draw(dir);
+    */
 }

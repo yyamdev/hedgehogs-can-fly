@@ -17,6 +17,7 @@ public:
     bool intersects_circle(sf::Vector2f pos, float radius);
 
     sf::Vector2f get_boost_vector();
+    sf::Vector2f get_boost_vector_normalised();
 
     sf::Vector2f position;
     float angle;
