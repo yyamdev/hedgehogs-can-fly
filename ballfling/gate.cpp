@@ -54,6 +54,7 @@ sf::Vector2f Gate::get_boost_vector_normalised() {
 }
 
 void Gate::draw(sf::RenderWindow &window) {
+    return;
     // Get vector down the line
     const float rtd = 3.14159f / 180.f;
     sf::Vector2f gateLine = sf::Vector2f(cos(angle * rtd), sin(angle * rtd));
