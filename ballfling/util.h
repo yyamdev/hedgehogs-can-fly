@@ -11,20 +11,16 @@
 namespace util {
     // inclusive
     inline int rnd(int min, int max) {
-        if (min > max)
-            return max;
-        std::random_device r;
-        std::default_random_engine e(r());
+        static std::random_device r;
+        static std::default_random_engine e(r());
         std::uniform_int_distribution<int> uniform_dist(min, max);
         return uniform_dist(e);
     }
 
     // inclusive
     inline float rnd(float min, float max) {
-        if (min > max)
-            return max;
-        std::random_device r;
-        std::mt19937 e(r());
+        static std::random_device r;
+        static std::mt19937 e(r());
         std::uniform_real_distribution<float> uniform_dist(min, max);
         return uniform_dist(e);
     }

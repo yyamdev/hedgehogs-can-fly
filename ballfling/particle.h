@@ -1,31 +1,28 @@
 #pragma once
 
-// particle system.
+// Fast particle system.
 
 #include <SFML/Graphics.hpp>
 
 struct Particle {
-    sf::Vector2f position;
-    sf::Vector2f velocity;
-    sf::Vector2f size;
-    sf::Color colour;
-    sf::Vector2f gravity;
+    float position[2];
+    float velocityVec[2];
+    float accelerationVec[2];
     int lifetime;
     bool active;
+    union {
+        sf::Uint8 colour[4];
+        sf::Uint32 colourInt;
+    };
 };
 
-#define PARTICLE_NUM 1024
+// Uses 9 megs of memory lmao but is fast as fuck.
+#define PARTICLE_NUM 262144
+extern Particle particles[PARTICLE_NUM];
+extern sf::Vertex particleVertex[PARTICLE_NUM];
+extern int particleIndex;
 
-class ParticleSystem {
-public:
-    ParticleSystem();
-    void tick(sf::Vector2f camera);
-    void draw(sf::RenderWindow &window, sf::Vector2f camera);
-    void add_particle(Particle part);
-private:
-    int index; // index of next particle to be created
-    Particle parts[PARTICLE_NUM];
-    sf::Vector2f gravity;
-    sf::RectangleShape shape;
-};
-extern ParticleSystem particleSystem;
+void particles_tick(sf::Vector2f camera);
+void particles_draw(sf::RenderWindow &window, sf::Vector2f camera);
+void add_particle(Particle *part);
+void add_particle(sf::Vector2f position, sf::Vector2f velocity, sf::Vector2f acceleration, sf::Color colour, int lifetime);
