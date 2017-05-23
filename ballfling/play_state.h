@@ -16,6 +16,9 @@ std::string level_num_to_filename(int levelNum);
 
 class EntityTerrain;
 
+extern sf::Vector2f playerPosition;
+extern sf::Vector2f playerVelocity;
+
 class StatePlay : public State, public Observer, public Subject {
 public:
     StatePlay(World *world, int levelNum);

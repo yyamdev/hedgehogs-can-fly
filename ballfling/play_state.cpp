@@ -61,7 +61,8 @@ void StatePlay::on_tick() {
         if (!world->is_paused()) world->toggle_pause(); // pause world
         State::push_state(new StateWin(world, levelNum));
     }
-    particles_tick(world->camera, player->position, player->velocity);
+    playerPosition = player->position;
+    playerVelocity = player->velocity;
 }
 
 void StatePlay::on_draw(sf::RenderWindow &window) {
@@ -92,6 +93,13 @@ void StatePlay::on_draw(sf::RenderWindow &window) {
                 ImGui::Separator();
             }
             ++count;
+        }
+        for (auto it = gates.begin(); it != gates.end(); ) {
+            if ((*it)->remove) {
+                gates.erase(it);
+                it = gates.begin();
+            }
+            else ++it;
         }
     }
 }

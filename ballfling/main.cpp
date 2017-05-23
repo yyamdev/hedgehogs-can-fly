@@ -34,6 +34,9 @@ void print_debug_controls();
 #define CSS_BUF_SIZE 8192
 char cssBuf[CSS_BUF_SIZE];
 
+sf::Vector2f playerPosition;
+sf::Vector2f playerVelocity;
+
 int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), TITLE, sf::Style::Close);
     window.setFramerateLimit(60);
@@ -91,7 +94,7 @@ int main() {
         gui.Update(1.f / 60.f);
         world.tick();
         State::tick_current();
-        
+        particles_tick(world.camera, playerPosition, playerVelocity);
         
         window.clear(State::get_current()->get_clear_colour());
         ImGui::SFML::Update(window, imguiDelta.restart());
