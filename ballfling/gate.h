@@ -5,10 +5,10 @@
 #include "entity.h"
 #include <SFML/Graphics.hpp>
 
-class Gate : public Entity {
+class EntityGate : public Entity {
 public:
-    Gate();
-    Gate(sf::Vector2f position, float angle, float size, float strength, sf::Color colour);
+    EntityGate();
+    EntityGate(sf::Vector2f position, float angle, float size, float strength, sf::Color colour);
 
     void event(sf::Event &e);
     void tick(std::vector<Entity*> &entities);

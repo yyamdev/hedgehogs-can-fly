@@ -13,6 +13,7 @@
 #include "imgui.h"
 #include "debug_draw.h"
 #include "particle.h"
+#include <fstream>
 
 std::string level_num_to_filename(int levelNum) {
     return std::string("data/lvl" + util::to_string(levelNum) + ".png");
@@ -41,9 +42,9 @@ StatePlay::StatePlay(World *world, int levelNum) : State(world) {
     sf::Vector2f screenSize((float)WINDOW_WIDTH, (float)WINDOW_HEIGHT);
     world->camera = (player->position - screenSize / 2.f);
 
-    // add gate
-    gate = new Gate(sf::Vector2f(650.f, 750.f), 25.f, 64.f, 2.f, levelColour);
-    world->add_entity(gate);
+    // add gates
+    gates = add_gates_from_file("data/lvl" + util::to_string(levelNum) + "gates.txt");
+    //gate = new EntityGate(sf::Vector2f(650.f, 750.f), 25.f, 64.f, 2.f, levelColour);
 
     completed = false;
 }
@@ -65,10 +66,32 @@ void StatePlay::on_tick() {
 
 void StatePlay::on_draw(sf::RenderWindow &window) {
     if (edit && ImGui::CollapsingHeader("Gates")) {
-        ImGui::DragFloat("x", &gate->position.x);
-        ImGui::DragFloat("y", &gate->position.y);
-        ImGui::DragFloat("angle", &gate->angle);
-        ImGui::DragFloat("strength", &gate->strength, .002f, 0.f, 16.f);
+        if (ImGui::Button("Write")) {
+            std::ofstream file("data/lvl" + util::to_string(levelNum) + "gates.txt");
+            file << serialise_gates_to_string(gates);
+            file.close();
+        }
+        if (ImGui::Button("Add")) {
+            EntityGate *gate = new EntityGate(player->position - sf::Vector2f(0.f, 64.f), 0.f, 64.f, 2.f, levelColour);
+            gates.push_back(gate);
+            world->add_entity(gate);
+        }
+        int count = 0;
+        for (auto &gate : gates) {
+            if (ImGui::TreeNode(util::to_string(count).c_str())) {
+                ImGui::DragFloat("x", &gate->position.x);
+                ImGui::DragFloat("y", &gate->position.y);
+                ImGui::DragFloat("angle", &gate->angle);
+                ImGui::DragFloat("size", &gate->size);
+                ImGui::DragFloat("strength", &gate->strength, .002f, 0.f, 16.f);
+                if (ImGui::Button("Remove")) {
+                    gate->remove = true;
+                }
+                ImGui::Separator();
+                ImGui::TreePop();
+            }
+            ++count;
+        }
     }
 }
 
@@ -88,4 +111,33 @@ void StatePlay::on_notify(Event event, void *data) {
     if (event == EVENT_BALL_HIT_FINISH) {
         completed = true;
     }
+}
+
+std::vector<EntityGate*> StatePlay::add_gates_from_file(std::string filename) {
+    std::vector<EntityGate*> vec;
+    std::ifstream file(filename);
+    while (!file.eof()) {
+        // <x> <y> <angle> <size> <str>
+        sf::Vector2f position;
+        float strength, size, angle;
+        file >> position.x >> position.y;
+        file >> angle >> size >> strength;
+        EntityGate *gate = new EntityGate(position, angle, size, strength, levelColour);
+        vec.push_back(gate);
+        world->add_entity(gate);
+    }
+    file.close();
+    return vec;
+}
+
+std::string StatePlay::serialise_gates_to_string(std::vector<EntityGate*> gates) {
+    std::string s;
+    bool first = true;
+    for (auto &gate : gates) {
+        if (!first) s = s + " ";
+        s = s + util::to_string(gate->position.x) + " " + util::to_string(gate->position.y) + " ";
+        s = s + util::to_string(gate->angle) + " " + util::to_string(gate->size) + " " + util::to_string(gate->strength);
+        first = false;
+    }
+    return s;
 }

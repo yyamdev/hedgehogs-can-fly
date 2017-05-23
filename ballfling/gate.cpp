@@ -5,11 +5,11 @@
 #include "debug_draw.h"
 #include "particle.h"
 
-Gate::Gate() {
-    Gate(sf::Vector2f(), 0.f, 0.f, 0.f, sf::Color::White);
+EntityGate::EntityGate() {
+    EntityGate(sf::Vector2f(), 0.f, 0.f, 0.f, sf::Color::White);
 }
 
-Gate::Gate(sf::Vector2f position, float angle, float size, float strength, sf::Color colour) :
+EntityGate::EntityGate(sf::Vector2f position, float angle, float size, float strength, sf::Color colour) :
     position(position),
     angle(angle),
     size(size),
@@ -19,10 +19,10 @@ Gate::Gate(sf::Vector2f position, float angle, float size, float strength, sf::C
     tag = "gate";
 }
 
-void Gate::event(sf::Event &e) {}
-void Gate::tick(std::vector<Entity*> &entities) {}
+void EntityGate::event(sf::Event &e) {}
+void EntityGate::tick(std::vector<Entity*> &entities) {}
 
-bool Gate::intersects_circle(sf::Vector2f pos, float radius) {
+bool EntityGate::intersects_circle(sf::Vector2f pos, float radius) {
     // determine if circle intersects line
     const float rtd = 3.14159f / 180.f;
     float adjustedAngle = angle - 90.f;
@@ -42,19 +42,19 @@ bool Gate::intersects_circle(sf::Vector2f pos, float radius) {
     return false;
 }
 
-sf::Vector2f Gate::get_boost_vector() {
+sf::Vector2f EntityGate::get_boost_vector() {
     const float rtd = 3.14159f / 180.f;
     float adjustedAngle = angle - 90.f;
     return strength * sf::Vector2f(cos(adjustedAngle * rtd), sin(adjustedAngle * rtd));
 }
 
-sf::Vector2f Gate::get_boost_vector_normalised() {
+sf::Vector2f EntityGate::get_boost_vector_normalised() {
     const float rtd = 3.14159f / 180.f;
     float adjustedAngle = angle - 90.f;
     return sf::Vector2f(cos(adjustedAngle * rtd), sin(adjustedAngle * rtd));
 }
 
-void Gate::draw(sf::RenderWindow &window) {
+void EntityGate::draw(sf::RenderWindow &window) {
     // Get vector down the line
     const float rtd = 3.14159f / 180.f;
     sf::Vector2f gateLine = sf::Vector2f(cos(angle * rtd), sin(angle * rtd));

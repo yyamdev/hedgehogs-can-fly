@@ -29,6 +29,9 @@ public:
 
     void on_notify(Event event, void *data);
 
+    std::vector<EntityGate*> add_gates_from_file(std::string filename);
+    std::string serialise_gates_to_string(std::vector<EntityGate*> gates);
+
 private:
     std::string filename;
     sf::Color levelColour; // colour of ball and wall edges.
@@ -41,6 +44,5 @@ private:
 
     bool completed;
     int levelNum;
-
-    Gate *gate;
+    std::vector<EntityGate*> gates;
 };

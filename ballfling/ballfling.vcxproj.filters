@@ -235,8 +235,5 @@
     <None Include="data\terrain.frag">
       <Filter>Source Files\game\world\terrain</Filter>
     </None>
-    <None Include="data\blur.frag">
-      <Filter>Source Files\game\state\play</Filter>
-    </None>
   </ItemGroup>
 </Project>
