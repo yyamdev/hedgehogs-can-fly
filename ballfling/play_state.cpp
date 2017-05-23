@@ -116,6 +116,7 @@ void StatePlay::on_notify(Event event, void *data) {
 std::vector<EntityGate*> StatePlay::add_gates_from_file(std::string filename) {
     std::vector<EntityGate*> vec;
     std::ifstream file(filename);
+    if (!file.is_open()) return vec;
     while (!file.eof()) {
         // <x> <y> <angle> <size> <str>
         sf::Vector2f position;
