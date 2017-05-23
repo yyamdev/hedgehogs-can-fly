@@ -58,21 +58,22 @@ void Gate::draw(sf::RenderWindow &window) {
     // Get vector down the line
     const float rtd = 3.14159f / 180.f;
     sf::Vector2f gateLine = sf::Vector2f(cos(angle * rtd), sin(angle * rtd));
-    int particlesPerFrame = 16;
+    int particlesPerFrame = 8;
     while (particlesPerFrame > 0) {
         --particlesPerFrame;
         float step = util::rnd(0.f, size);
         float dist = 1.f;
+        float accDist = .4f;
         add_particle(
             (position - gateLine * size / 2.f) + step * gateLine,
             get_boost_vector_normalised() * 4.f + sf::Vector2f(util::rnd(-dist, dist), util::rnd(-dist, dist)),
-            sf::Vector2f(0.f, 0.f),
-            sf::Color(255, util::rnd(10,100), 0, util::rnd(10,255)),
-            32 );
+            sf::Vector2f(util::rnd(-accDist, accDist), util::rnd(-accDist, accDist)),
+            sf::Color::White,
+            16 );
     }
     
-
-    sf::RectangleShape shape(sf::Vector2f(size, 4.f));
+    sf::Color col = sf::Color(colour.r, colour.g, colour.b, 64);
+    sf::RectangleShape shape(sf::Vector2f(size, 2.f));
     shape.setOrigin(shape.getSize() / 2.f);
     shape.setPosition(position - world->camera);
     shape.setRotation(angle);
