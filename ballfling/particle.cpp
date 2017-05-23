@@ -3,12 +3,13 @@
 #include "debug_draw.h"
 #include "imgui.h"
 #include <algorithm>
+#include "util.h"
 
 static Particle particles[PARTICLE_NUM];
 static sf::Vertex particleVertex[PARTICLE_NUM];
 static int particleIndex = 0;
 
-void particles_tick(sf::Vector2f camera) {
+void particles_tick(sf::Vector2f camera, sf::Vector2f actorPosition, sf::Vector2f actorVelocity) {
     for (int i = 0; i < PARTICLE_NUM; ++i) {
         if (!particles[i].active) continue;
 
@@ -33,6 +34,15 @@ void particles_tick(sf::Vector2f camera) {
             particles[i].position[1] > camera.y + WINDOW_HEIGHT) {
             particles[i].active = false;
         }
+
+        // React to actors.
+        // This seems quite slow
+        float actorToParticleLen  = util::len_squared(sf::Vector2f(particles[i].position[0], particles[i].position[1]) - actorPosition);
+        float cutoff = 1024.f;
+        float strength = fmax(0.f, cutoff - actorToParticleLen) / cutoff;
+        strength *= .5f;
+        particles[i].velocityVec[0] += strength * actorVelocity.x;
+        particles[i].velocityVec[1] += strength * actorVelocity.y;
     }
 }
 

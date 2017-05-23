@@ -186,6 +186,7 @@
     <ClInclude Include="world.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="data\blur.frag" />
     <None Include="data\terrain.frag">
       <FileType>Text</FileType>
     </None>

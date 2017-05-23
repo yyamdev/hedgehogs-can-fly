@@ -12,6 +12,7 @@
 #include <string>
 #include "imgui.h"
 #include "debug_draw.h"
+#include "particle.h"
 
 std::string level_num_to_filename(int levelNum) {
     return std::string("data/lvl" + util::to_string(levelNum) + ".png");
@@ -59,6 +60,7 @@ void StatePlay::on_tick() {
         if (!world->is_paused()) world->toggle_pause(); // pause world
         State::push_state(new StateWin(world, levelNum));
     }
+    particles_tick(world->camera, player->position, player->velocity);
 }
 
 void StatePlay::on_draw(sf::RenderWindow &window) {

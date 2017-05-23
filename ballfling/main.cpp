@@ -91,7 +91,7 @@ int main() {
         gui.Update(1.f / 60.f);
         world.tick();
         State::tick_current();
-        particles_tick(world.camera);
+        
         
         window.clear(State::get_current()->get_clear_colour());
         ImGui::SFML::Update(window, imguiDelta.restart());
