@@ -4,6 +4,7 @@
 #include "util.h"
 #include "debug_draw.h"
 #include "particle.h"
+#include <iostream>
 
 EntityGate::EntityGate() {
     EntityGate(sf::Vector2f(), 0.f, 0.f, 0.f, sf::Color::White);
@@ -14,12 +15,31 @@ EntityGate::EntityGate(sf::Vector2f position, float angle, float size, float str
     angle(angle),
     size(size),
     strength(strength),
-    colour(colour)
+    colour(colour),
+    selected(false)
 {
     tag = "gate";
 }
 
-void EntityGate::event(sf::Event &e) {}
+void EntityGate::event(sf::Event &e) {
+    if (edit && e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Left) {
+        float rad = size / 2.f;
+        float mouseX = (float)e.mouseButton.x + world->camera.x;
+        float mouseY = (float)e.mouseButton.y + world->camera.y;
+        if (mouseX > position.x - rad &&mouseX < position.x + rad &&
+            mouseY > position.y - rad && mouseY < position.y + rad) {
+            selected = !selected;
+        }
+    }
+
+    if (edit && e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::A) {
+        selected = true;
+    }
+
+    if (edit && e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::D) {
+        selected = false;
+    }
+}
 void EntityGate::tick(std::vector<Entity*> &entities) {}
 
 bool EntityGate::intersects_circle(sf::Vector2f pos, float radius) {
@@ -72,11 +92,12 @@ void EntityGate::draw(sf::RenderWindow &window) {
             16 );
     }
     
-    sf::Color col = sf::Color(colour.r, colour.g, colour.b, 64);
+    sf::Color col = colour;
+    if (selected) col = sf::Color::Red;
     sf::RectangleShape shape(sf::Vector2f(size, 2.f));
     shape.setOrigin(shape.getSize() / 2.f);
     shape.setPosition(position - world->camera);
     shape.setRotation(angle);
-    shape.setFillColor(colour);
+    shape.setFillColor(col);
     window.draw(shape);
 }

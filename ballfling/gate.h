@@ -24,4 +24,5 @@ public:
     float size;
     float strength;
     sf::Color colour;
+    bool selected;
 };

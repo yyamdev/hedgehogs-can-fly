@@ -76,9 +76,11 @@ void StatePlay::on_draw(sf::RenderWindow &window) {
             gates.push_back(gate);
             world->add_entity(gate);
         }
+        ImGui::Text("A to select all");
+        ImGui::Text("D to deselect all");
         int count = 0;
         for (auto &gate : gates) {
-            if (ImGui::TreeNode(util::to_string(count).c_str())) {
+            if (gate->selected) {
                 ImGui::DragFloat("x", &gate->position.x);
                 ImGui::DragFloat("y", &gate->position.y);
                 ImGui::DragFloat("angle", &gate->angle);
@@ -88,7 +90,6 @@ void StatePlay::on_draw(sf::RenderWindow &window) {
                     gate->remove = true;
                 }
                 ImGui::Separator();
-                ImGui::TreePop();
             }
             ++count;
         }
