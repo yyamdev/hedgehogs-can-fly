@@ -14,10 +14,10 @@ struct Particle {
         sf::Uint8 colour[4];
         sf::Uint32 colourInt;
     };
+    int _startLifetime;
 };
 
-// Uses 9 megs of memory lmao but is fast as fuck.
-#define PARTICLE_NUM 262144
+#define PARTICLE_NUM 4096
 extern Particle particles[PARTICLE_NUM];
 extern sf::Vertex particleVertex[PARTICLE_NUM];
 extern int particleIndex;

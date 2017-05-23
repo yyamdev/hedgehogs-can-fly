@@ -8,7 +8,7 @@
 class Gate : public Entity {
 public:
     Gate();
-    Gate(sf::Vector2f position, float angle, float size, float strength);
+    Gate(sf::Vector2f position, float angle, float size, float strength, sf::Color colour);
 
     void event(sf::Event &e);
     void tick(std::vector<Entity*> &entities);
@@ -23,4 +23,5 @@ public:
     float angle;
     float size;
     float strength;
+    sf::Color colour;
 };

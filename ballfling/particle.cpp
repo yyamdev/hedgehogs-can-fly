@@ -17,6 +17,9 @@ void particles_tick(sf::Vector2f camera) {
         particles[i].position[1] += particles[i].velocityVec[1];
         particles[i].velocityVec[0] += particles[i].accelerationVec[0];
         particles[i].velocityVec[1] += particles[i].accelerationVec[1];
+        
+        // Adjust alpha component of colour with lifetime.
+        particles[i].colour[3] = (sf::Uint8)(255 * particles[i].lifetime / particles[i]._startLifetime);
 
         // Kill due to lifetime.
         if (particles[i].lifetime-- < 0) {
@@ -58,6 +61,7 @@ void particles_draw(sf::RenderWindow &window, sf::Vector2f camera) {
 void add_particle(Particle *part) {
     particles[particleIndex] = *part;
     particles[particleIndex].active = true;
+    particles[particleIndex]._startLifetime = particles[particleIndex].lifetime;
     particleIndex = (particleIndex + 1) % PARTICLE_NUM;
 }
 
@@ -70,53 +74,7 @@ void add_particle(sf::Vector2f position, sf::Vector2f velocity, sf::Vector2f acc
     particles[particleIndex].accelerationVec[1] = acceleration.y;
     particles[particleIndex].colourInt = colour.toInteger();
     particles[particleIndex].lifetime = lifetime;
+    particles[particleIndex]._startLifetime = lifetime;
     particles[particleIndex].active = true;
     particleIndex = (particleIndex + 1) % PARTICLE_NUM;
 }
-
-/*
-
-ParticleSystem particleSystem;
-
-ParticleSystem::ParticleSystem() {
-    index = 0;
-    gravity = sf::Vector2f(0.f, GRAVITY);
-}
-
-void ParticleSystem::draw(sf::RenderWindow &window, sf::Vector2f camera) {
-    int activeCount = 0;
-    for (unsigned int i = 0; i < PARTICLE_NUM; ++i) {
-        Particle &p = parts[i];
-        if (!p.active) continue;
-        ++activeCount;
-        shape.setOrigin(shape.getSize() / 2.f);
-        shape.setPosition(p.position - camera);
-        shape.setFillColor(p.colour);
-        window.draw(shape);
-    }
-    
-    if (edit && ImGui::CollapsingHeader("Particles")) {
-        ImGui::Text("particles on screen: %i", activeCount);
-    }
-}
-
-void ParticleSystem::add_particle(Particle part) {
-    parts[index] = part;
-    parts[index].active = true;
-    index = (index + 1) % PARTICLE_NUM;
-}
-
-void ParticleSystem::tick(sf::Vector2f camera) {
-    for (unsigned int i = 0; i < PARTICLE_NUM; ++i) {
-        if (!parts[i].active) continue;
-        parts[i].position += parts[i].velocity;
-        parts[i].velocity += parts[i].gravity;
-        if (--parts[i].lifetime < 0)
-            parts[i].active = false;
-        if (parts[i].lifetime < 255)
-            parts[i].colour.a = parts[i].lifetime;
-        if (parts[i].position.x < camera.x || parts[i].position.x > camera.x + WINDOW_WIDTH || parts[i].position.y < camera.y || parts[i].position.y > camera.y + WINDOW_HEIGHT)
-            parts[i].active = false;
-    }
-}
-*/

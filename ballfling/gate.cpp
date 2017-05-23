@@ -6,14 +6,15 @@
 #include "particle.h"
 
 Gate::Gate() {
-    Gate(sf::Vector2f(), 0.f, 0.f, 0.f);
+    Gate(sf::Vector2f(), 0.f, 0.f, 0.f, sf::Color::White);
 }
 
-Gate::Gate(sf::Vector2f position, float angle, float size, float strength) :
+Gate::Gate(sf::Vector2f position, float angle, float size, float strength, sf::Color colour) :
     position(position),
     angle(angle),
     size(size),
-    strength(strength)
+    strength(strength),
+    colour(colour)
 {
     tag = "gate";
 }
@@ -57,17 +58,17 @@ void Gate::draw(sf::RenderWindow &window) {
     // Get vector down the line
     const float rtd = 3.14159f / 180.f;
     sf::Vector2f gateLine = sf::Vector2f(cos(angle * rtd), sin(angle * rtd));
-    int particlesPerFrame = 512;
+    int particlesPerFrame = 16;
     while (particlesPerFrame > 0) {
         --particlesPerFrame;
         float step = util::rnd(0.f, size);
         float dist = 1.f;
         add_particle(
-            (position - gateLine * size / 2.f) + step * gateLine/*(position - gateLine * (size / 2.f)) + step * gateLine*/,
-            get_boost_vector() + sf::Vector2f(util::rnd(-dist, dist), util::rnd(-dist, dist)),
+            (position - gateLine * size / 2.f) + step * gateLine,
+            get_boost_vector_normalised() * 4.f + sf::Vector2f(util::rnd(-dist, dist), util::rnd(-dist, dist)),
             sf::Vector2f(0.f, 0.f),
             sf::Color(255, util::rnd(10,100), 0, util::rnd(10,255)),
-            10 * 60 /* 10 seconds */ );
+            32 );
     }
     
 
@@ -75,6 +76,6 @@ void Gate::draw(sf::RenderWindow &window) {
     shape.setOrigin(shape.getSize() / 2.f);
     shape.setPosition(position - world->camera);
     shape.setRotation(angle);
-    shape.setFillColor(sf::Color::Red);
+    shape.setFillColor(colour);
     window.draw(shape);
 }
