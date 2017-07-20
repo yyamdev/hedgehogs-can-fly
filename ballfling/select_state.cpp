@@ -36,7 +36,7 @@ void StateSelect::on_gain_focus() {
 
     float w = 64.f, h = 64.f; // dimensions of buttons
     float g = 32.f; // xy gap between buttons
-    int rows = 3, cols = 5;
+    int rows = 3, cols = 4;
     float sub = cols / 2.f - 0.5f;
     float yOffset = 200.f;
     float xOffset = WINDOW_WIDTH / 2 - sub * (w + g);
