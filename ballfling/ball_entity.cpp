@@ -41,7 +41,7 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour) {
     canFling = false;
     canNudge = false;
     nudgeStr = 0.04f;
-    maxFlingVelocity = 1.4f;
+    maxFlingVelocity = 1.2f;
 }
 
 void EntityBall::event(sf::Event &e) {
@@ -196,7 +196,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             sf::Color particleColour = colour;
             // TODO -> Update particle colours.
             if (t == T_BOUNCY) {
-                bounceFactor = 1.2f;
+                bounceFactor = 1.6f;
                 particleColour = sf::Color::Red;
             }
             else if (t == T_SLOW) {
