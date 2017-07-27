@@ -69,11 +69,14 @@ void EntityBall::event(sf::Event &e) {
             mouse.y = (float)e.mouseButton.y;
             sf::Vector2f dir = mouse - dragStart;
             if (util::len(dir) != 0.f) {
-                float speed = util::len(mouse - dragStart) / 15.f;
-                if (lastTerrain == T_SLOW)
+                float speed = 0.f;
+                if (lastTerrain == T_SLOW) {
+                    speed = util::len(mouse - dragStart) / 25.f;
                     speed = util::clamp(speed, 0.f, BALL_MAX_LAUNCH_SPEED_NERF - 2.f);
-                else
+                } else {
+                    speed = util::len(mouse - dragStart) / 15.f;
                     speed = util::clamp(speed, 0.f, BALL_MAX_LAUNCH_SPEED - 2.f);
+                }
                 sf::Vector2f start = position;
                 dir = dir / util::len(dir) * speed;
 
