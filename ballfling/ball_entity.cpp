@@ -16,6 +16,7 @@ bool EntityBall::textureLoaded = false;
 
 const float BALL_TERM_VEL = 9.f;
 const float BALL_MAX_LAUNCH_SPEED = 14.f;
+const float BALL_MAX_LAUNCH_SPEED_NERF = 8.f;
 const float BALL_MAX_SPEED = 14.f;
 
 EntityBall::EntityBall() {
@@ -69,7 +70,10 @@ void EntityBall::event(sf::Event &e) {
             sf::Vector2f dir = mouse - dragStart;
             if (util::len(dir) != 0.f) {
                 float speed = util::len(mouse - dragStart) / 15.f;
-                speed = util::clamp(speed, 0.f, BALL_MAX_LAUNCH_SPEED - 2.f);
+                if (lastTerrain == T_SLOW)
+                    speed = util::clamp(speed, 0.f, BALL_MAX_LAUNCH_SPEED_NERF - 2.f);
+                else
+                    speed = util::clamp(speed, 0.f, BALL_MAX_LAUNCH_SPEED - 2.f);
                 sf::Vector2f start = position;
                 dir = dir / util::len(dir) * speed;
 
@@ -198,16 +202,19 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             if (t == T_BOUNCY) {
                 bounceFactor = 1.6f;
                 particleColour = sf::Color::Red;
+                lastTerrain = T_BOUNCY;
             }
             else if (t == T_SLOW) {
                 particleColour = sf::Color::Yellow;
                 bounceFactor = 0.3f;
+                lastTerrain = T_SLOW;
             }
             else if (t == T_STICKY) {
                 rest = true;
                 record_new_rest_pos();
                 bounceFactor = 0.0f;
                 particleColour = sf::Color(255, 0, 255);
+                lastTerrain = T_STICKY;
             }
             else if (t == T_THIN) {
                 float impactSpeed = util::len(velocity);
@@ -225,6 +232,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             }
             else {
                 notify(EVENT_BALL_HIT_SOLID, NULL);
+                lastTerrain = T_SOLID;
             }
 
             for (int p = 0; p < util::rnd(0, (int)util::len(velocity)); ++p) {

@@ -5,11 +5,13 @@
 #include "entity.h"
 #include "subject.h"
 #include "observer.h"
+#include "terrain_entity.h"
 
 class EntityTerrain;
 
 extern const float BALL_TERM_VEL;
 extern const float BALL_MAX_LAUNCH_SPEED;
+extern const float BALL_MAX_LAUNCH_SPEED_NERF;
 extern const float BALL_MAX_SPEED;
 
 
@@ -35,6 +37,8 @@ private:
     sf::Vector2f mouse;
 
     EntityTerrain *terrain;
+
+    TerrainType lastTerrain;
 
     bool reactToInput;
 
