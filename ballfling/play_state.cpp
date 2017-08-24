@@ -49,6 +49,10 @@ StatePlay::StatePlay(World *world, int levelNum) : State(world) {
     completed = false;
 }
 
+sf::Color StatePlay::get_clear_colour() {
+    return sf::Color(34, 32, 52);
+}
+
 void StatePlay::on_event(sf::Event &event) {
     if (event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::P)) {
         State::push_state(new StatePause(world));

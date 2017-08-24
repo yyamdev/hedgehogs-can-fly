@@ -22,6 +22,7 @@ extern sf::Vector2f playerVelocity;
 class StatePlay : public State, public Observer, public Subject {
 public:
     StatePlay(World *world, int levelNum);
+    sf::Color get_clear_colour();
 
     void on_event(sf::Event &event);
     void on_tick();
