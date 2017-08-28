@@ -154,6 +154,7 @@
     <ClCompile Include="state.cpp" />
     <ClCompile Include="subject.cpp" />
     <ClCompile Include="terrain_entity.cpp" />
+    <ClCompile Include="timer_entity.cpp" />
     <ClCompile Include="win_state.cpp" />
     <ClCompile Include="world.cpp" />
   </ItemGroup>
@@ -181,6 +182,7 @@
     <ClInclude Include="state.h" />
     <ClInclude Include="subject.h" />
     <ClInclude Include="terrain_entity.h" />
+    <ClInclude Include="timer_entity.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="win_state.h" />
     <ClInclude Include="world.h" />

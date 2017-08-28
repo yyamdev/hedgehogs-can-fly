@@ -88,6 +88,7 @@ void EntityBall::event(sf::Event &e) {
                     }
                 }
             }
+            notify(EVENT_BALL_FLING, NULL);
         }
     }
 }

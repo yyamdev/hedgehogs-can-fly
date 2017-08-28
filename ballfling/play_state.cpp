@@ -13,7 +13,9 @@
 #include "imgui.h"
 #include "debug_draw.h"
 #include "particle.h"
+#include "shared_res.h"
 #include <fstream>
+#include "timer_entity.h"
 
 std::string level_num_to_filename(int levelNum) {
     return std::string("data/lvl" + util::to_string(levelNum) + ".png");
@@ -36,6 +38,8 @@ StatePlay::StatePlay(World *world, int levelNum) : State(world) {
     }
     world->add_entity(terrain);
 
+    world->add_entity(new EntityTimer());
+
     // add ball & centre camera
     player = new EntityBall(terrain->playerSpawn, sf::Vector2f(), levelColour);
     world->add_entity(player);
@@ -55,6 +59,7 @@ sf::Color StatePlay::get_clear_colour() {
 
 void StatePlay::on_event(sf::Event &event) {
     if (event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::P)) {
+        notify(EVENT_PLAY_PAUSE, NULL);
         State::push_state(new StatePause(world));
     }
 }
@@ -63,6 +68,7 @@ void StatePlay::on_tick() {
     if (terrain->error) State::pop_state(); 
     if (completed) {
         if (!world->is_paused()) world->toggle_pause(); // pause world
+        notify(EVENT_PLAY_PAUSE, NULL);
         State::push_state(new StateWin(world, levelNum));
     }
     playerPosition = player->position;
@@ -115,6 +121,7 @@ void StatePlay::on_draw_ui(sf::RenderWindow &window) {
 void StatePlay::on_gain_focus() {
     gui.RemoveAll();
     if (world->is_paused()) world->toggle_pause();
+    notify(EVENT_PLAY_RESUME, NULL);
 }
 
 void StatePlay::on_lose_focus() {
