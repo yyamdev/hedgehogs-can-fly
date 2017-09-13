@@ -35,7 +35,7 @@ void StateMenu::on_gain_focus() {
     gui.RemoveAll();
 
     // create ui
-    auto guiLabelTitle = sfg::Label::Create(TITLE);
+    auto guiLabelTitle = sfg::Label::Create("Fling");
     guiLabelTitle->SetId("lblMenuTitle");
     guiLabelTitle->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiLabelTitle->GetRequisition().x / 2.f, 50.f));
     gui.Add(guiLabelTitle);
