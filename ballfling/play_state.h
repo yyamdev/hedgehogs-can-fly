@@ -41,6 +41,8 @@ private:
     sf::Color levelColour; // colour of ball and wall edges.
     sf::Color backgroundColor; // clear colour
 
+    bool restartOnResume;
+
     EntityBall *player;
 
     Hud hud; // hud renderer

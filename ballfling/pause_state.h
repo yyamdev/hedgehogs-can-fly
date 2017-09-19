@@ -11,7 +11,7 @@ class World;
 
 class StatePause : public State, public Observer, public Subject {
 public:
-    StatePause(World *world);
+    StatePause(World *world, bool *restartFlag);
 
     void on_event(sf::Event &event);
     void on_tick();
@@ -22,4 +22,5 @@ public:
 
     void on_notify(Event event, void *data);
 private:
+    bool *restartFlag;
 };

@@ -25,6 +25,8 @@ StatePlay::StatePlay(World *world, int levelNum) : State(world) {
     this->levelNum = levelNum;
     filename = level_num_to_filename(levelNum);
 
+    restartOnResume = false;
+
     if (levelNum <= 4) {
         levelColour = sf::Color(99, 155, 255);
         backgroundColor = sf::Color(34, 32, 52);
@@ -70,7 +72,7 @@ sf::Color StatePlay::get_clear_colour() {
 void StatePlay::on_event(sf::Event &event) {
     if (event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::P)) {
         notify(EVENT_PLAY_PAUSE, NULL);
-        State::push_state(new StatePause(world));
+        State::push_state(new StatePause(world, &restartOnResume));
     }
 }
 
@@ -131,6 +133,8 @@ void StatePlay::on_draw_ui(sf::RenderWindow &window) {
 void StatePlay::on_gain_focus() {
     gui.RemoveAll();
     if (world->is_paused()) world->toggle_pause();
+    if (restartOnResume)
+        State::change_state(new StatePlay(world, levelNum));
     notify(EVENT_PLAY_RESUME, NULL);
 }
 

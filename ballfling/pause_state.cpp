@@ -13,7 +13,8 @@
 #include "SFGUI/Separator.hpp"
 #include "options_state.h"
 
-StatePause::StatePause(World *world) : State(world) {
+StatePause::StatePause(World *world, bool *restartFlag) : State(world) {
+    this->restartFlag = restartFlag;
 }
 
 void StatePause::on_event(sf::Event &event) {
@@ -53,6 +54,15 @@ void StatePause::on_gain_focus() {
     guiBoxSpace->SetRequisition(sf::Vector2f(1.f, 50.f));
     guiBoxMain->Pack(guiBoxSpace);
 
+    auto guiButtonRestart = sfg::Button::Create("Restart");
+    guiButtonRestart->SetId("btnPauseRestart");
+    guiButtonRestart->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonRestart->GetRequisition().x / 2.f, 500.f));
+    guiButtonRestart->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
+        *restartFlag = true;
+        State::pop_state();
+    }));
+    guiBoxMain->Pack(guiButtonRestart);
+    
     auto guiButtonOptions = sfg::Button::Create("Options");
     guiButtonOptions->SetId("btnPauseOptions");
     guiButtonOptions->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonOptions->GetRequisition().x / 2.f, 500.f));
