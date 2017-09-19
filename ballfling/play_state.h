@@ -39,6 +39,7 @@ public:
 private:
     std::string filename;
     sf::Color levelColour; // colour of ball and wall edges.
+    sf::Color backgroundColor; // clear colour
 
     EntityBall *player;
 

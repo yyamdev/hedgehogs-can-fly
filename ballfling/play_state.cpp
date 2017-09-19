@@ -25,8 +25,18 @@ StatePlay::StatePlay(World *world, int levelNum) : State(world) {
     this->levelNum = levelNum;
     filename = level_num_to_filename(levelNum);
 
-    //levelColour = sf::Color::Red;
-    levelColour = sf::Color(99, 155, 255);
+    if (levelNum <= 4) {
+        levelColour = sf::Color(99, 155, 255);
+        backgroundColor = sf::Color(34, 32, 52);
+    }
+    else if (levelNum <= 9) {
+        levelColour = sf::Color(203, 219, 252);
+        backgroundColor = sf::Color(50, 60, 57);
+    }
+    else {
+        levelColour = sf::Color(55, 148, 110);
+        backgroundColor = sf::Color(69, 40, 60);
+    }
 
     gui.RemoveAll();
     world->remove_entity(ENTITY_TAG_ALL);
@@ -54,7 +64,7 @@ StatePlay::StatePlay(World *world, int levelNum) : State(world) {
 }
 
 sf::Color StatePlay::get_clear_colour() {
-    return sf::Color(34, 32, 52);
+    return backgroundColor;
 }
 
 void StatePlay::on_event(sf::Event &event) {
