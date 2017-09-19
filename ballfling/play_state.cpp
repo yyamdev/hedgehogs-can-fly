@@ -81,7 +81,7 @@ void StatePlay::on_tick() {
     if (completed) {
         if (!world->is_paused()) world->toggle_pause(); // pause world
         notify(EVENT_PLAY_PAUSE, NULL);
-        State::push_state(new StateWin(world, levelNum));
+        State::push_state(new StateWin(world, levelNum, &restartOnResume));
     }
     playerPosition = player->position;
     playerVelocity = player->velocity;
@@ -132,9 +132,11 @@ void StatePlay::on_draw_ui(sf::RenderWindow &window) {
 
 void StatePlay::on_gain_focus() {
     gui.RemoveAll();
-    if (world->is_paused()) world->toggle_pause();
-    if (restartOnResume)
+    if (restartOnResume) {
         State::change_state(new StatePlay(world, levelNum));
+        return;
+    }
+    if (world->is_paused()) world->toggle_pause();
     notify(EVENT_PLAY_RESUME, NULL);
 }
 

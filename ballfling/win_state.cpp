@@ -11,8 +11,9 @@
 #include "SFGUI/Separator.hpp"
 #include "play_state.h"
 
-StateWin::StateWin(World *world, int levelNum) : State(world) {
+StateWin::StateWin(World *world, int levelNum, bool *restartFlag) : State(world) {
     this->levelNum = levelNum;
+    this->restartFlag = restartFlag;
 }
 
 void StateWin::on_event(sf::Event &event) {
@@ -69,8 +70,9 @@ void StateWin::on_gain_focus() {
 
     auto guiButtonResert = sfg::Button::Create("Restart");
     guiButtonResert->SetId("btnWinRestart");
-    guiButtonResert->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([] (void) {
-        std::cout << "Restart.\n";
+    guiButtonResert->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
+        *restartFlag = true;
+        State::pop_state();
     }));
     guiBoxButtons->Pack(guiButtonResert);
 

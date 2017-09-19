@@ -10,7 +10,7 @@ class World;
 
 class StateWin : public State, public Observer, public Subject {
 public:
-    StateWin(World *world, int levelNum);
+    StateWin(World *world, int levelNum, bool *restartFlag);
 
     void on_event(sf::Event &event);
     void on_tick();
@@ -22,6 +22,6 @@ public:
     void on_notify(Event event, void *data);
 
 private:
-
+    bool *restartFlag;
     int levelNum;
 };
