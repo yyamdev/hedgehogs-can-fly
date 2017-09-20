@@ -67,7 +67,7 @@ void main() {
         if (dataPixel.r == 0 && dataPixel.g == 128 && dataPixel.b == 128) {
             pixel = texture2D(txtKill, gl_TexCoord[0].xy);
             gl_FragColor = gl_Color * pixel;
-            gl_FragColor.a = 0.5;
+            //gl_FragColor.a = 0.5;
         }
         else if (dataPixel.r == 255 && dataPixel.g == 255 && dataPixel.b == 255) {
             if (edge(dataTexCoord))
