@@ -8,6 +8,7 @@ namespace _cursors {
     sf::Texture txtCursorPointer;
     sf::Texture txtCursorStop;
     sf::Sprite sprCursor;
+    bool draw;
 }
 
 void load_cursor_textures() {
@@ -19,6 +20,7 @@ void load_cursor_textures() {
 }
 
 void draw_cursor(sf::RenderWindow &window) {
+    if (!_cursors::draw) return;
     sf::Vector2i mouseI = sf::Mouse::getPosition(window);
     _cursors::sprCursor.setTexture(*_cursors::sprCursor.getTexture());
     _cursors::sprCursor.setPosition((float)mouseI.x, (float)mouseI.y);
@@ -28,4 +30,9 @@ void draw_cursor(sf::RenderWindow &window) {
 
 void set_cursor(sf::Texture *cursorTexture) {
     _cursors::sprCursor.setTexture(*cursorTexture);
+    _cursors::draw = true;
+}
+
+void set_cursor_visible(bool visible) {
+    _cursors::draw = visible;
 }

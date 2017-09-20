@@ -151,6 +151,7 @@
     <ClCompile Include="play_state.cpp" />
     <ClCompile Include="select_state.cpp" />
     <ClCompile Include="shared_res.cpp" />
+    <ClCompile Include="splash_state.cpp" />
     <ClCompile Include="state.cpp" />
     <ClCompile Include="subject.cpp" />
     <ClCompile Include="terrain_entity.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="play_state.h" />
     <ClInclude Include="select_state.h" />
     <ClInclude Include="shared_res.h" />
+    <ClInclude Include="splash_state.h" />
     <ClInclude Include="state.h" />
     <ClInclude Include="subject.h" />
     <ClInclude Include="terrain_entity.h" />

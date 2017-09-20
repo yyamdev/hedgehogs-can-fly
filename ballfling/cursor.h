@@ -10,6 +10,7 @@ namespace _cursors {
     extern sf::Texture txtCursorPointer;
     extern sf::Texture txtCursorStop;
     extern sf::Sprite sprCursor;
+    extern bool draw;
 }
 
 // macros for easy reference to cursor textures
@@ -21,3 +22,4 @@ namespace _cursors {
 void load_cursor_textures();
 void draw_cursor(sf::RenderWindow &window);
 void set_cursor(sf::Texture *cursorTexture);
+void set_cursor_visible(bool visible);
