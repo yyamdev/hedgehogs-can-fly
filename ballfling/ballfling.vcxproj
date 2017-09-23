@@ -138,6 +138,7 @@
     <ClCompile Include="ball_entity.cpp" />
     <ClCompile Include="cursor.cpp" />
     <ClCompile Include="debug_draw.cpp" />
+    <ClCompile Include="enemy_entity.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="gate.cpp" />
     <ClCompile Include="hud.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="build_options.h" />
     <ClInclude Include="cursor.h" />
     <ClInclude Include="debug_draw.h" />
+    <ClInclude Include="enemy_entity.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="events.h" />
     <ClInclude Include="gate.h" />

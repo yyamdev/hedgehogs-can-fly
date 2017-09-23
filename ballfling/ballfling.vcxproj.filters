@@ -153,6 +153,9 @@
     <ClInclude Include="splash_state.h">
       <Filter>Header Files\game\state</Filter>
     </ClInclude>
+    <ClInclude Include="enemy_entity.h">
+      <Filter>Header Files\game\world</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="subject.cpp">
@@ -241,6 +244,9 @@
     </ClCompile>
     <ClCompile Include="splash_state.cpp">
       <Filter>Source Files\game\state</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_entity.cpp">
+      <Filter>Source Files\game\world</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

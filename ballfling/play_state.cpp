@@ -16,6 +16,7 @@
 #include "shared_res.h"
 #include <fstream>
 #include "timer_entity.h"
+#include "enemy_entity.h"
 
 std::string level_num_to_filename(int levelNum) {
     return std::string("data/lvl" + util::to_string(levelNum) + ".png");
@@ -57,6 +58,9 @@ StatePlay::StatePlay(World *world, int levelNum) : State(world) {
     world->add_entity(player);
     sf::Vector2f screenSize((float)WINDOW_WIDTH, (float)WINDOW_HEIGHT);
     world->camera = (player->position - screenSize / 2.f);
+
+    // add enemy
+    world->add_entity(new EntityEnemy(player->position, &player->position));
 
     // add gates
     gates = add_gates_from_file("data/lvl" + util::to_string(levelNum) + "gates.txt");
