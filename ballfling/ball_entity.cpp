@@ -186,8 +186,11 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         // test if hit lava
         if (terrain->get_pos(position) == T_KILL) {
             for (int p = 0; p < 25; ++p) {
-                // TODO -> add particles back in
-                // particleSystem.add_particle(Particle(position, colour, sf::Vector2f(0.f, -3.f) + sf::Vector2f(util::rnd(-1.f, 1.f), util::rnd(-1.f, 1.f)), sf::Vector2f(2.f, 2.f)));
+                add_particle(position,
+                             sf::Vector2f(0.f, -3.f) + sf::Vector2f(util::rnd(-1.f, 1.f), util::rnd(-1.f, 1.f)),
+                             sf::Vector2f(0.f, 0.1f),
+                             sf::Color(127, 87, 99),
+                             120);
             }
             reset_to_rest();
             notify(EVENT_HIT_WATER, NULL);
@@ -211,14 +214,15 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
 
             float bounceFactor = .6f;
             sf::Color particleColour = colour;
-            // TODO -> Update particle colours.
+            bool particles = false;
             if (t == T_BOUNCY) {
                 bounceFactor = 1.6f;
-                particleColour = sf::Color::Red;
+                particleColour = sf::Color(153, 229, 80);
+                particles = true;
                 lastTerrain = T_BOUNCY;
             }
             else if (t == T_SLOW) {
-                particleColour = sf::Color::Yellow;
+                particles = false;
                 bounceFactor = 0.3f;
                 lastTerrain = T_SLOW;
             }
@@ -226,7 +230,8 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                 rest = true;
                 record_new_rest_pos();
                 bounceFactor = 0.0f;
-                particleColour = sf::Color(255, 0, 255);
+                particleColour = sf::Color(215, 123, 186);
+                particles = true;
                 lastTerrain = T_STICKY;
             }
             else if (t == T_THIN) {
@@ -251,9 +256,14 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                 lastTerrain = T_SOLID;
             }
 
-            for (int p = 0; p < util::rnd(0, (int)util::len(velocity)); ++p) {
-                // TODO -> add particles back in
-                // particleSystem.add_particle(Particle(contact, particleColour, util::normalize(-velocity) * util::rnd(1.5f, 2.5f) + sf::Vector2f(util::rnd(-1.f, 1.f), util::rnd(-1.f, 1.f)), sf::Vector2f(2.f, 2.f)));
+            if (particles) {
+                for (int p = 0; p < 10; ++p) {
+                    add_particle(position,
+                                 sf::Vector2f(0.f, -3.f) + sf::Vector2f(util::rnd(-1.f, 1.f), util::rnd(-1.f, 1.f)),
+                                 sf::Vector2f(0.f, 0.1f),
+                                 particleColour,
+                                 120);
+                }
             }
             
             bounce(bounceFactor, terrain->get_normal(contact));

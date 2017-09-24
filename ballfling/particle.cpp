@@ -86,7 +86,10 @@ void add_particle(sf::Vector2f position, sf::Vector2f velocity, sf::Vector2f acc
     particles[particleIndex].velocityVec[1] = velocity.y;
     particles[particleIndex].accelerationVec[0] = acceleration.x;
     particles[particleIndex].accelerationVec[1] = acceleration.y;
-    particles[particleIndex].colourInt = colour.toInteger();
+    particles[particleIndex].colour[0] = colour.r;
+    particles[particleIndex].colour[1] = colour.g;
+    particles[particleIndex].colour[2] = colour.b;
+    particles[particleIndex].colour[3] = colour.a;
     particles[particleIndex].lifetime = lifetime;
     particles[particleIndex]._startLifetime = lifetime;
     particles[particleIndex].active = true;
