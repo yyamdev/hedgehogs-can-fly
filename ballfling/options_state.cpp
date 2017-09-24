@@ -11,6 +11,7 @@
 #include "SFGUI/Window.hpp"
 #include "SFGUI/Box.hpp"
 #include "SFGUI/Separator.hpp"
+#include "SFGUI/CheckButton.hpp"
 
 StateOptions::StateOptions(World *world) : State(world) {
 }
@@ -78,6 +79,18 @@ void StateOptions::on_gain_focus() {
     guiSliderSfx->SetValue((float)options.sfxVolume);
     guiBoxSfx->Pack(guiSliderSfx);
 
+    auto guiBoxTrail = sfg::Box::Create();
+    guiBoxMain->Pack(guiBoxTrail);
+
+    auto guiLblTrail = sfg::Label::Create("Trail");
+    guiLblTrail->SetId("lblOptionsTrail");
+    guiBoxTrail->Pack(guiLblTrail);
+
+    guiToggleTrail = sfg::CheckButton::Create("Trail");
+    guiToggleTrail->SetId("tglOptionsTrail");
+    guiToggleTrail->SetActive((bool)options.trail);
+    guiBoxTrail->Pack(guiToggleTrail);
+
     auto guiButtonBack = sfg::Button::Create("Back");
     guiButtonBack->SetId("btnOptionsBack");
     guiButtonBack->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonBack->GetRequisition().x / 2.f, 500.f));
@@ -96,6 +109,7 @@ void StateOptions::on_gain_focus() {
 void StateOptions::on_lose_focus() {
     options.musicVolume = (double)guiSliderMusic->GetValue();
     options.sfxVolume = (double)guiSliderSfx->GetValue();
+    options.trail = (int)guiToggleTrail->IsActive();
     options.save(CONFIG_FILENAME);
 }
 

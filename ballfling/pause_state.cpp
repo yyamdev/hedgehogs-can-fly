@@ -12,6 +12,7 @@
 #include "SFGUI/Box.hpp"
 #include "SFGUI/Separator.hpp"
 #include "options_state.h"
+#include "particle.h"
 
 StatePause::StatePause(World *world, bool *restartFlag) : State(world) {
     this->restartFlag = restartFlag;
@@ -27,6 +28,7 @@ void StatePause::on_tick() {
 }
 
 void StatePause::on_draw(sf::RenderWindow &window) {
+    particles_draw(window, world->camera);
 }
 
 void StatePause::on_draw_ui(sf::RenderWindow &window) {
@@ -54,6 +56,23 @@ void StatePause::on_gain_focus() {
     guiBoxSpace->SetRequisition(sf::Vector2f(1.f, 50.f));
     guiBoxMain->Pack(guiBoxSpace);
 
+    auto guiButtonBack = sfg::Button::Create("Resume");
+    guiButtonBack->SetId("btnPauseBack");
+    guiButtonBack->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonBack->GetRequisition().x / 2.f, 500.f));
+    guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
+        if (world->is_paused()) world->toggle_pause();
+        State::pop_state();
+    }));
+    guiBoxMain->Pack(guiButtonBack);
+
+    auto guiButtonOptions = sfg::Button::Create("Options");
+    guiButtonOptions->SetId("btnPauseOptions");
+    guiButtonOptions->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonOptions->GetRequisition().x / 2.f, 500.f));
+    guiButtonOptions->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
+        State::push_state(new StateOptions(world)); 
+    }));
+    guiBoxMain->Pack(guiButtonOptions);
+
     auto guiButtonRestart = sfg::Button::Create("Restart");
     guiButtonRestart->SetId("btnPauseRestart");
     guiButtonRestart->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonRestart->GetRequisition().x / 2.f, 500.f));
@@ -62,14 +81,6 @@ void StatePause::on_gain_focus() {
         State::pop_state();
     }));
     guiBoxMain->Pack(guiButtonRestart);
-    
-    auto guiButtonOptions = sfg::Button::Create("Options");
-    guiButtonOptions->SetId("btnPauseOptions");
-    guiButtonOptions->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonOptions->GetRequisition().x / 2.f, 500.f));
-    guiButtonOptions->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
-        State::push_state(new StateOptions(world)); 
-    }));
-    guiBoxMain->Pack(guiButtonOptions);
 
     auto guiButtonSelect = sfg::Button::Create("Level Select");
     guiButtonSelect->SetId("btnPauseSelect");
@@ -80,14 +91,7 @@ void StatePause::on_gain_focus() {
         State::pop_state(); // pop state back to level select 
     }));
     guiBoxMain->Pack(guiButtonSelect);
-
-    auto guiButtonBack = sfg::Button::Create("Resume");
-    guiButtonBack->SetId("btnPauseBack");
-    guiButtonBack->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonBack->GetRequisition().x / 2.f, 500.f));
-    guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
-        if (world->is_paused()) world->toggle_pause();
-        State::pop_state();
-    }));
+    
     guiBoxMain->Pack(guiButtonBack);
 
     // position window at centre of screen

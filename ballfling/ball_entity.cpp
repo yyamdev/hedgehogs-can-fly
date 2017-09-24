@@ -9,6 +9,7 @@
 #include "imgui.h"
 #include "particle.h"
 #include "gate.h"
+#include "options.h"
 
 sf::Texture EntityBall::txt;
 sf::Texture EntityBall::txtPoint;
@@ -100,7 +101,7 @@ void EntityBall::draw(sf::RenderWindow &window) {
     spr.setColor(colour);
     window.draw(spr);
 
-    if (util::len(velocity) > 0.f)
+    if (util::len(velocity) > 0.f && (bool)options.trail && !world->is_paused())
         add_particle(position, sf::Vector2f(), sf::Vector2f(0.f, 0.f), colour, 120);
 
     if (edit && ImGui::CollapsingHeader("Ball")) {

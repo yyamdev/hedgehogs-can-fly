@@ -6,6 +6,7 @@
 #include "observer.h"
 #include "subject.h"
 #include "SFGUI/Scale.hpp"
+#include "SFGUI/CheckButton.hpp"
 
 class World;
 
@@ -24,6 +25,7 @@ public:
 
     std::shared_ptr<sfg::Scale> guiSliderMusic;
     std::shared_ptr<sfg::Scale> guiSliderSfx;
+    std::shared_ptr<sfg::CheckButton> guiToggleTrail;
 
 private:
 };

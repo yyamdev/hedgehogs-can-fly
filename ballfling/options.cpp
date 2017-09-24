@@ -9,6 +9,7 @@ Options::Options() {
     // default values
     musicVolume = 1.f;
     sfxVolume = 1.f;
+    trail = 1;
 }
 
 void Options::load(std::string filename) {
@@ -20,6 +21,7 @@ void Options::load(std::string filename) {
     }
     config_lookup_float(&c, CONFIG_MUSIC, &musicVolume);
     config_lookup_float(&c, CONFIG_SFX, &sfxVolume);
+    config_lookup_bool (&c, CONFIG_TRAIL, &trail);
     config_destroy(&c);
 }
 
@@ -33,6 +35,9 @@ void Options::save(std::string filename) {
 
     setting = config_setting_add(c.root, CONFIG_SFX, CONFIG_TYPE_FLOAT);
     config_setting_set_float(setting, sfxVolume);
+
+    setting = config_setting_add(c.root, CONFIG_TRAIL, CONFIG_TYPE_BOOL);
+    config_setting_set_bool(setting, trail);
 
     config_write_file(&c, filename.c_str());
     config_destroy(&c);

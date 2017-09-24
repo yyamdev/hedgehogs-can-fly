@@ -7,6 +7,7 @@
 // config file options
 #define CONFIG_MUSIC    "music_vol"
 #define CONFIG_SFX      "sfx_vol"
+#define CONFIG_TRAIL    "trail"
 
 class Options {
 public:
@@ -16,6 +17,7 @@ public:
 
     double musicVolume;
     double sfxVolume;
+    int trail;
 };
 
 extern Options options; // global options

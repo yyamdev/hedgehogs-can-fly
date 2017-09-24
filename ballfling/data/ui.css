@@ -59,7 +59,7 @@ Label {
     FontSize: 64;
     FontName: data/Ticketing.ttf;
 }
-#lblOptionsMusic, #lblOptionsSfx {
+#lblOptionsMusic, #lblOptionsSfx, #lblOptionsTrail {
     Color: #008888ff;
     FontSize: 16;
 }
