@@ -96,7 +96,7 @@ int main() {
         gui.Update(1.f / 60.f);
         world.tick();
         State::tick_current();
-        particles_tick(world.camera, playerPosition, playerVelocity);
+        //particles_tick(world.camera, playerPosition, playerVelocity);
         
         window.clear(State::get_current()->get_clear_colour());
         ImGui::SFML::Update(window, imguiDelta.restart());
@@ -104,7 +104,7 @@ int main() {
         State::draw_current(window);
         State::draw_ui_current(window);
         guiManager.Display(window);
-        particles_draw(window, world.camera);
+        //particles_draw(window, world.camera);
         
         window.resetGLStates();
         

@@ -137,7 +137,11 @@ bool EntityTerrain::get_solid(sf::Vector2f pos) {
             &&
            !(terrain[base + 0] == 185 &&
              terrain[base + 1] == 122 &&
-             terrain[base + 2] == 87);
+             terrain[base + 2] == 87)
+            &&
+           !(terrain[base + 0] == 255 &&
+             terrain[base + 1] == 242 &&
+             terrain[base + 2] == 0);
 }
 
 TerrainType EntityTerrain::get_pos(sf::Vector2f pos) {

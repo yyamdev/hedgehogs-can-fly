@@ -17,12 +17,12 @@ struct Particle {
     int _startLifetime;
 };
 
-#define PARTICLE_NUM 4096
+#define PARTICLE_NUM 2048
 extern Particle particles[PARTICLE_NUM];
 extern sf::Vertex particleVertex[PARTICLE_NUM];
 extern int particleIndex;
 
-void particles_tick(sf::Vector2f camera, sf::Vector2f actorPosition, sf::Vector2f actorVelocity);
+void particles_tick(sf::Vector2f camera);
 void particles_draw(sf::RenderWindow &window, sf::Vector2f camera);
 void add_particle(Particle *part);
 void add_particle(sf::Vector2f position, sf::Vector2f velocity, sf::Vector2f acceleration, sf::Color colour, int lifetime);

@@ -100,6 +100,9 @@ void EntityBall::draw(sf::RenderWindow &window) {
     spr.setColor(colour);
     window.draw(spr);
 
+    if (util::len(velocity) > 0.f)
+        add_particle(position, sf::Vector2f(), sf::Vector2f(0.f, 0.f), colour, 120);
+
     if (edit && ImGui::CollapsingHeader("Ball")) {
         ImGui::Checkbox("react to input", &reactToInput);
         ImGui::Separator();
@@ -189,6 +192,11 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             notify(EVENT_HIT_WATER, NULL);
         }
 
+        if (terrain->get_pos(position) == T_THIN) {
+            // Hijaking this to spawn the enemy
+            notify(EVENT_BALL_HIT_TRIGGER, NULL);
+        }
+
         sf::Vector2f contact;
         if (terrain->intersects_with_circle(position, velocity, collisionRadius, &contact, &position)) { // collision with terrain
             contactPoint = contact;
@@ -221,6 +229,8 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                 lastTerrain = T_STICKY;
             }
             else if (t == T_THIN) {
+                // Used for something else
+                /*
                 float impactSpeed = util::len(velocity);
                 if (impactSpeed > 9.f) {
                     // TODO -> Increase updateRect or actualy calculate it using flood fill data? (Currently can be too small)
@@ -233,6 +243,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                 } else {
                     notify(EVENT_BOUNCE_DOOR, NULL);
                 }
+                */
             }
             else {
                 notify(EVENT_BALL_HIT_SOLID, NULL);

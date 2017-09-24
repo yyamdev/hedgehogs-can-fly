@@ -25,4 +25,11 @@ private:
     sf::Vector2f *player;
     EnemyState state;
     sf::Clock waitingTimer;
+    sf::Color colour;
+
+    sf::Clock pulseTimer;
+
+    // intro effect
+    float angle; // radians
+    float len;
 };

@@ -25,6 +25,8 @@ void EntityTimer::tick(std::vector<Entity*> &entities) {
 }
 
 void EntityTimer::draw(sf::RenderWindow &window) {
+    return; // disabled
+    
     unsigned int millis  = get_time();
     unsigned int seconds = (millis / 1000);
     unsigned int minutes = seconds / 60;

@@ -81,6 +81,7 @@ void StatePlay::on_event(sf::Event &event) {
 }
 
 void StatePlay::on_tick() {
+    if (!world->is_paused()) particles_tick(world->camera);
     if (terrain->error) State::pop_state(); 
     if (completed) {
         if (!world->is_paused()) world->toggle_pause(); // pause world
@@ -128,6 +129,7 @@ void StatePlay::on_draw(sf::RenderWindow &window) {
             else ++it;
         }
     }
+    particles_draw(window, world->camera);
 }
 
 void StatePlay::on_draw_ui(sf::RenderWindow &window) {

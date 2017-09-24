@@ -59,6 +59,8 @@ public:
 
     bool error;
 
+    sf::Color colour;
+
 private:
     std::string filename;
     sf::Vector2u size; // terrain texture size
@@ -66,7 +68,6 @@ private:
     sf::Shader shdTerrain;
     sf::Uint8 *terrain; // terrain data
     sf::Texture txtTerrainData; // terrain data as a texture (updated at draw time)
-    sf::Color colour;
     // terrain textures that are drawn
     sf::Texture txtSolid;
     sf::Texture txtWater;
