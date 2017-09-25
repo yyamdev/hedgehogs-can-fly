@@ -42,7 +42,7 @@ Label {
 /* Select screen style */
 #lblSelectTitle {
     FontSize: 72;
-    FontName: data/Ticketing.ttf;
+    FontName: data/fgd.ttf;
     Color: #00ffffff;
 }
 #btnSelectLevel {
@@ -57,7 +57,7 @@ Label {
 #lblOptionsTitle {
     Color: #00ffffff;
     FontSize: 64;
-    FontName: data/Ticketing.ttf;
+    FontName: data/fgd.ttf;
 }
 #lblOptionsMusic, #lblOptionsSfx, #lblOptionsTrail {
     Color: #008888ff;
@@ -75,7 +75,7 @@ Scale {
 #lblPauseTitle {
     Color: #00ffffff;
     FontSize: 64;
-    FontName: data/Ticketing.ttf;
+    FontName: data/fgd.ttf;
 }
 
 /* Win screen style */
@@ -86,5 +86,5 @@ Scale {
 #lblWinTitle {
     Color: #00ffffff;
     FontSize: 72;
-    FontName: data/Ticketing.ttf;
+    FontName: data/fgd.ttf;
 }
