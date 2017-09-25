@@ -19,7 +19,6 @@ public:
     void on_draw_ui(sf::RenderWindow &window);
     void on_gain_focus();
     void on_lose_focus();
-    sf::Color get_clear_colour();
 
     void on_notify(Event event, void *data);
 
