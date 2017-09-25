@@ -63,12 +63,13 @@ void EntityEnemy::tick(std::vector<Entity*> &entities)
 
     position += sf::Vector2f(direction.x * speed.x, direction.y * speed.y);
 
-    if (pulseTimer.getElapsedTime().asSeconds() > 2.f) {
-        float maxI = 1024;
+    if (pulseTimer.getElapsedTime().asSeconds() > 4.f &&
+        util::len(position - *player) > 500.f) {
+        float maxI = 512;
         for (float i = 0; i < maxI; ++i) {
             float angle = (2.f * 3.14f) * (i / maxI);
             sf::Vector2f vel = sf::Vector2f(cos(angle), sin(angle)) * 4.f;
-            add_particle(position, vel, sf::Vector2f(), colour, 180);
+            add_particle(position, vel, sf::Vector2f(), sf::Color(217, 87, 99), 400);
         }
         pulseTimer.restart();
     }
