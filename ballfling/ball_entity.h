@@ -19,7 +19,7 @@ extern const float BALL_MAX_SPEED;
 class EntityBall : public Entity, public Observer {
 public:
     EntityBall();
-    EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour);
+    EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour, bool *restartFlag);
 
     void event(sf::Event &e);
     void tick(std::vector<Entity*> &entities);
@@ -30,6 +30,7 @@ public:
 
     void bounce(float bounceFactor, sf::Vector2f norm);
 private:
+    bool *restartFlag;
     static sf::Texture txt;
     static sf::Texture txtPoint;
     static bool textureLoaded;

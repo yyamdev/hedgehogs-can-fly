@@ -88,3 +88,14 @@ Scale {
     FontSize: 72;
     FontName: data/fgd.ttf;
 }
+
+/* Death screen style */
+#winDeathMain {
+    BackgroundColor: #333333f0;
+    BorderWidth: 0;
+}
+#lblDeathTitle {
+    Color: #00ffffff;
+    FontSize: 72;
+    FontName: data/fgd.ttf;
+}

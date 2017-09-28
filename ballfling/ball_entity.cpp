@@ -11,6 +11,7 @@
 #include "gate.h"
 #include "options.h"
 #include "enemy_entity.h"
+#include "death_state.h"
 
 sf::Texture EntityBall::txt;
 sf::Texture EntityBall::txtPoint;
@@ -22,16 +23,18 @@ const float BALL_MAX_LAUNCH_SPEED_NERF = 8.f;
 const float BALL_MAX_SPEED = 14.f;
 
 EntityBall::EntityBall() {
-    EntityBall(sf::Vector2f(0.f, 0.f), sf::Vector2f(0.f, 0.f), sf::Color::White);
+    EntityBall(sf::Vector2f(0.f, 0.f), sf::Vector2f(0.f, 0.f), sf::Color::White, NULL);
+    std::cout << "Don't call EntityBall deafult constructor!\n";
 }
 
-EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour) {
+EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour, bool *restartFlag) {
     if (!textureLoaded) {
         txt.loadFromFile("data/ball.png");
         txtPoint.loadFromFile("data/point.png");
         textureLoaded = true;
     }
 
+    this->restartFlag = restartFlag;
     this->colour = colour;
     position = prevRest = pos;
     velocity = vel;
@@ -145,6 +148,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
 
     if (dead && deadTimer.getElapsedTime().asSeconds() > 2.f) {
         std::cout << "PUSH DEATH STATE\n";
+        State::push_state(new StateDeath(world, restartFlag));
     }
 
     if (rest) return;

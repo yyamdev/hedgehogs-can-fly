@@ -54,7 +54,7 @@ StatePlay::StatePlay(World *world, int levelNum) : State(world) {
     world->add_entity(new EntityTimer());
 
     // add ball & centre camera
-    player = new EntityBall(terrain->playerSpawn, sf::Vector2f(), levelColour);
+    player = new EntityBall(terrain->playerSpawn, sf::Vector2f(), levelColour, &restartOnResume);
     world->add_entity(player);
     sf::Vector2f screenSize((float)WINDOW_WIDTH, (float)WINDOW_HEIGHT);
     world->camera = (player->position - screenSize / 2.f);
