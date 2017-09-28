@@ -10,6 +10,7 @@
 #include "particle.h"
 #include "gate.h"
 #include "options.h"
+#include "enemy_entity.h"
 
 sf::Texture EntityBall::txt;
 sf::Texture EntityBall::txtPoint;
@@ -37,6 +38,7 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour) {
     tag = "ball";
     collisionRadius = 8.f;
     terrain = NULL;
+    enemy = NULL;
     dragging = false;
     rest = false;
     reactToInput = true;
@@ -120,6 +122,13 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         world->camera += delta * 0.05f;
     }
 
+    // Handle enemy collision even if at rest
+    if (enemy && enemy->is_active()) {
+        if (util::len(position - enemy->position) < collisionRadius + enemy->collisionRadius) {
+            std::cout << "DEAD!\n";
+        }
+    }
+
     if (rest) return;
         
     // move
@@ -172,6 +181,10 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     for (Entity *e : entities) {
         if (!terrain && e->get_tag() == "terrain") { // get terrain entity
             terrain = (EntityTerrain*)e;
+            break;
+        }
+        if (!enemy && e->get_tag() == "enemy") { // get enemy entity
+            enemy = (EntityEnemy*)e;
             break;
         }
         if (e->get_tag() == "gate") {

@@ -15,11 +15,18 @@ EntityEnemy::EntityEnemy(sf::Vector2f pos, sf::Vector2f *playerPos)
 {
     position = pos;
     player = playerPos;
+    collisionRadius = 32;
     state = ENEMY_STATE_INACTIVE;
     static float angle = 0.f; // radians
     static float len = 0.f;
     pulseTimer.restart();
+    tag = "enemy";
     colour = sf::Color(172, 50, 50);
+}
+
+bool EntityEnemy::is_active()
+{
+    return state == ENEMY_STATE_ACTIVE;
 }
 
 void EntityEnemy::event(sf::Event &e)

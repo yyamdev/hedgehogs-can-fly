@@ -21,6 +21,8 @@ public:
     void draw(sf::RenderWindow &window);
 
     void on_notify(Event event, void *data);
+
+    bool is_active();
 private:
     sf::Vector2f *player;
     EnemyState state;

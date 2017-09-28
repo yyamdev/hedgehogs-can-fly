@@ -8,6 +8,7 @@
 #include "terrain_entity.h"
 
 class EntityTerrain;
+class EntityEnemy;
 
 extern const float BALL_TERM_VEL;
 extern const float BALL_MAX_LAUNCH_SPEED;
@@ -37,6 +38,7 @@ private:
     sf::Vector2f mouse;
 
     EntityTerrain *terrain;
+    EntityEnemy *enemy;
 
     TerrainType lastTerrain;
 
