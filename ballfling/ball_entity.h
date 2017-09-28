@@ -43,6 +43,7 @@ private:
     TerrainType lastTerrain;
 
     bool reactToInput;
+    bool dead;
 
     // physics
     sf::Vector2f contactPoint;

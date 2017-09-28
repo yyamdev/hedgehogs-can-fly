@@ -39,6 +39,7 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour) {
     collisionRadius = 8.f;
     terrain = NULL;
     enemy = NULL;
+    dead = false;
     dragging = false;
     rest = false;
     reactToInput = true;
@@ -124,8 +125,17 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
 
     // Handle enemy collision even if at rest
     if (enemy && enemy->is_active()) {
-        if (util::len(position - enemy->position) < collisionRadius + enemy->collisionRadius) {
+        if (util::len(position - enemy->position) < collisionRadius + enemy->collisionRadius &&
+            !dead) {
             std::cout << "DEAD!\n";
+            dead = true;
+            for (int i = 0; i < 80; ++i) {
+                add_particle(position,
+                             sf::Vector2f(util::rnd(-4.f, 4.f), util::rnd(-4.f, 4.f)),
+                             sf::Vector2f(0.f, .1f),
+                             colour,
+                             120);
+            }
         }
     }
 
