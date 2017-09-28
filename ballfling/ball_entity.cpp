@@ -98,11 +98,13 @@ void EntityBall::event(sf::Event &e) {
 }
 
 void EntityBall::draw(sf::RenderWindow &window) {
-    spr.setTexture(txt);
-    spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
-    spr.setPosition(position - world->camera);
-    spr.setColor(colour);
-    window.draw(spr);
+    if (!dead) {
+        spr.setTexture(txt);
+        spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
+        spr.setPosition(position - world->camera);
+        spr.setColor(colour);
+        window.draw(spr);
+    }
 
     if (util::len(velocity) > 0.f && (bool)options.trail && !world->is_paused())
         add_particle(position, sf::Vector2f(), sf::Vector2f(0.f, 0.f), colour, 120);
@@ -127,8 +129,10 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     if (enemy && enemy->is_active()) {
         if (util::len(position - enemy->position) < collisionRadius + enemy->collisionRadius &&
             !dead) {
-            std::cout << "DEAD!\n";
             dead = true;
+            reactToInput = false;
+            rest = true;
+            deadTimer.restart();
             for (int i = 0; i < 80; ++i) {
                 add_particle(position,
                              sf::Vector2f(util::rnd(-4.f, 4.f), util::rnd(-4.f, 4.f)),
@@ -137,6 +141,10 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                              120);
             }
         }
+    }
+
+    if (dead && deadTimer.getElapsedTime().asSeconds() > 2.f) {
+        std::cout << "PUSH DEATH STATE\n";
     }
 
     if (rest) return;
