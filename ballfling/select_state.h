@@ -5,6 +5,7 @@
 #include "state.h"
 #include "observer.h"
 #include "subject.h"
+#include <SFML/Graphics.hpp>
 
 class World;
 
@@ -22,4 +23,5 @@ public:
     void on_notify(Event event, void *data);
 
 private:
+    sf::Image imgLock;
 };

@@ -8,8 +8,10 @@
 #include "util.h"
 #include "play_state.h"
 #include "save.h"
+#include "SFGUI/Image.hpp"
 
 StateSelect::StateSelect(World *world) : State(world) {
+    imgLock.loadFromFile("data/lock.png");
 }
 
 void StateSelect::on_event(sf::Event &event) {
@@ -47,11 +49,13 @@ void StateSelect::on_gain_focus() {
     for (int y = 0; y < rows; ++y) {
         for (int x = 0; x < cols; ++x) {
             int level = (y * cols + x) + 1;
-            std::string text = savegame_is_level_unlocked(level) ? util::to_string(level) : "?";
+            std::string text = savegame_is_level_unlocked(level) ? util::to_string(level) : "";
             auto guiButtonLvl = sfg::Button::Create(text);
             guiButtonLvl->SetId("btnSelectLevel");
             guiButtonLvl->SetRequisition(sf::Vector2f(w, h));
             guiButtonLvl->SetPosition(position - sf::Vector2f(w / 2, h / 2));
+            if (!savegame_is_level_unlocked(level))
+                guiButtonLvl->SetImage(sfg::Image::Create(imgLock));
             gui.Add(guiButtonLvl);
             guiButtonLvl->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this, level] (void) {
                 if (savegame_is_level_unlocked(level))
