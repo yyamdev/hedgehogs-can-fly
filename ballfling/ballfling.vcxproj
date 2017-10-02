@@ -151,6 +151,7 @@
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="pause_state.cpp" />
     <ClCompile Include="play_state.cpp" />
+    <ClCompile Include="save.cpp" />
     <ClCompile Include="select_state.cpp" />
     <ClCompile Include="shared_res.cpp" />
     <ClCompile Include="splash_state.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="particle.h" />
     <ClInclude Include="pause_state.h" />
     <ClInclude Include="play_state.h" />
+    <ClInclude Include="save.h" />
     <ClInclude Include="select_state.h" />
     <ClInclude Include="shared_res.h" />
     <ClInclude Include="splash_state.h" />

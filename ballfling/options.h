@@ -8,6 +8,7 @@
 #define CONFIG_MUSIC    "music_vol"
 #define CONFIG_SFX      "sfx_vol"
 #define CONFIG_TRAIL    "trail"
+#define CONFIG_PROG     "flung"
 
 class Options {
 public:

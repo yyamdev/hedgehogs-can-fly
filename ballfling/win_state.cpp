@@ -10,10 +10,12 @@
 #include "SFGUI/Box.hpp"
 #include "SFGUI/Separator.hpp"
 #include "play_state.h"
+#include "save.h"
 
 StateWin::StateWin(World *world, int levelNum, bool *restartFlag) : State(world) {
     this->levelNum = levelNum;
     this->restartFlag = restartFlag;
+    savegame_level_unlock(levelNum + 1);
 }
 
 void StateWin::on_event(sf::Event &event) {

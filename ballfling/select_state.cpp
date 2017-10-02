@@ -7,6 +7,7 @@
 #include "build_options.h"
 #include "util.h"
 #include "play_state.h"
+#include "save.h"
 
 StateSelect::StateSelect(World *world) : State(world) {
 }
@@ -45,13 +46,18 @@ void StateSelect::on_gain_focus() {
     sf::Vector2f down = sf::Vector2f(0.f, h + g);
     for (int y = 0; y < rows; ++y) {
         for (int x = 0; x < cols; ++x) {
-            auto guiButtonLvl = sfg::Button::Create(util::to_string((y * cols + x) + 1));
+            int level = (y * cols + x) + 1;
+            std::string text = savegame_is_level_unlocked(level) ? util::to_string(level) : "?";
+            auto guiButtonLvl = sfg::Button::Create(text);
             guiButtonLvl->SetId("btnSelectLevel");
             guiButtonLvl->SetRequisition(sf::Vector2f(w, h));
             guiButtonLvl->SetPosition(position - sf::Vector2f(w / 2, h / 2));
             gui.Add(guiButtonLvl);
-            guiButtonLvl->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this, x, y, cols] (void) {
-                State::push_state(new StatePlay(world, (y * cols + x) + 1));
+            guiButtonLvl->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this, level] (void) {
+                if (savegame_is_level_unlocked(level))
+                    State::push_state(new StatePlay(world, level));
+                //else
+                    // TODO(Pedro): Add sfx
             }));
             position += right;
         }
