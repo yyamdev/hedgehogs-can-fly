@@ -32,7 +32,7 @@ StatePlay::StatePlay(World *world, int levelNum) : State(world) {
         levelColour = sf::Color(99, 155, 255);
         backgroundColor = sf::Color(34, 32, 52);
     }
-    else if (levelNum <= 9) {
+    else if (levelNum <= 8) {
         levelColour = sf::Color(203, 219, 252);
         backgroundColor = sf::Color(50, 60, 57);
     }

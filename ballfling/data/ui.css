@@ -45,7 +45,52 @@ Label {
     FontName: data/fgd.ttf;
     Color: #00ffffff;
 }
-#btnSelectLevel {
+
+#btnSelectLevel1,
+#btnSelectLevel2,
+#btnSelectLevel3,
+#btnSelectLevel4 {
+    BackgroundColor: #444458ff;
+    Padding: 0;
+}
+
+#btnSelectLevel1:PRELIGHT,
+#btnSelectLevel2:PRELIGHT,
+#btnSelectLevel3:PRELIGHT,
+#btnSelectLevel4:PRELIGHT {
+    BackgroundColor: #9999BBff;
+    Padding: 0;
+}
+
+#btnSelectLevel5,
+#btnSelectLevel6,
+#btnSelectLevel7,
+#btnSelectLevel8 {
+    BackgroundColor: #44554Cff;
+    Padding: 0;
+}
+
+#btnSelectLevel5:PRELIGHT,
+#btnSelectLevel6:PRELIGHT,
+#btnSelectLevel7:PRELIGHT,
+#btnSelectLevel8:PRELIGHT {
+    BackgroundColor: #99BB99ff;
+    Padding: 0;
+}
+
+#btnSelectLevel9,
+#btnSelectLevel10,
+#btnSelectLevel11,
+#btnSelectLevel12 {
+    BackgroundColor: #553A55ff;
+    Padding: 0;
+}
+
+#btnSelectLevel9:PRELIGHT,
+#btnSelectLevel10:PRELIGHT,
+#btnSelectLevel11:PRELIGHT,
+#btnSelectLevel12:PRELIGHT {
+    BackgroundColor: #99BB99ff;
     Padding: 0;
 }
 

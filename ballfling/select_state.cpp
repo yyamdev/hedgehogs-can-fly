@@ -52,7 +52,7 @@ void StateSelect::on_gain_focus() {
             int level = (y * cols + x) + 1;
             std::string text = savegame_is_level_unlocked(level) ? util::to_string(level) : "";
             auto guiButtonLvl = sfg::Button::Create(text);
-            guiButtonLvl->SetId("btnSelectLevel");
+            guiButtonLvl->SetId("btnSelectLevel" + util::to_string(level));
             guiButtonLvl->SetRequisition(sf::Vector2f(w, h));
             guiButtonLvl->SetPosition(position - sf::Vector2f(w / 2, h / 2));
             if (!savegame_is_level_unlocked(level))
