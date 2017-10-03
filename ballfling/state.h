@@ -38,7 +38,10 @@ public:
 
     virtual sf::Color get_clear_colour();
 
+    inline std::string get_name(){ return name; }
+
 protected:
     World *world;
     static std::stack<State*> states;
+    std::string name;
 };

@@ -12,6 +12,7 @@
 
 StateSelect::StateSelect(World *world) : State(world) {
     imgLock.loadFromFile("data/lock.png");
+    name = "select";
 }
 
 void StateSelect::on_event(sf::Event &event) {

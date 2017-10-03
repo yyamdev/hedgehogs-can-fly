@@ -65,8 +65,9 @@ void StateWin::on_gain_focus() {
     auto guiButtonSelect = sfg::Button::Create("Level Select");
     guiButtonSelect->SetId("btnWinSelect");
     guiButtonSelect->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([] (void) {
-        State::pop_state(); // pop state back to level select
-        State::pop_state();
+        // pop state back to level select
+        while (State::get_current()->get_name() != "select")
+            State::pop_state();
     }));
     guiBoxButtons->Pack(guiButtonSelect);
 

@@ -87,8 +87,9 @@ void StatePause::on_gain_focus() {
     guiButtonSelect->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonSelect->GetRequisition().x / 2.f, 500.f));
     guiButtonSelect->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
         if (world->is_paused()) world->toggle_pause();
-        State::pop_state();
-        State::pop_state(); // pop state back to level select 
+        // pop state back to level select
+        while (State::get_current()->get_name() != "select")
+            State::pop_state(); 
     }));
     guiBoxMain->Pack(guiButtonSelect);
     
