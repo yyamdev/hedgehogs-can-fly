@@ -12,7 +12,7 @@ class World;
 
 class StateOptions : public State, public Observer, public Subject {
 public:
-    StateOptions(World *world);
+    StateOptions(World *world, bool full);
 
     void on_event(sf::Event &event);
     void on_tick();
@@ -28,4 +28,5 @@ public:
     std::shared_ptr<sfg::CheckButton> guiToggleTrail;
 
 private:
+    bool full;
 };

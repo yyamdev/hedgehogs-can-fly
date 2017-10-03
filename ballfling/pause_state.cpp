@@ -69,7 +69,7 @@ void StatePause::on_gain_focus() {
     guiButtonOptions->SetId("btnPauseOptions");
     guiButtonOptions->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonOptions->GetRequisition().x / 2.f, 500.f));
     guiButtonOptions->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
-        State::push_state(new StateOptions(world)); 
+        State::push_state(new StateOptions(world, false)); 
     }));
     guiBoxMain->Pack(guiButtonOptions);
 

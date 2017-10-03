@@ -12,8 +12,10 @@
 #include "SFGUI/Box.hpp"
 #include "SFGUI/Separator.hpp"
 #include "SFGUI/CheckButton.hpp"
+#include "save.h"
 
-StateOptions::StateOptions(World *world) : State(world) {
+StateOptions::StateOptions(World *world, bool full) : State(world) {
+    this->full = full;
 }
 
 void StateOptions::on_event(sf::Event &event) {
@@ -90,6 +92,18 @@ void StateOptions::on_gain_focus() {
     guiToggleTrail->SetId("tglOptionsTrail");
     guiToggleTrail->SetActive((bool)options.trail);
     guiBoxTrail->Pack(guiToggleTrail);
+
+    if (full) {
+        auto guiBoxErase = sfg::Box::Create();
+        guiBoxMain->Pack(guiBoxErase);
+        
+        auto guiButtonBack = sfg::Button::Create("Erase Save(!)");
+        guiButtonBack->SetId("btnOptionsErase");
+        guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
+            savegame_reset();
+        }));
+        guiBoxErase->Pack(guiButtonBack);
+    }
 
     auto guiButtonBack = sfg::Button::Create("Back");
     guiButtonBack->SetId("btnOptionsBack");

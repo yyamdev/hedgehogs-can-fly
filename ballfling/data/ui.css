@@ -66,6 +66,13 @@ Label {
 Scale {
     Color: #ff0000ff;
 }
+#btnOptionsErase {
+    FontSize: 16;
+    Padding: 8;
+}
+#btnOptionsErase:PRELIGHT {
+    BackgroundColor: #FF9999FF;
+}
 
 /* Pause screen style */
 #winPauseMain {
