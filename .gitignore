@@ -1,7 +1,8 @@
 LocMetrics*
-ballfling/imgui.ini
 *.cfg
 promo/
+ballfling/data/prog
+ballfling/data/imgui.ini
 
 
 # Created by https://www.gitignore.io/api/visualstudio
