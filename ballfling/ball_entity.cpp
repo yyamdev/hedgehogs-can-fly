@@ -12,6 +12,7 @@
 #include "options.h"
 #include "enemy_entity.h"
 #include "death_state.h"
+#include "state.h"
 
 sf::Texture EntityBall::txt;
 sf::Texture EntityBall::txtPoint;
@@ -148,7 +149,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
 
     if (dead && deadTimer.getElapsedTime().asSeconds() > 2.f) {
         std::cout << "PUSH DEATH STATE\n";
-        State::push_state(new StateDeath(world, restartFlag));
+        State::push_state(new StateDeath(world, restartFlag, State::get_current()->get_clear_colour()));
     }
 
     if (rest) return;

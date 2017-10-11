@@ -11,8 +11,14 @@
 #include "SFGUI/Separator.hpp"
 #include "play_state.h"
 
-StateDeath::StateDeath(World *world, bool *restartFlag) : State(world) {
+StateDeath::StateDeath(World *world, bool *restartFlag, sf::Color clear) : State(world) {
     this->restartFlag = restartFlag;
+    this->clear = clear;
+}
+
+sf::Color StateDeath::get_clear_colour()
+{
+    return clear;
 }
 
 void StateDeath::on_event(sf::Event &event) {
