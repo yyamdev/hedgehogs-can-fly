@@ -50,7 +50,7 @@ Label {
 #btnSelectLevel2,
 #btnSelectLevel3,
 #btnSelectLevel4 {
-    BackgroundColor: #444458ff;
+    BackgroundColor: #384458ff;
     Padding: 0;
 }
 
@@ -58,7 +58,7 @@ Label {
 #btnSelectLevel2:PRELIGHT,
 #btnSelectLevel3:PRELIGHT,
 #btnSelectLevel4:PRELIGHT {
-    BackgroundColor: #9999BBff;
+    BackgroundColor: #8899BBff;
     Padding: 0;
 }
 
@@ -90,7 +90,7 @@ Label {
 #btnSelectLevel10:PRELIGHT,
 #btnSelectLevel11:PRELIGHT,
 #btnSelectLevel12:PRELIGHT {
-    BackgroundColor: #99BB99ff;
+    BackgroundColor: #886A88ff;
     Padding: 0;
 }
 
