@@ -12,10 +12,16 @@
 #include "play_state.h"
 #include "save.h"
 
-StateWin::StateWin(World *world, int levelNum, bool *restartFlag) : State(world) {
+StateWin::StateWin(World *world, int levelNum, bool *restartFlag, sf::Color clear) : State(world) {
     this->levelNum = levelNum;
     this->restartFlag = restartFlag;
+    this->clear = clear;
     savegame_level_unlock(levelNum + 1);
+}
+
+sf::Color StateWin::get_clear_colour()
+{
+    return clear;
 }
 
 void StateWin::on_event(sf::Event &event) {

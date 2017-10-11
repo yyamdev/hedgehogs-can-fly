@@ -86,7 +86,7 @@ void StatePlay::on_tick() {
     if (completed) {
         if (!world->is_paused()) world->toggle_pause(); // pause world
         notify(EVENT_PLAY_PAUSE, NULL);
-        State::push_state(new StateWin(world, levelNum, &restartOnResume));
+        State::push_state(new StateWin(world, levelNum, &restartOnResume, backgroundColor));
     }
     playerPosition = player->position;
     playerVelocity = player->velocity;
