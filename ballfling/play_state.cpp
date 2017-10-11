@@ -76,7 +76,7 @@ sf::Color StatePlay::get_clear_colour() {
 void StatePlay::on_event(sf::Event &event) {
     if (event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::P)) {
         notify(EVENT_PLAY_PAUSE, NULL);
-        State::push_state(new StatePause(world, &restartOnResume));
+        State::push_state(new StatePause(world, &restartOnResume, backgroundColor));
     }
 }
 
