@@ -33,6 +33,7 @@ public:
 
     bool is_on_sand();
 private:
+    bool spawned_fireworks;
     bool *restartFlag;
     static sf::Texture txt;
     static sf::Texture txtPoint;

@@ -14,6 +14,7 @@
 #include "death_state.h"
 #include "state.h"
 #include "hud.h"
+#include "fireworks_entity.h"
 
 sf::Texture EntityBall::txt;
 sf::Texture EntityBall::txtPoint;
@@ -57,6 +58,7 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour, boo
     canNudge = false;
     nudgeStr = 0.04f;
     maxFlingVelocity = 1.2f;
+    spawned_fireworks = false;
 }
 
 void EntityBall::event(sf::Event &e) {
@@ -254,7 +256,12 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
 
             TerrainType t = terrain->get_pos(contactPoint);
             if (t == T_WIN) {
-                notify(EVENT_BALL_HIT_FINISH, NULL);
+                if (!spawned_fireworks) {
+                    reactToInput = false;
+                    world->add_entity(new EntityFireworks(position));
+                    spawned_fireworks = true;
+                }
+                //notify(EVENT_BALL_HIT_FINISH, NULL);
             }
 
             clkWallTouch.restart();

@@ -141,6 +141,7 @@
     <ClCompile Include="debug_draw.cpp" />
     <ClCompile Include="enemy_entity.cpp" />
     <ClCompile Include="entity.cpp" />
+    <ClCompile Include="fireworks_entity.cpp" />
     <ClCompile Include="gate.cpp" />
     <ClCompile Include="hud.cpp" />
     <ClCompile Include="main.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="enemy_entity.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="events.h" />
+    <ClInclude Include="fireworks_entity.h" />
     <ClInclude Include="gate.h" />
     <ClInclude Include="gui.h" />
     <ClInclude Include="hud.h" />
