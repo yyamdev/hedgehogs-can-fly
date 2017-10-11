@@ -6,8 +6,11 @@
 #include "ball_entity.h"
 #include "imgui.h"
 #include "cursor.h"
+#include <iostream>
 
 const float PI_F = 3.1415927f;
+
+EntityBall *ballHud = NULL;
 
 Hud::Hud() {
     Subject::add_observer(this); // register for events
@@ -42,12 +45,27 @@ void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera, sf::Color levelCol
     }
 
     // draw mouse drag arrow
+    bool onSand = false;
+    if (ballHud) onSand = ballHud->is_on_sand();
     if (dragging && canFling) {
+        // Calculate the speed the ball WILL be flung at if the player releases
+        // the mouse button
+        float speed = 0.f;
         sf::Vector2f dir = mouse - mouseDragStart;
-        float mag = util::len(dir) / 15.f;
-        float scale = fmin(mag / BALL_MAX_LAUNCH_SPEED, 1.f);
+        if (onSand) {
+            speed = util::len(dir) / 25.f;
+            speed = util::clamp(speed, 0.f, BALL_MAX_LAUNCH_SPEED_NERF - 2.f);
+        } else {
+            speed = util::len(dir) / 15.f;
+            speed = util::clamp(speed, 0.f, BALL_MAX_LAUNCH_SPEED - 2.f);
+        }
+
+        // Calculate how much to scale the arrow
+        // Arrow scale 1.0 == Ball speed BALL_MAX_LAUNCH_SPEED
+        float scale = fmin(1.f, speed / BALL_MAX_LAUNCH_SPEED);
+
+        // Draw arrow
         float ang = atan2f(dir.y, dir.x) * (180.f / PI_F);
-        // draw arrow
         sf::Sprite sprArrow(txtArrow);
         sprArrow.setOrigin(sf::Vector2f(0.f, (float)txtArrow.getSize().y / 2.f));
         if (drawArrowOnBall)

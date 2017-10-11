@@ -20,6 +20,7 @@ class EntityBall : public Entity, public Observer {
 public:
     EntityBall();
     EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour, bool *restartFlag);
+    ~EntityBall();
 
     void event(sf::Event &e);
     void tick(std::vector<Entity*> &entities);
@@ -29,6 +30,8 @@ public:
     bool is_at_rest();
 
     void bounce(float bounceFactor, sf::Vector2f norm);
+
+    bool is_on_sand();
 private:
     bool *restartFlag;
     static sf::Texture txt;

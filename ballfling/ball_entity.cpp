@@ -13,6 +13,7 @@
 #include "enemy_entity.h"
 #include "death_state.h"
 #include "state.h"
+#include "hud.h"
 
 sf::Texture EntityBall::txt;
 sf::Texture EntityBall::txtPoint;
@@ -28,6 +29,10 @@ EntityBall::EntityBall() {
     std::cout << "Don't call EntityBall deafult constructor!\n";
 }
 
+EntityBall::~EntityBall() {
+    ballHud = NULL;
+}
+
 EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour, bool *restartFlag) {
     if (!textureLoaded) {
         txt.loadFromFile("data/ball.png");
@@ -35,6 +40,7 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour, boo
         textureLoaded = true;
     }
 
+    ballHud = this;
     this->restartFlag = restartFlag;
     this->colour = colour;
     position = prevRest = pos;
@@ -119,6 +125,11 @@ void EntityBall::draw(sf::RenderWindow &window) {
         ImGui::Text("wall clock: %d", clkWallTouch.getElapsedTime().asMilliseconds());
         ImGui::Text("speed: %f", util::len(velocity));
     }
+}
+
+bool EntityBall::is_on_sand()
+{
+    return lastTerrain == T_SLOW;
 }
 
 void EntityBall::tick(std::vector<Entity*> &entities) {

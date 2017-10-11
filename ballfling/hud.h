@@ -7,6 +7,9 @@
 
 #define SHOW_INITIAL_INSTRUCTIONS 1
 
+class EntityBall;
+extern EntityBall *ballHud;
+
 class Hud : public Observer{
 public:
     Hud();
