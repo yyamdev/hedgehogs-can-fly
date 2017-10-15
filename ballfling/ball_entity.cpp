@@ -110,11 +110,14 @@ void EntityBall::event(sf::Event &e) {
 }
 
 void EntityBall::draw(sf::RenderWindow &window) {
+    static float angle = 0.f;
+    angle += velocity.x * 2.f;
     if (!dead) {
         spr.setTexture(txt);
         spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
         spr.setPosition(position - world->camera);
         spr.setColor(colour);
+        spr.setRotation(angle);
         window.draw(spr);
     }
 
