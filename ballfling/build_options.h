@@ -8,7 +8,7 @@
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 1
 
-#define TITLE "Disc Fling"
+#define TITLE "Fling"
 
 #define GRAVITY 0.15f
 
