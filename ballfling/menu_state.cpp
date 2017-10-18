@@ -66,6 +66,9 @@ void StateMenu::on_gain_focus() {
     world->remove_entity(ENTITY_TAG_ALL);
     gui.RemoveAll();
 
+    // Signal to play music
+    notify(EVENT_ENTER_MENU, NULL);
+
     // create ui
     auto guiButtonPlay = sfg::Button::Create("Play");
     guiButtonPlay->SetId("btnMenuPlay");

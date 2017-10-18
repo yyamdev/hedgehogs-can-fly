@@ -4,6 +4,10 @@ promo/
 ballfling/data/prog
 ballfling/data/imgui.ini
 
+# Avoid audio files
+*.ogg
+*.mp3
+*.wav
 
 # Created by https://www.gitignore.io/api/visualstudio
 

@@ -9,7 +9,6 @@
 #include "subject.h"
 #include <SFML/Graphics.hpp>
 #include "ball_entity.h"
-#include "audio.h"
 #include "gate.h"
 
 std::string level_num_to_filename(int levelNum);
@@ -46,7 +45,6 @@ private:
     EntityBall *player;
 
     Hud hud; // hud renderer
-    Audio audio; // audio player
     EntityTerrain *terrain;
 
     bool completed;

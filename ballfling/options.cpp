@@ -6,18 +6,19 @@
 Options options; // global options
 
 Options::Options() {
-    // default values
-    musicVolume = 1.f;
-    sfxVolume = 1.f;
-    trail = 1;
+    load(CONFIG_FILENAME);
 }
 
 void Options::load(std::string filename) {
     config_t c;
     config_init(&c);
     if (!config_read_file(&c, filename.c_str())) {
+        // No config file, use default values:
         config_destroy(&c);
-        return; // no config file, use default values.
+        musicVolume = .5f;
+        sfxVolume = .5f;
+        trail = true;
+        return;
     }
     config_lookup_float(&c, CONFIG_MUSIC, &musicVolume);
     config_lookup_float(&c, CONFIG_SFX, &sfxVolume);

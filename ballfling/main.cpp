@@ -19,6 +19,7 @@
 #include <fstream>
 #include "particle.h"
 #include "splash_state.h"
+#include "audio.h"
 
 // frame time profiler
 #define PBUFLEN 16
@@ -48,6 +49,8 @@ int main() {
     std::cout << "OpenGL version " << window.getSettings().majorVersion << "." << window.getSettings().minorVersion << std::endl;
     print_debug_controls();
 
+    Audio audio; // audio player
+    
     World world(window);
 
     sfg::SFGUI guiManager;

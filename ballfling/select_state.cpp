@@ -32,6 +32,9 @@ void StateSelect::on_gain_focus() {
     world->remove_entity(ENTITY_TAG_ALL);
     gui.RemoveAll();
 
+    // Play music
+    notify(EVENT_ENTER_MENU, NULL);
+    
     // create ui
     auto guiLblTitle = sfg::Label::Create("Select Level");
     guiLblTitle->SetId("lblSelectTitle");

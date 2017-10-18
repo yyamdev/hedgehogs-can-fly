@@ -66,6 +66,11 @@ void StateOptions::on_gain_focus() {
     guiSliderMusic->SetId("sclOptionsMusic");
     guiSliderMusic->SetRequisition(sliderSize);
     guiSliderMusic->SetValue((float)options.musicVolume);
+    guiSliderMusic->GetSignal(sfg::Scale::OnMouseMove).Connect(std::bind([this] (void) {
+                // Hack so users can hear music volume change with slider movement
+                options.musicVolume = (double)guiSliderMusic->GetValue();
+                notify(EVENT_CHANGE_MUSIC_VOLUME, NULL);
+        }));
     guiBoxMusic->Pack(guiSliderMusic);
 
     auto guiBoxSfx = sfg::Box::Create();
