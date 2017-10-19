@@ -13,6 +13,7 @@
 #include "SFGUI/Separator.hpp"
 #include "options_state.h"
 #include "particle.h"
+#include "cursor.h"
 
 StatePause::StatePause(World *world, bool *restartFlag, sf::Color clear) : State(world) {
     this->restartFlag = restartFlag;
@@ -44,6 +45,8 @@ void StatePause::on_gain_focus() {
     gui.RemoveAll();
     if (!world->is_paused()) world->toggle_pause();
 
+    set_cursor(CURSOR_POINTER);
+    
     // create ui
     sf::Vector2f sliderSize(200.f, 32.f);
 

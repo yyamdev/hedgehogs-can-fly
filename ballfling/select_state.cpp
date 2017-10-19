@@ -9,6 +9,7 @@
 #include "play_state.h"
 #include "save.h"
 #include "SFGUI/Image.hpp"
+#include "cursor.h"
 
 StateSelect::StateSelect(World *world) : State(world) {
     imgLock.loadFromFile("data/lock.png");
@@ -32,6 +33,8 @@ void StateSelect::on_gain_focus() {
     world->remove_entity(ENTITY_TAG_ALL);
     gui.RemoveAll();
 
+    set_cursor(CURSOR_POINTER);
+    
     // Play music
     notify(EVENT_ENTER_MENU, NULL);
     
