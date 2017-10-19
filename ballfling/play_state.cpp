@@ -26,6 +26,8 @@ StatePlay::StatePlay(World *world, int levelNum) : State(world) {
     this->levelNum = levelNum;
     filename = level_num_to_filename(levelNum);
 
+    name = "play";
+
     startScreenState = 0;
     counterStart = 0;
     

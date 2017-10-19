@@ -62,7 +62,7 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour, boo
 }
 
 void EntityBall::event(sf::Event &e) {
-    if (!reactToInput) return;
+    if (!reactToInput || State::get_current()->get_name() != "play") return;
 
     if (e.type == sf::Event::MouseMoved) {
         mouse.x = (float)e.mouseMove.x;
