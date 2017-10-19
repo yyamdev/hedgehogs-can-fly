@@ -45,6 +45,8 @@ private:
     EntityTerrain *terrain;
     EntityEnemy *enemy;
 
+    bool justSpawned;
+    
     TerrainType lastTerrain;
 
     bool reactToInput;

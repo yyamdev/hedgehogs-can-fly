@@ -59,6 +59,7 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour, boo
     nudgeStr = 0.04f;
     maxFlingVelocity = 1.2f;
     spawned_fireworks = false;
+    justSpawned = true;
 }
 
 void EntityBall::event(sf::Event &e) {
@@ -139,6 +140,12 @@ bool EntityBall::is_on_sand()
 
 void EntityBall::tick(std::vector<Entity*> &entities) {
     // centre camera
+    if (justSpawned) {
+        sf::Vector2f screenSize((float)WINDOW_WIDTH, (float)WINDOW_HEIGHT);
+        world->camera = (position - screenSize / 2.f);
+        justSpawned = false;
+    }
+    // move camera
     if (!world->is_paused()) {
         sf::Vector2f screenSize((float)WINDOW_WIDTH, (float)WINDOW_HEIGHT);
         sf::Vector2f delta = (position - screenSize / 2.f) - world->camera;
