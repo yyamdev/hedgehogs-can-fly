@@ -26,6 +26,9 @@ StatePlay::StatePlay(World *world, int levelNum) : State(world) {
     this->levelNum = levelNum;
     filename = level_num_to_filename(levelNum);
 
+    startScreenState = 0;
+    counterStart = 0;
+    
     restartOnResume = false;
 
     if (levelNum <= 4) {
@@ -78,6 +81,11 @@ void StatePlay::on_event(sf::Event &event) {
         notify(EVENT_PLAY_PAUSE, NULL);
         State::push_state(new StatePause(world, &restartOnResume, backgroundColor));
     }
+
+    if (event.type == sf::Event::MouseButtonPressed && startScreenState == 0) {
+        startScreenState = 1;
+        counterStart = 256;
+    }
 }
 
 void StatePlay::on_tick() {
@@ -90,6 +98,21 @@ void StatePlay::on_tick() {
     }
     playerPosition = player->position;
     playerVelocity = player->velocity;
+
+    if (startScreenState == 0) {
+        ++counterStart;
+        if (counterStart >= 200) {
+            startScreenState = 1;
+            counterStart = 256;
+        }
+    }
+
+    if (startScreenState == 1) {
+        counterStart -= 4;
+        if (counterStart < 0) {
+            startScreenState = 2;
+        }
+    }
 }
 
 void StatePlay::on_draw(sf::RenderWindow &window) {
@@ -129,7 +152,38 @@ void StatePlay::on_draw(sf::RenderWindow &window) {
             else ++it;
         }
     }
+    
     particles_draw(window, world->camera);
+
+    sf::Uint8 startAlpha = 255;
+    
+    sf::Sprite sprStart(txtStart);
+    sprStart.setOrigin(sf::Vector2f(112.f, 112.f)); // Hardcoded :(
+    sprStart.setPosition(WINDOW_WIDTH / 2.f, WINDOW_HEIGHT / 2.f);
+    sprStart.setScale(sf::Vector2f(.7f, .7f));
+    //sprStart.setColor(sf::Color(95, 205, 228, startAlpha));
+
+    sf::Text txtLvl(util::to_string(levelNum), fntUi, 80);
+    txtLvl.setOrigin(txtLvl.getLocalBounds().width, txtLvl.getLocalBounds().height);
+    txtLvl.setPosition(sf::Vector2f(WINDOW_WIDTH / 2.f, WINDOW_HEIGHT / 2.f));
+    txtLvl.setColor(sf::Color(95, 205, 228, startAlpha));
+    // Didn't have time to learn how to get text properly centered in SFML...
+    if (levelNum == 1)
+        txtLvl.move(4.f, 6.f);
+    else if (levelNum < 10)
+        txtLvl.move(14.f, 6.f);
+    else
+        txtLvl.move(20.f, 6.f);
+
+    if (startScreenState == 1) {
+        sprStart.setColor(sf::Color(255, 255, 255, counterStart));
+        txtLvl.setColor(sf::Color(95, 205, 228, counterStart));
+    }
+    
+    if (startScreenState == 0 || startScreenState == 1) {
+        window.draw(sprStart);
+        window.draw(txtLvl);
+    }
 }
 
 void StatePlay::on_draw_ui(sf::RenderWindow &window) {

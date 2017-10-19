@@ -50,4 +50,7 @@ private:
     bool completed;
     int levelNum;
     std::vector<EntityGate*> gates;
+
+    int startScreenState;
+    int counterStart;
 };

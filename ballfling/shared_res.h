@@ -6,4 +6,6 @@
 
 extern sf::Font fntUi;
 
+extern sf::Texture txtStart;
+
 void load_shared_res();
