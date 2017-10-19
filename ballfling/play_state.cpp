@@ -144,7 +144,7 @@ void StatePlay::on_gain_focus() {
     }
     if (world->is_paused()) world->toggle_pause();
     notify(EVENT_PLAY_RESUME, NULL);
-    notify(EVENT_PLAY_TRACK_A, NULL);
+    notify(EVENT_ENTER_GAME, NULL);
 }
 
 void StatePlay::on_lose_focus() {

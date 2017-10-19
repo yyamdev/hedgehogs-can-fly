@@ -97,6 +97,7 @@ int main() {
         }
 
         gui.Update(1.f / 60.f);
+        audio.tick_game_music();
         world.tick();
         State::tick_current();
         //particles_tick(world.camera, playerPosition, playerVelocity);
