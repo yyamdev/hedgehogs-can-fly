@@ -11,6 +11,7 @@
 #include "SFGUI/Separator.hpp"
 #include "play_state.h"
 #include "save.h"
+#include "end_state.h"
 
 StateWin::StateWin(World *world, int levelNum, bool *restartFlag, sf::Color clear) : State(world) {
     this->levelNum = levelNum;
@@ -61,29 +62,44 @@ void StateWin::on_gain_focus() {
 
     auto guiBoxButtons = sfg::Box::Create();
     guiBoxMain->Pack(guiBoxButtons);
-    auto guiButtonBack = sfg::Button::Create("Next");
-    guiButtonBack->SetId("btnWinNext");
-    guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
-        State::push_state(new StatePlay(world, levelNum + 1));
-    }));
-    guiBoxButtons->Pack(guiButtonBack);
 
-    auto guiButtonSelect = sfg::Button::Create("Level Select");
-    guiButtonSelect->SetId("btnWinSelect");
-    guiButtonSelect->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([] (void) {
-        // pop state back to level select
-        while (State::get_current()->get_name() != "select")
-            State::pop_state();
-    }));
-    guiBoxButtons->Pack(guiButtonSelect);
+    if (levelNum != 12) {
+        auto guiButtonBack = sfg::Button::Create("Next");
+        guiButtonBack->SetId("btnWinNext");
+        guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
+                    State::push_state(new StatePlay(world, levelNum + 1));
+                }));
+        guiBoxButtons->Pack(guiButtonBack);
 
-    auto guiButtonResert = sfg::Button::Create("Restart");
-    guiButtonResert->SetId("btnWinRestart");
-    guiButtonResert->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
-        *restartFlag = true;
-        State::pop_state();
-    }));
-    guiBoxButtons->Pack(guiButtonResert);
+        
+        auto guiButtonSelect = sfg::Button::Create("Level Select");
+        guiButtonSelect->SetId("btnWinSelect");
+        guiButtonSelect->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([] (void) {
+                    // pop state back to level select
+                    while (State::get_current()->get_name() != "select")
+                        State::pop_state();
+                }));
+        guiBoxButtons->Pack(guiButtonSelect);
+
+        auto guiButtonResert = sfg::Button::Create("Restart");
+        guiButtonResert->SetId("btnWinRestart");
+        guiButtonResert->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
+                    *restartFlag = true;
+                    State::pop_state();
+                }));
+        guiBoxButtons->Pack(guiButtonResert);
+
+    } else {
+        auto guiButtonBack = sfg::Button::Create("?");
+        guiButtonBack->SetId("btnWinNext");
+        guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
+                    // pop state back to level select
+                    while (State::get_current()->get_name() != "select")
+                        State::pop_state();
+                    State::change_state(new StateEnd(world));
+                }));
+        guiBoxButtons->Pack(guiButtonBack);
+    }
 
     // position window at centre of screen
     // needs to be done at the end so SFGUI knows how big it has to be

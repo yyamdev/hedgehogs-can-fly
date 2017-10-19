@@ -165,6 +165,9 @@
     <ClInclude Include="fireworks_entity.h">
       <Filter>Header Files\game\world</Filter>
     </ClInclude>
+    <ClInclude Include="end_state.h">
+      <Filter>Header Files\game\state</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="subject.cpp">
@@ -265,6 +268,9 @@
     </ClCompile>
     <ClCompile Include="fireworks_entity.cpp">
       <Filter>Source Files\game\world</Filter>
+    </ClCompile>
+    <ClCompile Include="end_state.cpp">
+      <Filter>Source Files\game\state</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
