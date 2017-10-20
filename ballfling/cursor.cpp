@@ -30,7 +30,7 @@ void draw_cursor(sf::RenderWindow &window) {
 
 void set_cursor(sf::Texture *cursorTexture) {
     _cursors::sprCursor.setTexture(*cursorTexture);
-    _cursors::draw = true;
+    //_cursors::draw = true;
 }
 
 void set_cursor_visible(bool visible) {

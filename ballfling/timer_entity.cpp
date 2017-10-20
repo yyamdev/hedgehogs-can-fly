@@ -6,6 +6,8 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include "imgui.h"
+#include "debug_draw.h"
 
 EntityTimer::EntityTimer() {
     millisecondsPaused = 0;
@@ -25,7 +27,14 @@ void EntityTimer::tick(std::vector<Entity*> &entities) {
 }
 
 void EntityTimer::draw(sf::RenderWindow &window) {
-    //return; // disabled
+    static bool enable = true;
+    if (edit && ImGui::CollapsingHeader("Timer")) {
+        if (ImGui::Button("toggle")) {
+            enable = !enable;
+        }
+    }
+
+    if (!enable) return;
     
     unsigned int millis  = get_time();
     unsigned int seconds = (millis / 1000);

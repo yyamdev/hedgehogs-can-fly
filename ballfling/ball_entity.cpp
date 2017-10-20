@@ -146,7 +146,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         justSpawned = false;
     }
     // move camera
-    if (!world->is_paused()) {
+    if (!world->is_paused() && !world->cameraFollowBall) {
         sf::Vector2f screenSize((float)WINDOW_WIDTH, (float)WINDOW_HEIGHT);
         sf::Vector2f delta = (position - screenSize / 2.f) - world->camera;
         world->camera += delta * 0.05f;

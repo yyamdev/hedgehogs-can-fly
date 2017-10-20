@@ -17,6 +17,7 @@
 #include "util.h"
 
 StateMenu::StateMenu(World *world) : State(world) {
+    set_cursor_visible(true);
     set_cursor(CURSOR_POINTER);
     txtTitle.loadFromFile("data/header.png");
     sprTitle.setTexture(txtTitle);

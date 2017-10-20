@@ -6,12 +6,17 @@
 #include "debug_draw.h"
 #include "imgui.h"
 #include "util.h"
+#include "cursor.h"
 
 World::World(sf::RenderWindow &window) {
     this->window = &window;
     paused = false;
     gravity = sf::Vector2f(0.f, GRAVITY);
     clamp = false;
+    
+    cameraFollowBall = false;
+    smoothCamOn = false;
+    smoothCam.maxSteps = 100;
 }
 
 World::~World() {
@@ -62,6 +67,15 @@ void World::tick() {
         entityAddQueue.pop();
     }
 
+    if (smoothCamOn) {
+        camera += smoothCam.step;
+        ++smoothCam.currentSteps;
+        if (smoothCam.currentSteps > smoothCam.maxSteps) {
+            smoothCamOn = false;
+            set_cursor_visible(true);
+        }
+    }
+
     if (clamp) {
         if (camera.x < clampPos.x) camera.x = clampPos.x;
         if (camera.y < clampPos.y) camera.y = clampPos.y;
@@ -83,6 +97,45 @@ void World::draw() {
             gravity = -gravity;
         }
         if (oldGrav != gravity) notify(EVENT_NEW_WORLD_GRAVITY, NULL);
+        ImGui::Separator();
+
+        if (ImGui::CollapsingHeader("Smooth Cam")) {
+            if (ImGui::Button("toggle camera follow")) {
+                cameraFollowBall = !cameraFollowBall;
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("pan")) {
+                camera = smoothCam.start;
+                smoothCam.step = util::normalize(smoothCam.end - smoothCam.start) * smoothCam.speed;
+                smoothCam.maxSteps = (int)(util::len(smoothCam.end - smoothCam.start) / util::len(smoothCam.step));
+                smoothCam.currentSteps = 0;
+                smoothCamOn = true;
+                set_cursor_visible(false);
+            }
+
+            ImGui::InputFloat("Speed", &smoothCam.speed);
+            
+            if (ImGui::Button("set start")) {
+                smoothCam.start = camera;
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Jump to start")) {
+                camera = smoothCam.start;
+            }
+            
+            ImGui::Text("Start: %f, %f", smoothCam.start.x, smoothCam.start.y);
+            
+            if (ImGui::Button("set end")) {
+                smoothCam.end = camera;
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("jump to end")) {
+                camera = smoothCam.end;
+            }
+            
+            ImGui::Text("End: %f, %f", smoothCam.end.x, smoothCam.end.y);
+        }
+        
         ImGui::Separator();
         ImGui::LabelText(util::to_string(entities.size()).c_str(), "entity count");
         if (ImGui::TreeNode("list")) {

@@ -13,6 +13,16 @@
 
 #define ENTITY_TAG_ALL ""
 
+struct SmoothCam {
+    sf::Vector2f start;
+    sf::Vector2f end;
+
+    float speed;
+    sf::Vector2f step;
+    int currentSteps;
+    int maxSteps;
+};
+
 class World : public Observer, public Subject{
 public:
     World(sf::RenderWindow &window);
@@ -40,9 +50,13 @@ public:
 
     sf::Vector2f gravity;
 
+    bool cameraFollowBall;
+    bool smoothCamOn;
+
 private:
     sf::RenderWindow *window;
     std::vector<Entity*> entities;
     std::queue<Entity*> entityAddQueue;
     bool paused;
+    SmoothCam smoothCam;
 };
