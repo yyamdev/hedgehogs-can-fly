@@ -4,6 +4,8 @@
 #include <SFML/System.hpp>
 #include "subject.h"
 
+void do_fireworks(sf::Vector2f position, int count);
+
 class EntityFireworks : public Entity
 {
 public:
