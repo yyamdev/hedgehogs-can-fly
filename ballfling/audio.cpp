@@ -12,6 +12,8 @@ enum Sfx {
     SFX_LVLSTART,
     SFX_HITSANDY,
     SFX_MENULOCK,
+    SFX_HITSTCKY,
+    SFX_DIEWATER,
     SFX_COUNT,
 };
 
@@ -22,6 +24,8 @@ static const char * names[SFX_COUNT] = {
     /* SFX_LVLSTART */  "data/sfx/level_start.wav",
     /* SFX_HITSANDY */  "data/sfx/hit_sand.wav",
     /* SFX_MENULOCK */  "data/sfx/menu_locked.wav",
+    /* SFX_HITSTCKY */  "data/sfx/hit_sticky.wav",
+    /* SFX_DIEWATER */  "data/sfx/die_water.wav",
 };
 static sf::SoundBuffer buf[SFX_COUNT];
 static sf::Sound       snd[SFX_COUNT];
@@ -88,6 +92,8 @@ void Audio::on_notify(Event event, void *data) {
     if (event == EVENT_MENU_CLICK)      sfx_play(SFX_MENUCLIC);
     if (event == EVENT_LEVEL_START)     sfx_play(SFX_LVLSTART);
     if (event == EVENT_MENU_LOCKED)     sfx_play(SFX_MENULOCK);
+    if (event == EVENT_BALL_HIT_STICKY) sfx_play(SFX_HITSTCKY);
+    if (event == EVENT_BALL_HIT_WATER)  sfx_play(SFX_DIEWATER);
 
     // Music
 
