@@ -69,8 +69,9 @@ void StatePause::on_gain_focus() {
     guiButtonBack->SetId("btnPauseBack");
     guiButtonBack->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonBack->GetRequisition().x / 2.f, 500.f));
     guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
-        if (world->is_paused()) world->toggle_pause();
-        State::pop_state();
+                notify(EVENT_MENU_CLICK, NULL);
+                if (world->is_paused()) world->toggle_pause();
+                State::pop_state();
     }));
     guiBoxMain->Pack(guiButtonBack);
 
@@ -78,6 +79,7 @@ void StatePause::on_gain_focus() {
     guiButtonOptions->SetId("btnPauseOptions");
     guiButtonOptions->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonOptions->GetRequisition().x / 2.f, 500.f));
     guiButtonOptions->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
+                notify(EVENT_MENU_CLICK, NULL);
                 State::push_state(new StateOptions(world, false, clear)); 
     }));
     guiBoxMain->Pack(guiButtonOptions);
@@ -86,8 +88,9 @@ void StatePause::on_gain_focus() {
     guiButtonRestart->SetId("btnPauseRestart");
     guiButtonRestart->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonRestart->GetRequisition().x / 2.f, 500.f));
     guiButtonRestart->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
-        *restartFlag = true;
-        State::pop_state();
+                notify(EVENT_MENU_CLICK, NULL);
+                *restartFlag = true;
+                State::pop_state();
     }));
     guiBoxMain->Pack(guiButtonRestart);
 
@@ -95,6 +98,7 @@ void StatePause::on_gain_focus() {
     guiButtonSelect->SetId("btnPauseSelect");
     guiButtonSelect->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonSelect->GetRequisition().x / 2.f, 500.f));
     guiButtonSelect->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
+                notify(EVENT_MENU_CLICK, NULL);
         if (world->is_paused()) world->toggle_pause();
         // pop state back to level select
         while (State::get_current()->get_name() != "select")
