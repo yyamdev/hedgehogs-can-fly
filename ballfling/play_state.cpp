@@ -72,6 +72,8 @@ StatePlay::StatePlay(World *world, int levelNum) : State(world) {
     //gate = new EntityGate(sf::Vector2f(650.f, 750.f), 25.f, 64.f, 2.f, levelColour);
 
     completed = false;
+
+    notify(EVENT_LEVEL_START, NULL);
 }
 
 sf::Color StatePlay::get_clear_colour() {
