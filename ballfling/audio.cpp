@@ -10,6 +10,7 @@ enum Sfx {
     SFX_HITBOUNC,
     SFX_MENUCLIC,
     SFX_LVLSTART,
+    SFX_HITSANDY,
     SFX_COUNT,
 };
 
@@ -17,7 +18,8 @@ static const char * names[SFX_COUNT] = {
     /* SFX_HITSOLID */  "data/sfx/hit_solid.wav",
     /* SFX_HITCOUNC */  "data/sfx/hit_bouncy.wav",
     /* SFX_MENUCLIC */  "data/sfx/menu_click.wav",
-    /* SFX_LVLSTART */  "data/sfx/level_start.wav"
+    /* SFX_LVLSTART */  "data/sfx/level_start.wav",
+    /* SFX_HITSANDY */  "data/sfx/hit_sand.wav",
 };
 static sf::SoundBuffer buf[SFX_COUNT];
 static sf::Sound       snd[SFX_COUNT];
@@ -70,6 +72,13 @@ void Audio::on_notify(Event event, void *data) {
         if (clkHit.getElapsedTime().asSeconds() > .1f) {
             sfx_play(SFX_HITSOLID);
             clkHit.restart();
+        }
+    }
+
+    if (event == EVENT_BALL_HIT_SANDY) {
+        if (clkHitSandy.getElapsedTime().asSeconds() > .25f) {
+            sfx_play(SFX_HITSANDY);
+            clkHitSandy.restart();
         }
     }
 

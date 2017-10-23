@@ -290,7 +290,8 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                 particles = false;
                 bounceFactor = 0.3f;
                 lastTerrain = T_SLOW;
-                notify(EVENT_BALL_HIT_SANDY, NULL);
+                if (util::len(velocity) > .75f)
+                    notify(EVENT_BALL_HIT_SANDY, NULL);
             }
             else if (t == T_STICKY) {
                 rest = true;

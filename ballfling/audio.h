@@ -23,6 +23,7 @@ public:
     void on_notify(Event event, void *data);
 private:
     sf::Clock clkHit;
+    sf::Clock clkHitSandy;
 
     track currentlyPlaying;
     track wasCurrentlyPlaying;
