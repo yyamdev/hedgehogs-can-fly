@@ -14,8 +14,13 @@
 #include "SFGUI/CheckButton.hpp"
 #include "save.h"
 
-StateOptions::StateOptions(World *world, bool full) : State(world) {
+StateOptions::StateOptions(World *world, bool full, sf::Color clear) : State(world) {
     this->full = full;
+    this->clear = clear;
+}
+
+sf::Color StateOptions::get_clear_colour() {
+    return clear;
 }
 
 void StateOptions::on_event(sf::Event &event) {
