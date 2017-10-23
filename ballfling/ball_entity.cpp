@@ -252,7 +252,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                              120);
             }
             reset_to_rest();
-            notify(EVENT_HIT_WATER, NULL);
+            notify(EVENT_BALL_HIT_WATER, NULL);
         }
 
         if (terrain->get_pos(position) == T_THIN) {
@@ -284,11 +284,13 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                 particleColour = sf::Color(153, 229, 80);
                 particles = true;
                 lastTerrain = T_BOUNCY;
+                notify(EVENT_BALL_HIT_BOUNCY, NULL);
             }
             else if (t == T_SLOW) {
                 particles = false;
                 bounceFactor = 0.3f;
                 lastTerrain = T_SLOW;
+                notify(EVENT_BALL_HIT_SANDY, NULL);
             }
             else if (t == T_STICKY) {
                 rest = true;
@@ -297,6 +299,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                 particleColour = sf::Color(215, 123, 186);
                 particles = true;
                 lastTerrain = T_STICKY;
+                notify(EVENT_BALL_HIT_STICKY, NULL);
             }
             else if (t == T_THIN) {
                 // Used for something else

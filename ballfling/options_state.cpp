@@ -110,7 +110,8 @@ void StateOptions::on_gain_focus() {
         auto guiButtonBack = sfg::Button::Create("Erase Save(!)");
         guiButtonBack->SetId("btnOptionsErase");
         guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
-            savegame_reset();
+                    notify(EVENT_MENU_CLICK, NULL);
+                    savegame_reset();
         }));
         guiBoxErase->Pack(guiButtonBack);
     }
@@ -119,8 +120,9 @@ void StateOptions::on_gain_focus() {
     guiButtonBack->SetId("btnOptionsBack");
     guiButtonBack->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonBack->GetRequisition().x / 2.f, 500.f));
     guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
-        guiSliderMusic->Show(false); // neccessary to stop this widget from displaying in other menus, possibly an SFGUI bug?
-        guiSliderSfx->Show(false);   // ""
+                notify(EVENT_MENU_CLICK, NULL);
+                guiSliderMusic->Show(false); // neccessary to stop this widget from displaying in other menus, possibly an SFGUI bug?
+                guiSliderSfx->Show(false);   // ""
         State::pop_state();
     }));
     guiBoxMain->Pack(guiButtonBack);

@@ -4,22 +4,38 @@
 #include "options.h"
 #include "subject.h"
 
+enum Sfx {
+ // SFX_XXXXXXXX
+    SFX_HITSOLID,
+    SFX_HITBOUNC,
+    SFX_MENUCLIC,
+    SFX_COUNT,
+};
+
+static const char * names[SFX_COUNT] = {
+    /* SFX_HITSOLID */  "data/sfx/hit_solid.wav",
+    /* SFX_HITCOUNC */  "data/sfx/hit_bouncy.wav",
+    /* SFX_MENUCLIC */  "data/sfx/menu_click.wav",
+};
+static sf::SoundBuffer buf[SFX_COUNT];
+static sf::Sound       snd[SFX_COUNT];
+
+void sfx_play(Sfx sfx) {
+    snd[sfx].setVolume((float)options.sfxVolume * 100.f);
+    snd[sfx].play();
+}
+
 Audio::Audio() {
     Subject::add_observer(this);
+
+    // Init sfx
+    for (int i = 0; i < SFX_COUNT; ++i) {
+        buf[i].loadFromFile(names[i]);
+        snd[i].setBuffer(buf[i]);
+        snd[i].setLoop(false);
+    }
     
-    bufSplash.loadFromFile("data/splash.wav");
-    sndSplash.setBuffer(bufSplash);
-
-    bufBounce.loadFromFile("data/bounce.wav");
-    sndBounce.setBuffer(bufBounce);
-
-    bufSmash.loadFromFile("data/smash.wav");
-    sndSmash.setBuffer(bufSmash);
-
-    bufHit.loadFromFile("data/hit.wav");
-    sndHit.setBuffer(bufHit);
-
-
+    // Init music
     currentlyPlaying = MUSIC_TRACK_COUNT;
     wasCurrentlyPlaying = MUSIC_TRACK_A;
     
@@ -46,28 +62,19 @@ void Audio::update_all_music_volume() {
 }
 
 void Audio::on_notify(Event event, void *data) {
-    if (event == EVENT_HIT_WATER) {
-        sndSplash.setVolume((float)options.sfxVolume * 100.f);
-        sndSplash.play();
-    }
-
-    if (event == EVENT_BOUNCE_DOOR) {
-        sndBounce.setVolume((float)options.sfxVolume * 100.f);
-        sndBounce.play();
-    }
-
-    if (event == EVENT_SMASH_DOOR) {
-        sndSmash.setVolume((float)options.sfxVolume * 100.f);
-        sndSmash.play();
-    }
+    // Sfx
 
     if (event == EVENT_BALL_HIT_SOLID) {
         if (clkHit.getElapsedTime().asSeconds() > .1f) {
-            sndHit.setVolume((float)options.sfxVolume * 100.f);
-            sndHit.play();
+            sfx_play(SFX_HITSOLID);
             clkHit.restart();
         }
     }
+
+    if (event == EVENT_BALL_HIT_BOUNCY) sfx_play(SFX_HITBOUNC);
+    if (event == EVENT_MENU_CLICK)      sfx_play(SFX_MENUCLIC);
+
+    // Music
 
     if (event == EVENT_CHANGE_MUSIC_VOLUME) {
         update_all_music_volume();

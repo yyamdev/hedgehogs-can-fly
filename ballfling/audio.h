@@ -22,17 +22,6 @@ public:
     
     void on_notify(Event event, void *data);
 private:
-    sf::SoundBuffer bufSplash;
-    sf::Sound sndSplash;
-
-    sf::SoundBuffer bufBounce;
-    sf::Sound sndBounce;
-
-    sf::SoundBuffer bufSmash;
-    sf::Sound sndSmash;
-
-    sf::SoundBuffer bufHit;
-    sf::Sound sndHit;
     sf::Clock clkHit;
 
     track currentlyPlaying;

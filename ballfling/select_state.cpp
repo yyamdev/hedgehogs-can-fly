@@ -65,10 +65,12 @@ void StateSelect::on_gain_focus() {
                 guiButtonLvl->SetImage(sfg::Image::Create(imgLock));
             gui.Add(guiButtonLvl);
             guiButtonLvl->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this, level] (void) {
-                if (savegame_is_level_unlocked(level))
-                    State::push_state(new StatePlay(world, level));
-                //else
-                    // TODO(Pedro): Add sfx
+                        if (savegame_is_level_unlocked(level)) {
+                            notify(EVENT_MENU_CLICK, NULL);
+                            State::push_state(new StatePlay(world, level));
+                        } else {
+                            // TODO: Add Sfx
+                        }
             }));
             position += right;
         }
@@ -81,7 +83,8 @@ void StateSelect::on_gain_focus() {
     guiButtonBack->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonBack->GetRequisition().x / 2.f, 500.f));
     gui.Add(guiButtonBack);
     guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([] (void) {
-        State::pop_state();
+                notify(EVENT_MENU_CLICK, NULL);
+                State::pop_state();
     }));
 }
 

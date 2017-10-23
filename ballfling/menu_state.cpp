@@ -76,6 +76,7 @@ void StateMenu::on_gain_focus() {
     guiButtonPlay->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonPlay->GetRequisition().x / 2.f, 325.f));
     gui.Add(guiButtonPlay);
     guiButtonPlay->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
+                notify(EVENT_MENU_CLICK, NULL);
         State::push_state(new StateSelect(world));
     }));
 
@@ -84,6 +85,7 @@ void StateMenu::on_gain_focus() {
     guiButtonOptions->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonOptions->GetRequisition().x / 2.f, 425.f));
     gui.Add(guiButtonOptions);
     guiButtonOptions->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
+                notify(EVENT_MENU_CLICK, NULL);
                 State::push_state(new StateOptions(world, true, sf::Color::Black));
     }));
 }
