@@ -6,6 +6,7 @@
 #include "observer.h"
 #include "subject.h"
 #include <SFML/Graphics.hpp>
+#include "SFGUI/Button.hpp"
 
 class World;
 
@@ -30,4 +31,6 @@ private:
     sf::Clock timerState;
 
     int state;
+
+    std::shared_ptr<sfg::Button> guiButtonSelect;
 };

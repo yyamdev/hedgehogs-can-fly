@@ -20,6 +20,7 @@
 #include "particle.h"
 #include "splash_state.h"
 #include "audio.h"
+#include "end_state.h"
 
 // frame time profiler
 #define PBUFLEN 16
@@ -56,7 +57,6 @@ int main() {
     sfg::SFGUI guiManager;
     gui.LoadThemeFromFile("data/ui.css");
 
-    //State::change_state(new StateMenu(&world));
     State::change_state(new StateSplash(&world));
 
     ImGui::SFML::Init(window);

@@ -5,13 +5,11 @@
 #include "SFGUI/Button.hpp"
 #include "build_options.h"
 #include "util.h"
-#include "SFGUI/Label.hpp"
-#include "SFGUI/Window.hpp"
-#include "SFGUI/Box.hpp"
-#include "SFGUI/Separator.hpp"
 #include "play_state.h"
 #include "fireworks_entity.h"
 #include "particle.h"
+#include "shared_res.h"
+#include "cursor.h"
 
 StateEnd::StateEnd(World *world) : State(world) {
     fireworkTime = 1.f;
@@ -22,7 +20,8 @@ void StateEnd::on_event(sf::Event &event) {
 }
 
 sf::Color StateEnd::get_clear_colour() {
-    return sf::Color(34, 32, 52);
+    //return sf::Color(34, 32, 52);
+    return sf::Color::Black;
 }
 
 void StateEnd::on_tick() {
@@ -41,7 +40,7 @@ void StateEnd::on_tick() {
 
         if (timerState.getElapsedTime().asSeconds() > 8.f) {
             state = 1;
-            create_gui();
+            gui.Add(guiButtonSelect);
         }
     }
 
@@ -57,6 +56,10 @@ void StateEnd::on_tick() {
 
 void StateEnd::on_draw(sf::RenderWindow &window) {
     particles_draw(window, sf::Vector2f(0.f, 0.f));
+    if (state == 1) {
+        sf::Sprite sprMsg(txtBye);
+        window.draw(sprMsg);
+    }
 }
 
 void StateEnd::on_draw_ui(sf::RenderWindow &window) {
@@ -64,19 +67,20 @@ void StateEnd::on_draw_ui(sf::RenderWindow &window) {
 
 void StateEnd::create_gui() {
     gui.RemoveAll();
-    auto guiButtonSelect = sfg::Button::Create("Back");
+    guiButtonSelect = sfg::Button::Create("Back");
     guiButtonSelect->SetId("btnDeathSelect");
     guiButtonSelect->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([] (void) {
         State::pop_state(); // pop state back to level select
     }));
     guiButtonSelect->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2 - guiButtonSelect->GetRequisition().x / 2.f, 500.f));
-    gui.Add(guiButtonSelect);
 }
 
 void StateEnd::on_gain_focus() {
-    gui.RemoveAll();
+    create_gui();
     timerFirework.restart();
     timerState.restart();
+    set_cursor_visible(true);
+    set_cursor(CURSOR_POINTER);
 }
 
 void StateEnd::on_lose_focus() {
