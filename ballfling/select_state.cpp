@@ -69,7 +69,7 @@ void StateSelect::on_gain_focus() {
                             notify(EVENT_MENU_CLICK, NULL);
                             State::push_state(new StatePlay(world, level));
                         } else {
-                            // TODO: Add Sfx
+                            notify(EVENT_MENU_LOCKED, NULL);
                         }
             }));
             position += right;

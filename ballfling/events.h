@@ -33,4 +33,5 @@ enum Event {
     EVENT_LEVEL_START, // NULL
 
     EVENT_MENU_CLICK, // NULL
+    EVENT_MENU_LOCKED, // NULL
 };
