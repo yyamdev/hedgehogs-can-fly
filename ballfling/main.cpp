@@ -111,7 +111,12 @@ int main() {
         //particles_draw(window, world.camera);
         
         window.resetGLStates();
-        
+
+        if (edit && ImGui::CollapsingHeader("Resources")) {
+            if (ImGui::Button("reload sfx")) {
+                audio.reload_sfx();
+            }
+        }
         if (edit && ImGui::CollapsingHeader("Performance")) {
             sf::Color frameCol = sf::Color::Green;
             if (framePercent > 100.f) frameCol = sf::Color::Red;

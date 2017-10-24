@@ -14,6 +14,7 @@ enum Sfx {
     SFX_MENULOCK,
     SFX_HITSTCKY,
     SFX_DIEWATER,
+    SFX_SPLASHSC,
     SFX_COUNT,
 };
 
@@ -26,6 +27,7 @@ static const char * names[SFX_COUNT] = {
     /* SFX_MENULOCK */  "data/sfx/menu_locked.wav",
     /* SFX_HITSTCKY */  "data/sfx/hit_sticky.wav",
     /* SFX_DIEWATER */  "data/sfx/die_water.wav",
+    /* SFX_SPLASHSC */  "data/sfx/splash.wav",
 };
 static sf::SoundBuffer buf[SFX_COUNT];
 static sf::Sound       snd[SFX_COUNT];
@@ -35,15 +37,18 @@ void sfx_play(Sfx sfx) {
     snd[sfx].play();
 }
 
-Audio::Audio() {
-    Subject::add_observer(this);
-
-    // Init sfx
+void Audio::reload_sfx() {
     for (int i = 0; i < SFX_COUNT; ++i) {
         buf[i].loadFromFile(names[i]);
         snd[i].setBuffer(buf[i]);
         snd[i].setLoop(false);
     }
+}
+
+Audio::Audio() {
+    Subject::add_observer(this);
+
+    reload_sfx();
     
     // Init music
     currentlyPlaying = MUSIC_TRACK_COUNT;
@@ -94,6 +99,7 @@ void Audio::on_notify(Event event, void *data) {
     if (event == EVENT_MENU_LOCKED)     sfx_play(SFX_MENULOCK);
     if (event == EVENT_BALL_HIT_STICKY) sfx_play(SFX_HITSTCKY);
     if (event == EVENT_BALL_HIT_WATER)  sfx_play(SFX_DIEWATER);
+    if (event == EVENT_ENTER_SPLASH)    sfx_play(SFX_SPLASHSC);
 
     // Music
 

@@ -4,10 +4,11 @@
 
 #include "state.h"
 #include <SFML/Graphics.hpp>
+#include "subject.h"
 
 class World;
 
-class StateSplash : public State {
+class StateSplash : public State, public Subject {
 public:
     StateSplash(World *world);
 

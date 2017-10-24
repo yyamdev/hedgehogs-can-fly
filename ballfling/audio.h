@@ -21,6 +21,8 @@ public:
     sf::Music *track_to_music(track track_enum);
     
     void on_notify(Event event, void *data);
+
+    void reload_sfx();
 private:
     sf::Clock clkHit;
     sf::Clock clkHitSandy;

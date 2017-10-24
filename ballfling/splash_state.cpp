@@ -33,6 +33,7 @@ void StateSplash::on_tick() {
     case 1: // hold
         if (timer.getElapsedTime().asSeconds() > 2.f) {
             state = 2;
+            //notify(EVENT_ENTER_SPLASH, NULL);
         }
         break;
     case 2: // fade out
@@ -54,6 +55,7 @@ void StateSplash::on_draw_ui(sf::RenderWindow &window) {
 }
 
 void StateSplash::on_gain_focus() {
+    notify(EVENT_ENTER_SPLASH, NULL);
 }
 
 void StateSplash::on_lose_focus() {

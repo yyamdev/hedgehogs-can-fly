@@ -34,4 +34,6 @@ enum Event {
 
     EVENT_MENU_CLICK, // NULL
     EVENT_MENU_LOCKED, // NULL
+
+    EVENT_ENTER_SPLASH, // NULL
 };
