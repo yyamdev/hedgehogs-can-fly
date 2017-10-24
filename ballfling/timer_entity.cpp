@@ -27,7 +27,7 @@ void EntityTimer::tick(std::vector<Entity*> &entities) {
 }
 
 void EntityTimer::draw(sf::RenderWindow &window) {
-    static bool enable = true;
+    static bool enable = false;
     if (edit && ImGui::CollapsingHeader("Timer")) {
         if (ImGui::Button("toggle")) {
             enable = !enable;
