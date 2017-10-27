@@ -33,4 +33,6 @@ private:
     int state;
 
     std::shared_ptr<sfg::Button> guiButtonSelect;
+
+    float nextFireworkSeconds;
 };

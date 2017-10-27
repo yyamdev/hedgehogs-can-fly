@@ -12,7 +12,7 @@
 #include "cursor.h"
 
 StateEnd::StateEnd(World *world) : State(world) {
-    fireworkTime = 1.f;
+    fireworkTime = 2.0f;
     state = 0;
 }
 
@@ -29,27 +29,29 @@ void StateEnd::on_tick() {
 
     if (state == 0) {
         if (timerFirework.getElapsedTime().asSeconds() > fireworkTime) {
-            do_fireworks(sf::Vector2f(util::rnd(0.f, (float)WINDOW_WIDTH),
-                                      util::rnd(0.f, (float)WINDOW_HEIGHT)),
+            EntityFireworks::do_fireworks(sf::Vector2f(util::rnd(0.f, (float)WINDOW_WIDTH),
+                                                       util::rnd(0.f, (float)WINDOW_HEIGHT)),
                          50);
             timerFirework.restart();
-            fireworkTime -= .05f;
+            fireworkTime -= .25f;
             if (fireworkTime < .2f)
                 fireworkTime = .2f;
         }
 
-        if (timerState.getElapsedTime().asSeconds() > 8.f) {
+        if (timerState.getElapsedTime().asSeconds() > 12.f) {
             state = 1;
+            nextFireworkSeconds = util::rnd(.8f, 2.5f);
             gui.Add(guiButtonSelect);
         }
     }
 
     if (state == 1) {
-        if (timerFirework.getElapsedTime().asSeconds() > 1.f) {
-            do_fireworks(sf::Vector2f(util::rnd(0.f, (float)WINDOW_WIDTH),
-                                      util::rnd(0.f, (float)WINDOW_HEIGHT)),
+        if (timerFirework.getElapsedTime().asSeconds() > nextFireworkSeconds) {
+            EntityFireworks::do_fireworks(sf::Vector2f(util::rnd(0.f, (float)WINDOW_WIDTH),
+                                                       util::rnd(0.f, (float)WINDOW_HEIGHT)),
                          50);
             timerFirework.restart();
+            nextFireworkSeconds = util::rnd(.8f, 2.5f);
         }
     }
 }

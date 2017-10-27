@@ -20,7 +20,7 @@ void EntityFireworks::event(sf::Event &e)
 {
 }
 
-void do_fireworks(sf::Vector2f position, int count)
+void EntityFireworks::do_fireworks(sf::Vector2f position, int count)
 {
     for (int i = 0; i < count; ++i)
     {
@@ -30,6 +30,7 @@ void do_fireworks(sf::Vector2f position, int count)
                      util::choose(sf::Color::Yellow, sf::Color::White),
                      360);
     }
+    notify(EVENT_FIREWORK, NULL);
 }
 
 void EntityFireworks::tick(std::vector<Entity*> &entities)
