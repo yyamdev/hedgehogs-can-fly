@@ -16,6 +16,8 @@ enum Sfx {
     SFX_DIEWATER,
     SFX_SPLASHSC,
     SFX_FIREWORK,
+    SFX_BALLDRAG,
+    SFX_BALLFLNG,
     SFX_COUNT,
 };
 
@@ -29,7 +31,9 @@ static const char * names[SFX_COUNT] = {
     /* SFX_HITSTCKY */  "data/sfx/hit_sticky.wav",
     /* SFX_DIEWATER */  "data/sfx/die_water.wav",
     /* SFX_SPLASHSC */  "data/sfx/splash.wav",
-    /* SFX_FIREWORK */  "data/sfx/firework.wav"
+    /* SFX_FIREWORK */  "data/sfx/firework.wav",
+    /* SFX_BALLDRAG */  "data/sfx/ball_drag.wav",
+    /* SFX_BALLFLNG */  "data/sfx/ball_fling.wav",
 };
 static sf::SoundBuffer buf[SFX_COUNT];
 static sf::Sound       snd[SFX_COUNT];
@@ -95,14 +99,16 @@ void Audio::on_notify(Event event, void *data) {
         }
     }
 
-    if (event == EVENT_BALL_HIT_BOUNCY)  sfx_play(SFX_HITBOUNC);
-    if (event == EVENT_MENU_CLICK)       sfx_play(SFX_MENUCLIC);
-    if (event == EVENT_LEVEL_START)      sfx_play(SFX_LVLSTART);
-    if (event == EVENT_MENU_LOCKED)      sfx_play(SFX_MENULOCK);
-    if (event == EVENT_BALL_HIT_STICKY)  sfx_play(SFX_HITSTCKY);
-    if (event == EVENT_BALL_HIT_WATER)   sfx_play(SFX_DIEWATER);
-    if (event == EVENT_ENTER_SPLASH)     sfx_play(SFX_SPLASHSC);
-    if (event == EVENT_FIREWORK)         sfx_play(SFX_FIREWORK);
+    if (event == EVENT_BALL_HIT_BOUNCY)    sfx_play(SFX_HITBOUNC);
+    if (event == EVENT_MENU_CLICK)         sfx_play(SFX_MENUCLIC);
+    if (event == EVENT_LEVEL_START)        sfx_play(SFX_LVLSTART);
+    if (event == EVENT_MENU_LOCKED)        sfx_play(SFX_MENULOCK);
+    if (event == EVENT_BALL_HIT_STICKY)    sfx_play(SFX_HITSTCKY);
+    if (event == EVENT_BALL_HIT_WATER)     sfx_play(SFX_DIEWATER);
+    if (event == EVENT_ENTER_SPLASH)       sfx_play(SFX_SPLASHSC);
+    if (event == EVENT_FIREWORK)           sfx_play(SFX_FIREWORK);
+    if (event == EVENT_PLAYER_START_DRAG)  sfx_play(SFX_BALLDRAG);
+    if (event == EVENT_PLAYER_END_DRAG)    sfx_play(SFX_BALLFLNG);
 
     // Music
 
