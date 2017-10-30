@@ -112,6 +112,8 @@ void StatePause::on_gain_focus() {
     // needs to be done at the end so SFGUI knows how big it has to be
     guiWinMain->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2 - guiWinMain->GetRequisition().x / 2.f, WINDOW_HEIGHT / 2 - guiWinMain->GetRequisition().y / 2.f - 40.f));
 
+    notify(EVENT_ENTER_PAUSE_SCREEN, NULL);
+    
 }
 
 void StatePause::on_lose_focus() {

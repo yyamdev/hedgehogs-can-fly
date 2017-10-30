@@ -18,6 +18,8 @@ enum Sfx {
     SFX_FIREWORK,
     SFX_BALLDRAG,
     SFX_BALLFLNG,
+    SFX_ENTPAUSE,
+    SFX_LVFINISH,
     SFX_COUNT,
 };
 
@@ -34,6 +36,8 @@ static const char * names[SFX_COUNT] = {
     /* SFX_FIREWORK */  "data/sfx/firework.wav",
     /* SFX_BALLDRAG */  "data/sfx/ball_drag.wav",
     /* SFX_BALLFLNG */  "data/sfx/ball_fling.wav",
+    /* SFX_ENTPAUSE */  "data/sfx/pause.wav",
+    /* SFX_LVFINISH */  "data/sfx/level_complete.wav",
 };
 static sf::SoundBuffer buf[SFX_COUNT];
 static sf::Sound       snd[SFX_COUNT];
@@ -109,6 +113,8 @@ void Audio::on_notify(Event event, void *data) {
     if (event == EVENT_FIREWORK)           sfx_play(SFX_FIREWORK);
     if (event == EVENT_PLAYER_START_DRAG)  sfx_play(SFX_BALLDRAG);
     if (event == EVENT_PLAYER_END_DRAG)    sfx_play(SFX_BALLFLNG);
+    if (event == EVENT_ENTER_PAUSE_SCREEN) sfx_play(SFX_ENTPAUSE);
+    if (event == EVENT_LEVEL_COMPLETE)     sfx_play(SFX_LVFINISH);
 
     // Music
 

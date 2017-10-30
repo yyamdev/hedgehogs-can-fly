@@ -269,9 +269,9 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                 if (!spawned_fireworks) {
                     reactToInput = false;
                     world->add_entity(new EntityFireworks(position));
+                    notify(EVENT_LEVEL_COMPLETE, NULL);
                     spawned_fireworks = true;
                 }
-                //notify(EVENT_BALL_HIT_FINISH, NULL);
             }
 
             clkWallTouch.restart();
