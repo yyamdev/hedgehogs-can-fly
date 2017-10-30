@@ -99,6 +99,7 @@ void EntityEnemy::draw(sf::RenderWindow &window)
 void EntityEnemy::on_notify(Event event, void *data)
 {
     if (event == EVENT_BALL_HIT_TRIGGER && state == ENEMY_STATE_INACTIVE) {
+        return; // Disable enemy
         state = ENEMY_STATE_WAITING;
         waitingTimer.restart();
     }
