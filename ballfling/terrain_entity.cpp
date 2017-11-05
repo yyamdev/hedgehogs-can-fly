@@ -259,6 +259,11 @@ bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, sf::Vector2f vel, f
     for (int i=0; i<divisions; ++i) {
         float angle = (float)i * deltaAngle;
         sf::Vector2f probe(pos.x + rad * cos(angle), pos.y + rad * sin(angle));
+        if (get_pos(probe) == T_KILL) {
+            *newPos = pos;
+            *contact = probe;
+            return true;
+        }
         if (get_solid(probe)) {
             intersects = true;
             contactBroad = probe;

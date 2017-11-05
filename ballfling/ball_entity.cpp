@@ -242,19 +242,6 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     }
 
     if (terrain) {
-        // test if hit lava
-        if (terrain->get_pos(position) == T_KILL) {
-            for (int p = 0; p < 25; ++p) {
-                add_particle(position,
-                             sf::Vector2f(0.f, -3.f) + sf::Vector2f(util::rnd(-1.f, 1.f), util::rnd(-1.f, 1.f)),
-                             sf::Vector2f(0.f, 0.1f),
-                             sf::Color(127, 87, 99),
-                             120);
-            }
-            reset_to_rest();
-            notify(EVENT_BALL_HIT_WATER, NULL);
-        }
-
         if (terrain->get_pos(position) == T_THIN) {
             // Hijaking this to spawn the enemy
             notify(EVENT_BALL_HIT_TRIGGER, NULL);
@@ -265,6 +252,18 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
             contactPoint = contact;
 
             TerrainType t = terrain->get_pos(contactPoint);
+            if (t == T_KILL) {
+                for (int p = 0; p < 25; ++p) {
+                    add_particle(position,
+                                 sf::Vector2f(0.f, -3.f) + sf::Vector2f(util::rnd(-1.f, 1.f), util::rnd(-1.f, 1.f)),
+                                 sf::Vector2f(0.f, 0.1f),
+                                 sf::Color(127, 87, 99),
+                                 120);
+                }
+                reset_to_rest();
+                notify(EVENT_BALL_HIT_WATER, NULL);
+            }
+            
             if (t == T_WIN) {
                 if (!spawned_fireworks) {
                     reactToInput = false;
