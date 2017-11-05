@@ -118,6 +118,11 @@ void Audio::on_notify(Event event, void *data) {
 
     // Music
 
+    if (event == EVENT_ENTER_END_SCREEN) {
+        stop_all_music();
+        currentlyPlaying = MUSIC_TRACK_COUNT;
+    }
+
     if (event == EVENT_CHANGE_MUSIC_VOLUME) {
         update_all_music_volume();
     }

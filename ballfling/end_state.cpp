@@ -83,6 +83,7 @@ void StateEnd::on_gain_focus() {
     timerState.restart();
     set_cursor_visible(true);
     set_cursor(CURSOR_POINTER);
+    notify(EVENT_ENTER_END_SCREEN, NULL);
 }
 
 void StateEnd::on_lose_focus() {
