@@ -140,7 +140,7 @@ void World::draw() {
         ImGui::LabelText(util::to_string(entities.size()).c_str(), "entity count");
         if (ImGui::TreeNode("list")) {
             for (auto &e : entities) {
-                if (ImGui::TreeNode(e->get_tag().c_str())) {
+                if (ImGui::TreeNode(*e->get_tag().c_str() == 0 ? "_UNTAGGED_" : e->get_tag().c_str())) {
                     // posiiton
                     float pos[2] = {e->position.x, e->position.y};
                     ImGui::DragFloat2("position", pos);
