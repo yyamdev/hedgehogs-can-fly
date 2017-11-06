@@ -53,7 +53,9 @@ StatePlay::StatePlay(World *world, int levelNum) : State(world) {
     // Add background sprites
     switch (levelNum) {
     case 1:
-        world->add_entity(new EntitySprite("data/tnt.png", 3000.f, 1700.f));
+        world->add_entity(new EntitySprite("data/how_to_fling.png", 2903.f, 1638.f));
+        world->add_entity(new EntitySprite("data/how_to_pause.png", 4333.f, 1564.f));
+        world->add_entity(new EntitySprite("data/how_to_nudge.png", 3836.f,  996.f));
         break;
     }
 
