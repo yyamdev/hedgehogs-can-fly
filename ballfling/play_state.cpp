@@ -17,6 +17,7 @@
 #include <fstream>
 #include "timer_entity.h"
 #include "enemy_entity.h"
+#include "sprite_entity.h"
 
 std::string level_num_to_filename(int levelNum) {
     return std::string("data/lvl" + util::to_string(levelNum) + ".png");
@@ -49,6 +50,13 @@ StatePlay::StatePlay(World *world, int levelNum) : State(world) {
     gui.RemoveAll();
     world->remove_entity(ENTITY_TAG_ALL);
 
+    // Add background sprites
+    switch (levelNum) {
+    case 1:
+        world->add_entity(new EntitySprite("data/tnt.png", 3000.f, 1700.f));
+        break;
+    }
+
     // create terrain
     terrain = new EntityTerrain(2.f, filename, levelColour);
     if (terrain->error) {
@@ -71,7 +79,7 @@ StatePlay::StatePlay(World *world, int levelNum) : State(world) {
     // add gates
     gates = add_gates_from_file("data/lvl" + util::to_string(levelNum) + "gates.txt");
     //gate = new EntityGate(sf::Vector2f(650.f, 750.f), 25.f, 64.f, 2.f, levelColour);
-
+    
     completed = false;
 
     notify(EVENT_LEVEL_START, NULL);
