@@ -140,6 +140,10 @@ Scale {
     FontSize: 72;
     FontName: data/fgd.ttf;
 }
+#lblWinTime {
+	FontSize: 32;
+	FontName: data/fgd.ttf;
+}
 
 /* Death screen style */
 #winDeathMain {

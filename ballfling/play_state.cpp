@@ -56,7 +56,8 @@ StatePlay::StatePlay(World *world, int levelNum) : State(world) {
     }
     world->add_entity(terrain);
 
-    world->add_entity(new EntityTimer());
+    timer = new EntityTimer();
+    world->add_entity(timer);
 
     // add ball & centre camera
     player = new EntityBall(terrain->playerSpawn, sf::Vector2f(), levelColour, &restartOnResume);
@@ -98,7 +99,7 @@ void StatePlay::on_tick() {
     if (completed) {
         if (!world->is_paused()) world->toggle_pause(); // pause world
         notify(EVENT_PLAY_PAUSE, NULL);
-        State::push_state(new StateWin(world, levelNum, &restartOnResume, backgroundColor));
+        State::push_state(new StateWin(world, levelNum, &restartOnResume, backgroundColor, timer->get_time()));
     }
     playerPosition = player->position;
     playerVelocity = player->velocity;

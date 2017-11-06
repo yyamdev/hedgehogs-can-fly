@@ -14,6 +14,7 @@
 std::string level_num_to_filename(int levelNum);
 
 class EntityTerrain;
+class EntityTimer;
 
 extern sf::Vector2f playerPosition;
 extern sf::Vector2f playerVelocity;
@@ -53,4 +54,6 @@ private:
 
     int startScreenState;
     int counterStart;
+
+    EntityTimer *timer;
 };

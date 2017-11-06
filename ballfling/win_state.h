@@ -11,7 +11,7 @@ class World;
 
 class StateWin : public State, public Observer, public Subject {
 public:
-    StateWin(World *world, int levelNum, bool *restartFlag, sf::Color clear);
+    StateWin(World *world, int levelNum, bool *restartFlag, sf::Color clear, unsigned int millis);
 
     void on_event(sf::Event &event);
     void on_tick();
@@ -27,4 +27,5 @@ private:
     bool *restartFlag;
     int levelNum;
     sf::Color clear;
+    unsigned int millis;
 };

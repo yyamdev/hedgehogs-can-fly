@@ -12,11 +12,13 @@
 #include "play_state.h"
 #include "save.h"
 #include "end_state.h"
+#include "timer_entity.h"
 
-StateWin::StateWin(World *world, int levelNum, bool *restartFlag, sf::Color clear) : State(world) {
+StateWin::StateWin(World *world, int levelNum, bool *restartFlag, sf::Color clear, unsigned int millis) : State(world) {
     this->levelNum = levelNum;
     this->restartFlag = restartFlag;
     this->clear = clear;
+    this->millis = millis;
     savegame_level_unlock(levelNum + 1);
 }
 
@@ -42,8 +44,6 @@ void StateWin::on_gain_focus() {
 
     if (!world->is_paused()) world->toggle_pause();
 
-    // TODO -> Update save files?
-
     // create ui
     auto guiWinMain = sfg::Window::Create(sfg::Window::Style::BACKGROUND);
     guiWinMain->SetId("winWinMain");
@@ -55,6 +55,10 @@ void StateWin::on_gain_focus() {
     auto guiLblTitle = sfg::Label::Create("Level Complete");
     guiLblTitle->SetId("lblWinTitle");
     guiBoxMain->Pack(guiLblTitle);
+
+    auto guiLblTime = sfg::Label::Create("TIME: " + get_formatted_time_str(millis));
+    guiLblTime->SetId("lblWinTime");
+    guiBoxMain->Pack(guiLblTime);
 
     auto guiBoxSpace = sfg::Box::Create();
     guiBoxSpace->SetRequisition(sf::Vector2f(1.f, 50.f));

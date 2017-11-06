@@ -6,6 +6,9 @@
 #include "subject.h"
 #include "observer.h"
 #include <SFML/System.hpp>
+#include <string>
+
+std::string get_formatted_time_str(unsigned int millis);
 
 class EntityTimer : public Entity, public Observer {
 public:

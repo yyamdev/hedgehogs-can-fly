@@ -26,17 +26,8 @@ void EntityTimer::event(sf::Event &e) {
 void EntityTimer::tick(std::vector<Entity*> &entities) {
 }
 
-void EntityTimer::draw(sf::RenderWindow &window) {
-    static bool enable = false;
-    if (edit && ImGui::CollapsingHeader("Timer")) {
-        if (ImGui::Button("toggle")) {
-            enable = !enable;
-        }
-    }
-
-    if (!enable) return;
-    
-    unsigned int millis  = get_time();
+std::string get_formatted_time_str(unsigned int millis)
+{
     unsigned int seconds = (millis / 1000);
     unsigned int minutes = seconds / 60;
     millis = millis % 1000;
@@ -45,8 +36,21 @@ void EntityTimer::draw(sf::RenderWindow &window) {
     format << std::setfill('0') << minutes << ".";
     format << std::setw(2) << seconds << ".";
     format << std::setw(3) << millis;
-    sf::Text timerDraw(format.str(), fntUi);
-    window.draw(timerDraw);
+
+    return format.str();
+}
+
+void EntityTimer::draw(sf::RenderWindow &window) {
+    static bool enable = true;
+    if (edit && ImGui::CollapsingHeader("Timer")) {
+        if (ImGui::Button("toggle")) {
+            enable = !enable;
+        }
+    }
+
+    if (!enable) return;
+    
+    window.draw(sf::Text(get_formatted_time_str(get_time()), fntUi));
 }
 
 void EntityTimer::on_notify(Event event, void *data) {
@@ -55,7 +59,7 @@ void EntityTimer::on_notify(Event event, void *data) {
         timer.restart();
     }
 
-    if (event == EVENT_BALL_HIT_FINISH) {
+    if (event == EVENT_LEVEL_COMPLETE) {
         millisecondsFinish = get_time();
         finish = true;
     }
