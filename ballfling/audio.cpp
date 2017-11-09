@@ -59,11 +59,11 @@ Audio::Audio() {
     Subject::add_observer(this);
 
     reload_sfx();
-    
+
     // Init music
     currentlyPlaying = MUSIC_TRACK_COUNT;
     wasCurrentlyPlaying = MUSIC_TRACK_A;
-    
+
     musMenu.openFromFile("data/testmusic.ogg");
     musMenu.setLoop(true);
 
@@ -116,6 +116,8 @@ void Audio::on_notify(Event event, void *data) {
     if (event == EVENT_ENTER_PAUSE_SCREEN) sfx_play(SFX_ENTPAUSE);
     if (event == EVENT_LEVEL_COMPLETE)     sfx_play(SFX_LVFINISH);
 
+    if (event == EVENT_EXIT_SPLASH)        snd[SFX_SPLASHSC].stop();
+
     // Music
 
     if (event == EVENT_ENTER_END_SCREEN) {
@@ -126,7 +128,7 @@ void Audio::on_notify(Event event, void *data) {
     if (event == EVENT_CHANGE_MUSIC_VOLUME) {
         update_all_music_volume();
     }
-    
+
     if (event == EVENT_ENTER_MENU && currentlyPlaying != MUSIC_TRACK_MENU) {
         /* When we enter a menu and we are not already playing the menu music */
 
@@ -137,7 +139,7 @@ void Audio::on_notify(Event event, void *data) {
             wasCurrentlyPlaying = currentlyPlaying;
             std::cout << "save track\n";
         }
-        
+
         stop_all_music();
         update_all_music_volume();
         currentlyPlaying = MUSIC_TRACK_MENU;

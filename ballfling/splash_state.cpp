@@ -59,4 +59,5 @@ void StateSplash::on_gain_focus() {
 }
 
 void StateSplash::on_lose_focus() {
+  notify(EVENT_EXIT_SPLASH, NULL);
 }
