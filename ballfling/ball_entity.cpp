@@ -47,7 +47,7 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour, boo
     position = prevRest = pos;
     velocity = vel;
     tag = "ball";
-    collisionRadius = 8.f;
+    collisionRadius = 10.f;
     terrain = NULL;
     enemy = NULL;
     dead = false;
@@ -60,6 +60,7 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour, boo
     maxFlingVelocity = 1.2f;
     spawned_fireworks = false;
     justSpawned = true;
+    angle = 0.f;
 }
 
 void EntityBall::event(sf::Event &e) {
@@ -110,15 +111,23 @@ void EntityBall::event(sf::Event &e) {
     }
 }
 
-void EntityBall::draw(sf::RenderWindow &window) {
-    static float angle = 0.f;
+void EntityBall::draw(sf::RenderWindow &window)
+{
     angle += velocity.x * 2.f;
     if (!dead) {
         spr.setTexture(txt);
         spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
         spr.setPosition(position - world->camera);
-        spr.setColor(colour);
+        //spr.setColor(colour);
         spr.setRotation(angle);
+
+        // Set direction
+        if (rest && dragging)
+        {
+            spr.setScale((int)dragStart.x < sf::Mouse::getPosition(window).x ? 1.f : -1.f, 1.f);
+        }
+
+        //spr.setScale(sf::Mouse::getPosition(window).x > (int)(position.x - world->camera.x) ? 1.f : -1.f, 1.f);
         window.draw(spr);
     }
 
@@ -176,7 +185,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     }
 
     if (rest) return;
-        
+
     // move
     sf::Vector2f oldPos = position;
     position += velocity;
@@ -263,7 +272,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                 reset_to_rest();
                 notify(EVENT_BALL_HIT_WATER, NULL);
             }
-            
+
             if (t == T_WIN) {
                 if (!spawned_fireworks) {
                     reactToInput = false;
@@ -332,7 +341,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                                  120);
                 }
             }
-            
+
             bounce(bounceFactor, terrain->get_normal(contact));
         }
     }
@@ -381,6 +390,8 @@ void EntityBall::record_new_rest_pos() {
     notify(EVENT_BALL_REST_POS, (void*)(&position));
     canFling = true;
     notify(EVENT_BALL_CHANGE_CAN_FLING, &canFling);
+
+    angle = 0.f;
 }
 
 void EntityBall::stop_resting() {

@@ -41,16 +41,20 @@ private:
     sf::Sprite spr, sprPoint;
     sf::Color colour;
     sf::Vector2f mouse;
+    float angle;
+    float xDirection; //  1 >
+                      // -1 <
+
 
     EntityTerrain *terrain;
     EntityEnemy *enemy;
 
     bool justSpawned;
-    
+
     TerrainType lastTerrain;
 
     bool reactToInput;
-    
+
     bool dead;
     sf::Clock deadTimer;
 
@@ -71,7 +75,7 @@ private:
     sf::Clock clkFlingTimer;
     float nudgeStr;
     float maxFlingVelocity;
-    
+
     sf::Clock clkWallTouch;
     bool touching_wall();
 };
