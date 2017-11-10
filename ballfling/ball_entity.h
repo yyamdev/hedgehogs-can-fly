@@ -58,6 +58,8 @@ private:
     bool dead;
     sf::Clock deadTimer;
 
+    sf::Vector2f lastContact;
+
     // physics
     sf::Vector2f contactPoint;
     sf::Clock clkRest;

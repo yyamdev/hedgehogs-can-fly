@@ -259,6 +259,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         sf::Vector2f contact;
         if (terrain->intersects_with_circle(position, velocity, collisionRadius, &contact, &position)) { // collision with terrain
             contactPoint = contact;
+            lastContact = contact;
 
             TerrainType t = terrain->get_pos(contactPoint);
             if (t == T_KILL) {
@@ -391,7 +392,16 @@ void EntityBall::record_new_rest_pos() {
     canFling = true;
     notify(EVENT_BALL_CHANGE_CAN_FLING, &canFling);
 
-    angle = 0.f;
+    velocity.x = 0.f;
+    velocity.y = 0.f;
+
+    if (!terrain)
+        angle = 0.f;
+    else
+    {
+        sf::Vector2f normal = terrain->get_normal(lastContact);
+        angle = atan2(normal.x, -normal.y) * (180.f / 3.14f);
+    }
 }
 
 void EntityBall::stop_resting() {
