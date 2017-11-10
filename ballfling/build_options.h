@@ -8,7 +8,7 @@
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 1
 
-#define TITLE "Fling"
+#define TITLE "Hedgehogs Can Fly"
 
 #define GRAVITY 0.15f
 

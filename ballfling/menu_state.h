@@ -23,6 +23,6 @@ public:
     void on_notify(Event event, void *data);
 
 private:
-    sf::Texture txtTitle;
-    sf::Sprite sprTitle;
+    sf::Texture txtTitle, txtHog;
+    sf::Sprite sprTitle, sprHog;
 };

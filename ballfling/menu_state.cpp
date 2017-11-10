@@ -23,6 +23,10 @@ StateMenu::StateMenu(World *world) : State(world) {
     sprTitle.setTexture(txtTitle);
     sprTitle.setOrigin(txtTitle.getSize().x / 2.f, txtTitle.getSize().y / 2.f);
     sprTitle.setPosition(WINDOW_WIDTH / 2.f, 150.f);
+
+    txtHog.loadFromFile("data/ball.png");
+    sprHog.setTexture(txtHog);
+    sprHog.setOrigin(txtHog.getSize().x / 2.f, txtHog.getSize().y / 2.f);
 }
 
 void StateMenu::on_event(sf::Event &event) {
@@ -30,12 +34,12 @@ void StateMenu::on_event(sf::Event &event) {
 
 void StateMenu::on_tick() {
     static float time = 0.f;
-    static float size = 1.f;
+    static float size = 0.6f;
     static float rot  = 0.f;
-    
+
     size += sin(time) * .002f;
     rot   = sin(time) * 1.6f;
-    
+
     sprTitle.setScale(sf::Vector2f(size, size));
     sprTitle.setRotation(rot);
 
@@ -43,19 +47,24 @@ void StateMenu::on_tick() {
 
 
     static sf::Vector2f pos(WINDOW_WIDTH / 2.f, WINDOW_HEIGHT / 2.f);
-    float speed = 4.f;
+    float speed = 2.f;
     static sf::Vector2f vel(util::rnd(-speed, speed), util::rnd(-speed, speed));
     sf::Vector2f next = pos + vel;
-    if (next.x < 0.f || next.x > WINDOW_WIDTH) vel.x = -vel.x;
-    if (next.y < 0.f || next.y > WINDOW_HEIGHT) vel.y = -vel.y;
+    if (next.x < 0.f + 10.f || next.x > WINDOW_WIDTH - 10.f)  vel.x = -vel.x;
+    if (next.y < 0.f + 10.f || next.y > WINDOW_HEIGHT - 10.f) vel.y = -vel.y;
     pos += vel;
-    add_particle(pos, sf::Vector2f(), sf::Vector2f(0.f, 0.f), sf::Color(95, 205, 228), 240);
+    //add_particle(pos, sf::Vector2f(), sf::Vector2f(0.f, 0.f), sf::Color(95, 205, 228), 240);
+    sprHog.setPosition(pos);
 
     particles_tick(sf::Vector2f());
 }
 
 void StateMenu::on_draw(sf::RenderWindow &window) {
     particles_draw(window, sf::Vector2f());
+    static float angle = 0.f;
+    angle += .5f;
+    sprHog.setRotation(angle);
+    window.draw(sprHog);
     window.draw(sprTitle);
 }
 
