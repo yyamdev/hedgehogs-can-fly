@@ -65,6 +65,7 @@ private:
     sf::Clock clkRest;
     bool rest;
     sf::Vector2f prevRest;
+    float prevAngle;
     void record_new_rest_pos();
     void stop_resting();
     void reset_to_rest();

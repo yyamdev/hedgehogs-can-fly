@@ -402,6 +402,8 @@ void EntityBall::record_new_rest_pos() {
         sf::Vector2f normal = terrain->get_normal(lastContact);
         angle = atan2(normal.x, -normal.y) * (180.f / 3.14f);
     }
+    prevAngle = angle;
+    std::cout << "prevAngle = " << prevAngle << std::endl;
 }
 
 void EntityBall::stop_resting() {
@@ -410,6 +412,13 @@ void EntityBall::stop_resting() {
 }
 
 void EntityBall::reset_to_rest() {
+    rest = true;
+
     position = prevRest;
+    angle = prevAngle;
     velocity = sf::Vector2f();
+
+    notify(EVENT_BALL_REST_POS, (void*)(&position));
+    canFling = true;
+    notify(EVENT_BALL_CHANGE_CAN_FLING, &canFling);
 }
