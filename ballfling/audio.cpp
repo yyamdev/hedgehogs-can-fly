@@ -67,7 +67,7 @@ Audio::Audio() {
     musMenu.openFromFile("data/testmusic.ogg");
     musMenu.setLoop(true);
 
-    musGameA.openFromFile("data/Kings Gift.ogg");
+    musGameA.openFromFile("data/a.ogg");
     musGameA.setLoop(false); // gameplay tracks are switched out when finished
 
     musGameB.openFromFile("data/LMR.ogg");
