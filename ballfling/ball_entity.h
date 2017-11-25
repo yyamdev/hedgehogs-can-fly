@@ -32,6 +32,7 @@ public:
     void bounce(float bounceFactor, sf::Vector2f norm);
 
     bool is_on_sand();
+
 private:
     bool spawned_fireworks;
     bool *restartFlag;

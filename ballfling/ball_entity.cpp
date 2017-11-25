@@ -113,7 +113,8 @@ void EntityBall::event(sf::Event &e) {
 
 void EntityBall::draw(sf::RenderWindow &window)
 {
-    angle += velocity.x * 2.f;
+    if (!world->is_paused())
+        angle += velocity.x * 2.f;
     if (!dead) {
         spr.setTexture(txt);
         spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
