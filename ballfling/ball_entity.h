@@ -52,7 +52,7 @@ private:
 
     bool justSpawned;
 
-    TerrainType lastTerrain;
+    TerrainType lastTerrain, terrainFlungOn;
 
     bool reactToInput;
 

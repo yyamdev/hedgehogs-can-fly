@@ -106,6 +106,8 @@ void EntityBall::event(sf::Event &e) {
                     }
                 }
             }
+            terrainFlungOn = lastTerrain;
+            prevAngle = angle;
             notify(EVENT_BALL_FLING, NULL);
         }
     }
@@ -273,6 +275,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                 }
                 reset_to_rest();
                 notify(EVENT_BALL_HIT_WATER, NULL);
+                return;
             }
 
             if (t == T_WIN) {
@@ -422,4 +425,6 @@ void EntityBall::reset_to_rest() {
     notify(EVENT_BALL_REST_POS, (void*)(&position));
     canFling = true;
     notify(EVENT_BALL_CHANGE_CAN_FLING, &canFling);
+
+    lastTerrain = terrainFlungOn;
 }
