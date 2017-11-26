@@ -21,6 +21,7 @@
 #include "splash_state.h"
 #include "audio.h"
 #include "end_state.h"
+#include <windows.h>
 
 // frame time profiler
 #define PBUFLEN 16
@@ -40,7 +41,11 @@ char cssBuf[CSS_BUF_SIZE];
 sf::Vector2f playerPosition;
 sf::Vector2f playerVelocity;
 
+#ifndef _DEBUG
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
+#else
 int main() {
+#endif
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), TITLE, sf::Style::Close);
     window.setFramerateLimit(60);
 
@@ -51,7 +56,7 @@ int main() {
     print_debug_controls();
 
     Audio audio; // audio player
-    
+
     World world(window);
 
     sfg::SFGUI guiManager;
@@ -75,6 +80,7 @@ int main() {
                 window.close();
             }
 
+            #ifdef _DEBUG
             if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::F2) {
                 edit = !edit;
                 window.setMouseCursorVisible(edit);
@@ -82,6 +88,7 @@ int main() {
                 fileTheme.get(cssBuf, CSS_BUF_SIZE, 0);
                 fileTheme.close();
             }
+            #endif
 
             if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::F1)
                 window.capture().saveToFile(util::to_string(time(NULL)) + ".png");
@@ -91,7 +98,7 @@ int main() {
 
             if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::F4)
                 system("cls");
-            
+
             world.event(e);
             State::event_current(e);
         }
@@ -101,7 +108,7 @@ int main() {
         world.tick();
         State::tick_current();
         //particles_tick(world.camera, playerPosition, playerVelocity);
-        
+
         window.clear(State::get_current()->get_clear_colour());
         ImGui::SFML::Update(window, imguiDelta.restart());
         world.draw();
@@ -109,7 +116,7 @@ int main() {
         State::draw_ui_current(window);
         guiManager.Display(window);
         //particles_draw(window, world.camera);
-        
+
         window.resetGLStates();
 
         if (edit && ImGui::CollapsingHeader("Resources")) {
