@@ -93,12 +93,6 @@ int main() {
             if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::F1)
                 window.capture().saveToFile(util::to_string(time(NULL)) + ".png");
 
-            if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::F3)
-                State::pop_state();
-
-            if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::F4)
-                system("cls");
-
             world.event(e);
             State::event_current(e);
         }
