@@ -46,6 +46,13 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 #else
 int main() {
 #endif
+
+    if (!sf::Shader::isAvailable())
+    {
+        MessageBox(NULL, "Oops.. It looks like your graphics card does not support shaders :( The game needs shader support in order to run. Make sure you have the most up to date graphics drivers installed!", "Error", 0);
+        return -1;
+    }
+
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), TITLE, sf::Style::Close);
     window.setFramerateLimit(60);
 
