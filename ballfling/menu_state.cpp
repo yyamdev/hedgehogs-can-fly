@@ -66,6 +66,11 @@ void StateMenu::on_draw(sf::RenderWindow &window) {
     sprHog.setRotation(angle);
     window.draw(sprHog);
     window.draw(sprTitle);
+
+    sf::Text version("version " VERSION_STRING, fntUi, 16);
+    version.setPosition(16.f, WINDOW_HEIGHT - version.getCharacterSize() - 16.f);
+    version.setColor(sf::Color(128, 128, 128));
+    window.draw(version);
 }
 
 void StateMenu::on_draw_ui(sf::RenderWindow &window) {
