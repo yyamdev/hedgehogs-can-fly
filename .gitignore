@@ -3,6 +3,7 @@ LocMetrics*
 promo/
 ballfling/data/prog
 ballfling/data/imgui.ini
+Builds/
 
 # Avoid audio files
 *.ogg
