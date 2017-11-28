@@ -13,7 +13,7 @@ World::World(sf::RenderWindow &window) {
     paused = false;
     gravity = sf::Vector2f(0.f, GRAVITY);
     clamp = false;
-    
+
     cameraFollowBall = false;
     smoothCamOn = false;
     smoothCam.maxSteps = 100;
@@ -114,7 +114,7 @@ void World::draw() {
             }
 
             ImGui::InputFloat("Speed", &smoothCam.speed);
-            
+
             if (ImGui::Button("set start")) {
                 smoothCam.start = camera;
             }
@@ -122,9 +122,9 @@ void World::draw() {
             if (ImGui::Button("Jump to start")) {
                 camera = smoothCam.start;
             }
-            
+
             ImGui::Text("Start: %f, %f", smoothCam.start.x, smoothCam.start.y);
-            
+
             if (ImGui::Button("set end")) {
                 smoothCam.end = camera;
             }
@@ -132,10 +132,10 @@ void World::draw() {
             if (ImGui::Button("jump to end")) {
                 camera = smoothCam.end;
             }
-            
+
             ImGui::Text("End: %f, %f", smoothCam.end.x, smoothCam.end.y);
         }
-        
+
         ImGui::Separator();
         ImGui::LabelText(util::to_string(entities.size()).c_str(), "entity count");
         if (ImGui::TreeNode("list")) {
@@ -167,6 +167,7 @@ sf::Vector2i World::get_mouse_position() {
 void World::add_entity(Entity *entity) {
     entity->set_world_ptr(this);
     entityAddQueue.push(entity);
+    entity->on_add();
 }
 
 int World::remove_entity(std::string tag) {
@@ -189,17 +190,23 @@ int World::remove_entity(std::string tag) {
 
 void World::toggle_pause() {
     paused = !paused;
-    if (paused) {
-        for (auto &entity : entities) {
-            entity->on_pause();
-        }
-    } else {
-        for (auto &entity : entities) {
-            entity->on_resume();
-        }
+    for (auto &entity : entities) {
+        paused? entity->on_pause() : entity->on_resume();
     }
 }
-bool World::is_paused() { return paused; }
+
+bool World::is_paused()
+{
+    return paused;
+}
+
+void World::set_pause(bool paused)
+{
+    paused = true;
+    for (auto &entity : entities) {
+        entity->on_pause();
+    }
+}
 
 void World::on_notify(Event event, void *data) {
 }

@@ -16,7 +16,7 @@
 #include "particle.h"
 #include "util.h"
 
-StateMenu::StateMenu(World *world) : State(world) {
+StateMenu::StateMenu(World *world) : State(world, "menu") {
     set_cursor_visible(true);
     set_cursor(CURSOR_POINTER);
     txtTitle.loadFromFile("data/header.png");

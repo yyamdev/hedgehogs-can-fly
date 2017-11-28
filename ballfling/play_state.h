@@ -1,23 +1,19 @@
 #pragma once
 
-// gameplay state
+/*
+ * Gameplay state.
+ */
 
+#include <string>
+#include <SFML/Graphics.hpp>
 #include "state.h"
 #include "hud.h"
 #include "observer.h"
-#include <string>
 #include "subject.h"
-#include <SFML/Graphics.hpp>
-#include "ball_entity.h"
-#include "gate.h"
-
-std::string level_num_to_filename(int levelNum);
 
 class EntityTerrain;
+class EntityBall;
 class EntityTimer;
-
-extern sf::Vector2f playerPosition;
-extern sf::Vector2f playerVelocity;
 
 class StatePlay : public State, public Observer, public Subject {
 public:
@@ -33,27 +29,19 @@ public:
 
     void on_notify(Event event, void *data);
 
-    std::vector<EntityGate*> add_gates_from_file(std::string filename);
-    std::string serialise_gates_to_string(std::vector<EntityGate*> gates);
-
 private:
-    std::string filename;
-    sf::Color levelColour; // colour of ball and wall edges.
-    sf::Color backgroundColor; // clear colour
-
-    bool restartOnResume;
-
-    EntityBall *player;
-
-    Hud hud; // hud renderer
-    EntityTerrain *terrain;
-
-    bool completed;
+    bool initSuccess = false;
+    sf::Color levelColour; // Colour wall edges
+    sf::Color backgroundColor; // Clear colour
     int levelNum;
-    std::vector<EntityGate*> gates;
 
-    int startScreenState;
-    int counterStart;
-
+    EntityTerrain *terrain;
+    EntityBall *player;
     EntityTimer *timer;
+
+    Hud hud;
+
+    bool restartOnResume = false;
+    int startScreenState = 0;
+    int counterStart = 0;
 };

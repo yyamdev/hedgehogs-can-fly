@@ -14,7 +14,7 @@
 #include "end_state.h"
 #include "timer_entity.h"
 
-StateWin::StateWin(World *world, int levelNum, bool *restartFlag, sf::Color clear, unsigned int millis) : State(world) {
+StateWin::StateWin(World *world, int levelNum, bool *restartFlag, sf::Color clear, unsigned int millis) : State(world, "win") {
     this->levelNum = levelNum;
     this->restartFlag = restartFlag;
     this->clear = clear;
@@ -72,10 +72,11 @@ void StateWin::on_gain_focus() {
         guiButtonBack->SetId("btnWinNext");
         guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
                     State::push_state(new StatePlay(world, levelNum + 1));
+                    // TODO: Fix state system so a new play state doesn't need to be pushed here
                 }));
         guiBoxButtons->Pack(guiButtonBack);
 
-        
+
         auto guiButtonSelect = sfg::Button::Create("Level Select");
         guiButtonSelect->SetId("btnWinSelect");
         guiButtonSelect->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([] (void) {

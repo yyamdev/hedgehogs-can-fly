@@ -1,7 +1,9 @@
 #pragma once
 
-// base class for a program state
-// also manages the stack of states
+/*
+ * Base class for a program state with static members & methods to manage a
+ * stack of states.
+ */
 
 #include <stack>
 #include <SFML/Graphics.hpp>
@@ -10,19 +12,19 @@ class World;
 
 class State {
 public:
-    State(World *world);
+    State(World *world, std::string name);
     virtual ~State(){};
 
-    static void free_memory(); // call before program closes to ensure all memory is freed
-
-    // <implemented by derived classes>
     virtual void on_event(sf::Event &event) = 0;
     virtual void on_tick() = 0;
     virtual void on_draw(sf::RenderWindow &window) = 0;
+
     virtual void on_draw_ui(sf::RenderWindow &window){};
     virtual void on_gain_focus(){};
     virtual void on_lose_focus(){};
-    // </>
+
+    virtual sf::Color get_clear_colour();
+    std::string get_name();
 
     // state changing
     static void change_state(State *state); // swap the current state for a new one. takes ownership of the pointer
@@ -35,13 +37,10 @@ public:
     static void draw_current(sf::RenderWindow &window);
     static void draw_ui_current(sf::RenderWindow &window);
     static State* get_current();
-
-    virtual sf::Color get_clear_colour();
-
-    inline std::string get_name(){ return name; }
+    static void reset();
 
 protected:
-    World *world;
     static std::stack<State*> states;
+    World *world;
     std::string name;
 };

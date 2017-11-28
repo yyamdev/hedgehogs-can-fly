@@ -4,7 +4,7 @@
 #include <iostream>
 #include "menu_state.h"
 
-StateSplash::StateSplash(World *world) : State(world) {
+StateSplash::StateSplash(World *world) : State(world, "splash") {
     set_cursor_visible(false);
     state = 0;
     alpha = 0.f;

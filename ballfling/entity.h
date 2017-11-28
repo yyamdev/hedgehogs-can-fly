@@ -22,6 +22,8 @@ public:
     virtual void on_pause(){}
     virtual void on_resume(){}
 
+    virtual void on_add(){}
+
     bool intersects(const Entity &other);
 
     std::string get_tag();

@@ -38,9 +38,6 @@ void print_debug_controls();
 #define CSS_BUF_SIZE 8192
 char cssBuf[CSS_BUF_SIZE];
 
-sf::Vector2f playerPosition;
-sf::Vector2f playerVelocity;
-
 #ifndef _DEBUG
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
 #else
@@ -60,7 +57,11 @@ int main() {
     load_cursor_textures();
 
     std::cout << "OpenGL version " << window.getSettings().majorVersion << "." << window.getSettings().minorVersion << std::endl;
-    print_debug_controls();
+
+    std::cout << "debug controls:\n";
+    std::cout << "F1 - screenshot\n";
+    std::cout << "F2 - toggle tools mode\n";
+    std::cout << "F5 - toggle world pause\n";
 
     Audio audio; // audio player
 
@@ -108,7 +109,6 @@ int main() {
         audio.tick_game_music();
         world.tick();
         State::tick_current();
-        //particles_tick(world.camera, playerPosition, playerVelocity);
 
         window.clear(State::get_current()->get_clear_colour());
         ImGui::SFML::Update(window, imguiDelta.restart());
@@ -166,15 +166,5 @@ int main() {
     }
 
     ImGui::SFML::Shutdown();
-    State::free_memory();
     return 0;
-}
-
-void print_debug_controls() {
-    std::cout << "debug controls:\n";
-    std::cout << "F1 - screenshot\n";
-    std::cout << "F2 - toggle tools mode\n";
-    std::cout << "F3 - pop current state\n";
-    std::cout << "F4 - clear console\n";
-    std::cout << "F5 - toggle pause\n";
 }

@@ -15,7 +15,7 @@
 #include "particle.h"
 #include "cursor.h"
 
-StatePause::StatePause(World *world, bool *restartFlag, sf::Color clear) : State(world) {
+StatePause::StatePause(World *world, bool *restartFlag, sf::Color clear) : State(world, "pause") {
     this->restartFlag = restartFlag;
     this->clear = clear;
 }
@@ -46,7 +46,7 @@ void StatePause::on_gain_focus() {
     if (!world->is_paused()) world->toggle_pause();
 
     set_cursor(CURSOR_POINTER);
-    
+
     // create ui
     sf::Vector2f sliderSize(200.f, 32.f);
 
@@ -80,7 +80,7 @@ void StatePause::on_gain_focus() {
     guiButtonOptions->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonOptions->GetRequisition().x / 2.f, 500.f));
     guiButtonOptions->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
                 notify(EVENT_MENU_CLICK, NULL);
-                State::push_state(new StateOptions(world, false, clear)); 
+                State::push_state(new StateOptions(world, false, clear));
     }));
     guiBoxMain->Pack(guiButtonOptions);
 
@@ -102,10 +102,10 @@ void StatePause::on_gain_focus() {
         if (world->is_paused()) world->toggle_pause();
         // pop state back to level select
         while (State::get_current()->get_name() != "select")
-            State::pop_state(); 
+            State::pop_state();
     }));
     guiBoxMain->Pack(guiButtonSelect);
-    
+
     guiBoxMain->Pack(guiButtonBack);
 
     // position window at centre of screen
@@ -113,7 +113,7 @@ void StatePause::on_gain_focus() {
     guiWinMain->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2 - guiWinMain->GetRequisition().x / 2.f, WINDOW_HEIGHT / 2 - guiWinMain->GetRequisition().y / 2.f - 40.f));
 
     notify(EVENT_ENTER_PAUSE_SCREEN, NULL);
-    
+
 }
 
 void StatePause::on_lose_focus() {

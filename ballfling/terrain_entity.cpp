@@ -12,18 +12,17 @@
 #include "imgui.h"
 #include <algorithm>
 
-EntityTerrain::EntityTerrain(float scale, std::string filename, sf::Color colour) {
-    this->colour = colour;
+EntityTerrain::EntityTerrain(float scale, std::string filename, sf::Color colour) :
+    colour(colour), filename(filename), scale(scale)
+{
     // load map image
     sf::Image imgMap;
     if (!imgMap.loadFromFile(filename)) {
         error = true;
         return;
     }
-    this->filename = filename;
     // properties
     size = imgMap.getSize();
-    this->scale = scale;
     tag = "terrain";
     render = true;
     // allocate terrain data memory & load map into it
@@ -378,4 +377,9 @@ void EntityTerrain::on_notify(Event event, void *data) {
         txtTerrainData.update(terrainUpdate, updateBounds.width, updateBounds.height, updateBounds.left, updateBounds.top); // update data texture
         delete[] terrainUpdate;
     }
+}
+
+bool EntityTerrain::loaded_successfuly()
+{
+    return !error;
 }

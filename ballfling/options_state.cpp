@@ -14,7 +14,7 @@
 #include "SFGUI/CheckButton.hpp"
 #include "save.h"
 
-StateOptions::StateOptions(World *world, bool full, sf::Color clear) : State(world) {
+StateOptions::StateOptions(World *world, bool full, sf::Color clear) : State(world, "options") {
     this->full = full;
     this->clear = clear;
 }
@@ -106,7 +106,7 @@ void StateOptions::on_gain_focus() {
     if (full) {
         auto guiBoxErase = sfg::Box::Create();
         guiBoxMain->Pack(guiBoxErase);
-        
+
         auto guiButtonBack = sfg::Button::Create("Erase Save(!)");
         guiButtonBack->SetId("btnOptionsErase");
         guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {

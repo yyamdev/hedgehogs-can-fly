@@ -11,7 +11,7 @@
 #include "SFGUI/Image.hpp"
 #include "cursor.h"
 
-StateSelect::StateSelect(World *world) : State(world) {
+StateSelect::StateSelect(World *world) : State(world, "select") {
     imgLock.loadFromFile("data/lock.png");
     name = "select";
 }
@@ -34,10 +34,10 @@ void StateSelect::on_gain_focus() {
     gui.RemoveAll();
 
     set_cursor(CURSOR_POINTER);
-    
+
     // Play music
     notify(EVENT_ENTER_MENU, NULL);
-    
+
     // create ui
     auto guiLblTitle = sfg::Label::Create("Select Level");
     guiLblTitle->SetId("lblSelectTitle");

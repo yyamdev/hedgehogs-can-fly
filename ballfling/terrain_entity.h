@@ -41,7 +41,7 @@ public:
 
     void set_solid(); // make terrain all solid
     void set_empty(); // make terrain all empty
-    
+
     void set_rectangle(sf::FloatRect rect, bool solid); // set a rectangular block
     void set_circle(sf::Vector2f center, float rad, bool solid); // set a circular block
 
@@ -57,11 +57,12 @@ public:
 
     sf::Vector2f playerSpawn;
 
-    bool error;
+    bool loaded_successfuly();
 
     sf::Color colour;
 
 private:
+    bool error;
     std::string filename;
     sf::Vector2u size; // terrain texture size
     float scale; // scale factor for drawing

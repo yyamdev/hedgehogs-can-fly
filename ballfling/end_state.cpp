@@ -11,7 +11,7 @@
 #include "shared_res.h"
 #include "cursor.h"
 
-StateEnd::StateEnd(World *world) : State(world) {
+StateEnd::StateEnd(World *world) : State(world, "end") {
     fireworkTime = 2.0f;
     state = 0;
 }

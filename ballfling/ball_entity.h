@@ -22,6 +22,8 @@ public:
     EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour, bool *restartFlag);
     ~EntityBall();
 
+    void on_add();
+
     void event(sf::Event &e);
     void tick(std::vector<Entity*> &entities);
     void draw(sf::RenderWindow &window);

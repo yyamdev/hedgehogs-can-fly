@@ -3,16 +3,22 @@
 
 std::stack<State*> State::states;
 
-State::State(World *world) {
-    this->world = world;
+State::State(World *world, std::string name) : world(world), name(name)
+{
 }
 
-sf::Color State::get_clear_colour() {
+sf::Color State::get_clear_colour()
+{
     return DEFAULT_CLEAR_COLOUR;
 }
 
-void State::free_memory() {
-    // free all memory used by states
+std::string State::get_name()
+{
+    return name;
+}
+
+void State::reset() {
+    // Reset the entire state stack freeing all memory used.
     while (!State::states.empty()) {
         State::states.top()->on_lose_focus();
         delete State::states.top();

@@ -63,6 +63,13 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour, boo
     angle = 0.f;
 }
 
+void EntityBall::on_add()
+{
+    // Centre camera on our position.
+    sf::Vector2f screenSize((float)WINDOW_WIDTH, (float)WINDOW_HEIGHT);
+    world->camera = (position - screenSize / 2.f);
+}
+
 void EntityBall::event(sf::Event &e) {
     if (!reactToInput || State::get_current()->get_name() != "play") return;
 
