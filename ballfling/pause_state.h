@@ -12,7 +12,7 @@ class World;
 
 class StatePause : public State, public Observer, public Subject {
 public:
-    StatePause(World *world, bool *restartFlag, sf::Color clear);
+    StatePause(World *world, sf::Color clear);
 
     void on_event(sf::Event &event);
     void on_tick();
@@ -24,6 +24,5 @@ public:
     void on_notify(Event event, void *data);
     sf::Color get_clear_colour();
 private:
-    bool *restartFlag;
     sf::Color clear;
 };

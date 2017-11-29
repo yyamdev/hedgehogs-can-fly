@@ -11,7 +11,7 @@ class World;
 
 class StateDeath : public State, public Observer, public Subject {
 public:
-    StateDeath(World *world, bool *restartFlag, sf::Color clear);
+    StateDeath(World *world, sf::Color clear);
 
     void on_event(sf::Event &event);
     void on_tick();
@@ -24,6 +24,5 @@ public:
     sf::Color get_clear_colour();
 
 private:
-    bool *restartFlag;
     sf::Color clear;
 };

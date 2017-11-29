@@ -13,7 +13,12 @@ void Subject::remove_observer(Observer *obs) {
 }
 
 void Subject::notify(Event event, void *data) {
-    for (auto &obs : Subject::observers) {
+    std::vector<Observer*> observersCopy = Subject::observers;
+    /*
+     * Iterate over a copy of the vector to account for the case where a new
+     * Obverver is created from inside an on_notify() function.
+     */
+    for (auto &obs : observersCopy) {
         obs->on_notify(event, data);
     }
 }

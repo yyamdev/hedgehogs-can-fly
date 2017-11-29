@@ -200,11 +200,11 @@ bool World::is_paused()
     return paused;
 }
 
-void World::set_pause(bool paused)
+void World::set_pause(bool pausedNew)
 {
-    paused = true;
+    paused = pausedNew;
     for (auto &entity : entities) {
-        entity->on_pause();
+        paused? entity->on_pause() : entity->on_resume();
     }
 }
 

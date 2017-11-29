@@ -54,7 +54,7 @@ StatePlay::StatePlay(World *world, int levelNum) :
     timer = new EntityTimer();
     world->add_entity(timer);
 
-    player = new EntityBall(terrain->playerSpawn, sf::Vector2f(), levelColour, &restartOnResume); // TODO: Why are we passing ptr to restartOnResume?
+    player = new EntityBall(terrain->playerSpawn, sf::Vector2f(), levelColour);
     world->add_entity(player);
 
     notify(EVENT_LEVEL_START, NULL);
@@ -73,7 +73,7 @@ void StatePlay::on_event(sf::Event &event)
         (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::P)) {
 
         notify(EVENT_PLAY_PAUSE, NULL);
-        State::push_state(new StatePause(world, &restartOnResume, backgroundColor));
+        State::push_state(new StatePause(world, backgroundColor));
     }
 
     if (event.type == sf::Event::MouseButtonPressed && startScreenState == 0) {
@@ -166,6 +166,11 @@ void StatePlay::on_notify(Event event, void *data)
     if (event == EVENT_BALL_HIT_FINISH) {
         world->set_pause(true);
         notify(EVENT_PLAY_PAUSE, NULL);
-        State::push_state(new StateWin(world, levelNum, &restartOnResume, backgroundColor, timer->get_time()));
+        State::push_state(new StateWin(world, levelNum, backgroundColor, timer->get_time()));
+        return;
+    }
+
+    if (event == EVENT_PLAY_SIGNAL_LEVEL_RESTART) {
+        restartOnResume = true;
     }
 }

@@ -11,8 +11,8 @@
 #include "SFGUI/Separator.hpp"
 #include "play_state.h"
 
-StateDeath::StateDeath(World *world, bool *restartFlag, sf::Color clear) :
-    State(world, "death"), restartFlag(restartFlag), clear(clear)
+StateDeath::StateDeath(World *world, sf::Color clear) :
+    State(world, "death"), clear(clear)
 {
 }
 
@@ -68,7 +68,7 @@ void StateDeath::on_gain_focus() {
     auto guiButtonResert = sfg::Button::Create("Restart");
     guiButtonResert->SetId("btnDeathRestart");
     guiButtonResert->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
-        *restartFlag = true;
+        notify(EVENT_PLAY_SIGNAL_LEVEL_RESTART, NULL);
         State::pop_state();
     }));
     guiBoxButtons->Pack(guiButtonResert);

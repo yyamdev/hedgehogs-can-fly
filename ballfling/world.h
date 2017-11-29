@@ -41,7 +41,7 @@ public:
 
     void toggle_pause();
     bool is_paused();
-    void set_pause(bool paused);
+    void set_pause(bool pausedNew);
 
     void set_camera_clamp(sf::Vector2f topLeft, sf::Vector2f size);
     void disable_camera_clamp();

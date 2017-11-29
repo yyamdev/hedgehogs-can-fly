@@ -19,7 +19,7 @@ extern const float BALL_MAX_SPEED;
 class EntityBall : public Entity, public Observer {
 public:
     EntityBall();
-    EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour, bool *restartFlag);
+    EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour);
     ~EntityBall();
 
     void on_add();

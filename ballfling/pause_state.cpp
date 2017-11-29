@@ -15,9 +15,9 @@
 #include "particle.h"
 #include "cursor.h"
 
-StatePause::StatePause(World *world, bool *restartFlag, sf::Color clear) : State(world, "pause") {
-    this->restartFlag = restartFlag;
-    this->clear = clear;
+StatePause::StatePause(World *world, sf::Color clear) :
+    State(world, "pause"), clear(clear)
+{
 }
 
 sf::Color StatePause::get_clear_colour()
@@ -89,7 +89,7 @@ void StatePause::on_gain_focus() {
     guiButtonRestart->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonRestart->GetRequisition().x / 2.f, 500.f));
     guiButtonRestart->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
                 notify(EVENT_MENU_CLICK, NULL);
-                *restartFlag = true;
+                notify(EVENT_PLAY_SIGNAL_LEVEL_RESTART, NULL);
                 State::pop_state();
     }));
     guiBoxMain->Pack(guiButtonRestart);

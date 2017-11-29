@@ -14,11 +14,9 @@
 #include "end_state.h"
 #include "timer_entity.h"
 
-StateWin::StateWin(World *world, int levelNum, bool *restartFlag, sf::Color clear, unsigned int millis) : State(world, "win") {
-    this->levelNum = levelNum;
-    this->restartFlag = restartFlag;
-    this->clear = clear;
-    this->millis = millis;
+StateWin::StateWin(World *world, int levelNum, sf::Color clear, unsigned int millis) :
+    State(world, "win"), levelNum(levelNum), clear(clear), millis(millis)
+{
     savegame_level_unlock(levelNum + 1);
 }
 
@@ -72,6 +70,7 @@ void StateWin::on_gain_focus() {
         guiButtonBack->SetId("btnWinNext");
         guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
                     State::push_state(new StatePlay(world, levelNum + 1));
+                    return;
                     // TODO: Fix state system so a new play state doesn't need to be pushed here
                 }));
         guiBoxButtons->Pack(guiButtonBack);
@@ -89,7 +88,7 @@ void StateWin::on_gain_focus() {
         auto guiButtonResert = sfg::Button::Create("Restart");
         guiButtonResert->SetId("btnWinRestart");
         guiButtonResert->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
-                    *restartFlag = true;
+                    notify(EVENT_PLAY_SIGNAL_LEVEL_RESTART, NULL);
                     State::pop_state();
                 }));
         guiBoxButtons->Pack(guiButtonResert);
