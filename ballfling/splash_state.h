@@ -1,9 +1,11 @@
 #pragma once
 
-// splash screen state
+/*
+ * Splash screen state shown at game startup.
+ */
 
-#include "state.h"
 #include <SFML/Graphics.hpp>
+#include "state.h"
 #include "subject.h"
 
 class World;
@@ -22,7 +24,6 @@ private:
     sf::Texture txtSplash;
     sf::Sprite sprSplash;
     sf::Clock timer;
-    int state;
-    float alpha; // 0 to 1
-    int mouseEventCount;
+    int state = 0;
+    float alpha = 0.f;
 };

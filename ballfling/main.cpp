@@ -1,49 +1,35 @@
 #include <iostream>
-#include <SFML/Graphics.hpp>
 #include <memory>
-#include "build_options.h"
-#include "world.h"
-#include "play_state.h"
-#include "util.h"
-#include "menu_state.h"
-#include "shared_res.h"
-#include "imgui.h"
-#include "imgui-SFML.h"
-#include "debug_draw.h"
+#include <SFML/Graphics.hpp>
 #include "SFGUI/SFGUI.hpp"
 #include "SFGUI/Button.hpp"
 #include "SFGUI/Window.hpp"
 #include "SFGUI/Desktop.hpp"
+#include "imgui.h"
+#include "imgui-SFML.h"
+#include "build_options.h"
+#include "util.h"
+#include "debug_draw.h"
+#include "shared_res.h"
+#include "world.h"
 #include "gui.h"
 #include "cursor.h"
-#include <fstream>
 #include "particle.h"
-#include "splash_state.h"
 #include "audio.h"
-#include "end_state.h"
+#include "splash_state.h"
+
 #include <windows.h>
 
-// frame time profiler
-#define PBUFLEN 16
-sf::Int32 pbuf[PBUFLEN];
-int pbufi = 0;
-float framePercent = 0.f;
-float framePercentBuf[PBUFLEN];
-int fbufi = 0;
+sfg::SFGUI guiManager;
+sfg::Desktop gui;
 
-sfg::Desktop gui; // SFGUI global Desktop object
-
-void print_debug_controls();
-
-#define CSS_BUF_SIZE 8192
-char cssBuf[CSS_BUF_SIZE];
-
+// Only open console window in debug mode
 #ifndef _DEBUG
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
 #else
-int main() {
+int main()
 #endif
-
+{
     if (!sf::Shader::isAvailable())
     {
         MessageBox(NULL, "Oops.. It looks like your graphics card does not support shaders :( The game needs shader support in order to run. Make sure you have the most up to date graphics drivers installed!", "Error", 0);
@@ -52,33 +38,26 @@ int main() {
 
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), TITLE, sf::Style::Close);
     window.setFramerateLimit(60);
+    window.setMouseCursorVisible(false);
 
-    load_shared_res();
-    load_cursor_textures();
-
-    std::cout << "OpenGL version " << window.getSettings().majorVersion << "." << window.getSettings().minorVersion << std::endl;
-
+    std::cout << "OpenGL version: " << window.getSettings().majorVersion << "." << window.getSettings().minorVersion << std::endl;
     std::cout << "debug controls:\n";
     std::cout << "F1 - screenshot\n";
     std::cout << "F2 - toggle tools mode\n";
     std::cout << "F5 - toggle world pause\n";
 
-    Audio audio; // audio player
-
-    World world(window);
-
-    sfg::SFGUI guiManager;
+    load_shared_res();
+    load_cursor_textures();
     gui.LoadThemeFromFile("data/ui.css");
+
+    Audio audio;
+    World world(window);
+    ImGui::SFML::Init(window);
 
     State::change_state(new StateSplash(&world));
 
-    ImGui::SFML::Init(window);
-    window.setMouseCursorVisible(false);
     sf::Clock imguiDelta;
-    sf::Clock clkProfile;
-    window.resetGLStates();
     while (window.isOpen()) {
-        clkProfile.restart();
         sf::Event e;
         while (window.pollEvent(e)) {
             ImGui::SFML::ProcessEvent(e);
@@ -92,32 +71,36 @@ int main() {
             if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::F2) {
                 edit = !edit;
                 window.setMouseCursorVisible(edit);
-                std::ifstream fileTheme("data/ui.css");
-                fileTheme.get(cssBuf, CSS_BUF_SIZE, 0);
-                fileTheme.close();
             }
             #endif
 
-            if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::F1)
+            if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::F1) {
                 window.capture().saveToFile(util::to_string(time(NULL)) + ".png");
+            }
 
             world.event(e);
             State::event_current(e);
         }
 
+        // Logic
         gui.Update(1.f / 60.f);
         audio.tick_game_music();
         world.tick();
         State::tick_current();
-
-        window.clear(State::get_current()->get_clear_colour());
         ImGui::SFML::Update(window, imguiDelta.restart());
+
+        // Rendering
+        window.clear(State::get_current()->get_clear_colour());
         world.draw();
         State::draw_current(window);
         State::draw_ui_current(window);
         guiManager.Display(window);
-        //particles_draw(window, world.camera);
 
+        /*
+         * The next line keeps the terrain rendering properly when the ImGui
+         * header is active. It seems like there are some OpenGL state
+         * incompatibilities with SFML and ImGui?
+         */
         window.resetGLStates();
 
         if (edit && ImGui::CollapsingHeader("Resources")) {
@@ -125,44 +108,10 @@ int main() {
                 audio.reload_sfx();
             }
         }
-        if (edit && ImGui::CollapsingHeader("Performance")) {
-            sf::Color frameCol = sf::Color::Green;
-            if (framePercent > 100.f) frameCol = sf::Color::Red;
-            ImGui::TextColored(frameCol, "frame time: %f%", framePercent);
-            ImGui::PlotLines("frame time", framePercentBuf, PBUFLEN, 0, 0, 95.f, 140.f, sf::Vector2f(0, 70.f), 4);
-        }
-        if (edit && ImGui::CollapsingHeader("CSS")) {
-            if (ImGui::Button("Update")) {
-                std::ofstream fileTheme("data/ui.css");
-                for (int i = 0; i < CSS_BUF_SIZE; ++i) {
-                    if (cssBuf[i] == 0) break;
-                    fileTheme.put(cssBuf[i]);
-                }
-                fileTheme.close();
-                gui.LoadThemeFromFile("data/ui.css");
-                gui.Refresh();
-            }
-            if (ImGui::Button("Reload")) {
-                gui.LoadThemeFromFile("data/ui.css");
-                gui.Refresh();
-            }
-            ImGui::InputTextMultiline("css", cssBuf, CSS_BUF_SIZE, sf::Vector2f(400.f, 250.f), ImGuiInputTextFlags_AllowTabInput);
-        }
+
         ImGui::Render();
         draw_cursor(window);
         window.display();
-
-        pbuf[pbufi] = clkProfile.getElapsedTime().asMilliseconds();
-        pbufi = (pbufi + 1) % PBUFLEN;
-        if (pbufi == 0) {
-            sf::Int32 av = 0;
-            for (int i = 0; i < PBUFLEN; ++i) {
-                av += pbuf[i];
-            }
-            framePercent = (float)(av / PBUFLEN) / 16 * 100.f;
-            framePercentBuf[fbufi] = framePercent;
-            fbufi = (fbufi + 1) % PBUFLEN;
-        }
     }
 
     ImGui::SFML::Shutdown();
