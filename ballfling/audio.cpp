@@ -70,7 +70,7 @@ Audio::Audio() {
     musGameA.openFromFile("data/a.ogg");
     musGameA.setLoop(false); // gameplay tracks are switched out when finished
 
-    musGameB.openFromFile("data/LMR.ogg");
+    musGameB.openFromFile("data/b.ogg");
     musGameB.setLoop(false);
 }
 
