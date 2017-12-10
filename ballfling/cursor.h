@@ -1,8 +1,10 @@
 #pragma once
 
-// small module that draws different cursors
+/*
+ * Draw different cursors.
+ */
 
-#include "SFML/Graphics.hpp"
+#include <SFML/Graphics.hpp>
 
 namespace _cursors {
     extern sf::Texture txtCursorReticle;
@@ -13,7 +15,7 @@ namespace _cursors {
     extern bool draw;
 }
 
-// macros for easy reference to cursor textures
+// Pointers to cursor textures
 #define CURSOR_RETICLE (&_cursors::txtCursorReticle)
 #define CURSOR_CROSS (&_cursors::txtCursorCross)
 #define CURSOR_POINTER (&_cursors::txtCursorPointer)

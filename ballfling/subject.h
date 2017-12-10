@@ -1,10 +1,12 @@
 #pragma once
 
-// base class for an object that can trigger events
+/*
+ * Base class for an object that can trigger events.
+ */
 
-#include "events.h"
-#include <vector>
 #include <algorithm>
+#include <vector>
+#include "events.h"
 #include "observer.h"
 
 class Subject {
@@ -15,5 +17,5 @@ protected:
     static void notify(Event event, void *data);
     static std::vector<Observer*> observers;
 private:
-    
+
 };

@@ -8,7 +8,6 @@
 #include "debug_draw.h"
 #include "imgui.h"
 #include "particle.h"
-#include "gate.h"
 #include "options.h"
 #include "enemy_entity.h"
 #include "death_state.h"
@@ -250,12 +249,6 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         if (!enemy && e->get_tag() == "enemy") { // get enemy entity
             enemy = (EntityEnemy*)e;
             break;
-        }
-        if (e->get_tag() == "gate") {
-            EntityGate *gate = (EntityGate*)e;
-            if (gate->intersects_circle(position, collisionRadius)) {
-                velocity += gate->get_boost_vector();
-            }
         }
     }
 

@@ -142,7 +142,6 @@
     <ClCompile Include="enemy_entity.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="fireworks_entity.cpp" />
-    <ClCompile Include="gate.cpp" />
     <ClCompile Include="hud.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu_state.cpp" />
@@ -176,7 +175,6 @@
     <ClInclude Include="entity.h" />
     <ClInclude Include="events.h" />
     <ClInclude Include="fireworks_entity.h" />
-    <ClInclude Include="gate.h" />
     <ClInclude Include="gui.h" />
     <ClInclude Include="hud.h" />
     <ClInclude Include="menu_state.h" />

@@ -1,6 +1,8 @@
 #pragma once
 
-// base class for objects that can listen for events
+/*
+ * Base class for objects that can detect events.
+ */
 
 #include "events.h"
 
@@ -8,5 +10,6 @@ class Observer {
 public:
     Observer();
     virtual ~Observer();
-    virtual void on_notify(Event event, void *data) = 0; // must not destroy the instance or add entities in this function
+
+    virtual void on_notify(Event event, void *data) = 0;
 };
