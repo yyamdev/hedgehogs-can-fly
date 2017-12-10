@@ -133,7 +133,6 @@
     <ClCompile Include="..\..\..\..\dev\imgui\imgui.cpp" />
     <ClCompile Include="..\..\..\..\dev\imgui\imgui_demo.cpp" />
     <ClCompile Include="..\..\..\..\dev\imgui\imgui_draw.cpp" />
-    <ClCompile Include="animation.cpp" />
     <ClCompile Include="audio.cpp" />
     <ClCompile Include="ball_entity.cpp" />
     <ClCompile Include="cursor.cpp" />
@@ -166,7 +165,6 @@
     <ClCompile Include="world.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="animation.h" />
     <ClInclude Include="audio.h" />
     <ClInclude Include="ball_entity.h" />
     <ClInclude Include="build_options.h" />

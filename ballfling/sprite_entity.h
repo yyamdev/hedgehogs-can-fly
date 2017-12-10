@@ -1,10 +1,12 @@
 #pragma once
 
-// sprite entity
+/*
+ * Entity that just draws a sprite. Not affected by physics.
+ */
 
-#include "entity.h"
 #include <string>
 #include <SFML/Graphics.hpp>
+#include "entity.h"
 
 class EntitySprite : public Entity {
 public:

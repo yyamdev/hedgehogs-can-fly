@@ -1,6 +1,6 @@
-#include "sprite_entity.h"
 #include <string>
 #include <SFML/Graphics.hpp>
+#include "sprite_entity.h"
 #include "world.h"
 
 EntitySprite::EntitySprite(std::string filename, float x, float y, float scale)

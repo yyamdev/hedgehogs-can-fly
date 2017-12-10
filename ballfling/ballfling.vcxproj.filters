@@ -141,9 +141,6 @@
     <ClInclude Include="particle.h">
       <Filter>Header Files\game\state\play</Filter>
     </ClInclude>
-    <ClInclude Include="animation.h">
-      <Filter>Header Files\framework\world</Filter>
-    </ClInclude>
     <ClInclude Include="gate.h">
       <Filter>Header Files\game\world</Filter>
     </ClInclude>
@@ -244,9 +241,6 @@
     </ClCompile>
     <ClCompile Include="particle.cpp">
       <Filter>Source Files\game\state\play</Filter>
-    </ClCompile>
-    <ClCompile Include="animation.cpp">
-      <Filter>Source Files\framework\world</Filter>
     </ClCompile>
     <ClCompile Include="gate.cpp">
       <Filter>Source Files\game\world</Filter>

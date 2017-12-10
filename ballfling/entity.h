@@ -1,10 +1,12 @@
 #pragma once
 
-// generic entity that lives in a World
+/*
+ * Base class for an entity that is contained in a World.
+ */
 
-#include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
+#include <SFML/Graphics.hpp>
 #include "subject.h"
 
 class World;
@@ -24,18 +26,18 @@ public:
 
     virtual void on_add(){}
 
-    bool intersects(const Entity &other);
-
     std::string get_tag();
+
+    void set_world_ptr(World *world);
+
+    bool intersects(const Entity &other);
 
     sf::Vector2f position;
     sf::Vector2f velocity;
-    float collisionRadius;
-    bool remove; // flag to remove entity from game
-
-    void set_world_ptr(World *world);
+    float collisionRadius = 0.f;
+    bool remove = false;
 protected:
-    std::string tag;
-    World *world;
+    std::string tag = "";
+    World *world = NULL;
 private:
 };
