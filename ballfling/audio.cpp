@@ -42,12 +42,14 @@ static const char * names[SFX_COUNT] = {
 static sf::SoundBuffer buf[SFX_COUNT];
 static sf::Sound       snd[SFX_COUNT];
 
-void sfx_play(Sfx sfx) {
+void sfx_play(Sfx sfx)
+{
     snd[sfx].setVolume((float)options.sfxVolume * 100.f);
     snd[sfx].play();
 }
 
-void Audio::reload_sfx() {
+void Audio::reload_sfx()
+{
     for (int i = 0; i < SFX_COUNT; ++i) {
         buf[i].loadFromFile(names[i]);
         snd[i].setBuffer(buf[i]);
@@ -55,7 +57,8 @@ void Audio::reload_sfx() {
     }
 }
 
-Audio::Audio() {
+Audio::Audio()
+{
     Subject::add_observer(this);
 
     reload_sfx();
@@ -74,19 +77,22 @@ Audio::Audio() {
     musGameB.setLoop(false);
 }
 
-void Audio::stop_all_music() {
+void Audio::stop_all_music()
+{
     musMenu.stop();
     musGameA.stop();
     musGameB.stop();
 }
 
-void Audio::update_all_music_volume() {
+void Audio::update_all_music_volume()
+{
     musMenu.setVolume((float)options.musicVolume * 100.f);
     musGameA.setVolume((float)options.musicVolume * 100.f);
     musGameB.setVolume((float)options.musicVolume * 100.f);
 }
 
-void Audio::on_notify(Event event, void *data) {
+void Audio::on_notify(Event event, void *data)
+{
     // Sfx
 
     if (event == EVENT_BALL_HIT_SOLID) {
@@ -130,14 +136,15 @@ void Audio::on_notify(Event event, void *data) {
     }
 
     if (event == EVENT_ENTER_MENU && currentlyPlaying != MUSIC_TRACK_MENU) {
-        /* When we enter a menu and we are not already playing the menu music */
+        // When we enter a menu and we are not already playing the menu music
 
         if (currentlyPlaying != MUSIC_TRACK_COUNT &&
             currentlyPlaying > MUSIC_TRACK_MENU)
         {
-            /* Just came from a game, save the track */
+            /* Transition game -> menu
+             * On resume, start playing the NEXT game song. */
+            go_to_next_game_track();
             wasCurrentlyPlaying = currentlyPlaying;
-            std::cout << "save track\n";
         }
 
         stop_all_music();
@@ -150,24 +157,17 @@ void Audio::on_notify(Event event, void *data) {
         if (currentlyPlaying == MUSIC_TRACK_MENU ||
             currentlyPlaying == MUSIC_TRACK_COUNT)
         {
-            /* Just entered the game */
+            // Transition menu -> game
             currentlyPlaying = wasCurrentlyPlaying;
             stop_all_music();
             update_all_music_volume();
             track_to_music(currentlyPlaying)->play();
         }
-
-        else if (currentlyPlaying != MUSIC_TRACK_COUNT &&
-                 currentlyPlaying > MUSIC_TRACK_MENU)
-        {
-            /* Entered the game when already inside the game */
-            // NOTE: Delete this unless needed
-            std::cout << "test\n";
-        }
     }
 }
 
-sf::Music * Audio::track_to_music(track track_enum) {
+sf::Music * Audio::track_to_music(track track_enum)
+{
     if (track_enum == MUSIC_TRACK_MENU)
         return &musMenu;
     if (track_enum == MUSIC_TRACK_A)
@@ -180,7 +180,15 @@ sf::Music * Audio::track_to_music(track track_enum) {
     }
 }
 
-void Audio::tick_game_music() {
+void Audio::go_to_next_game_track()
+{
+    currentlyPlaying = (track)((int)currentlyPlaying + 1);
+    if (currentlyPlaying == MUSIC_TRACK_COUNT)
+        currentlyPlaying = MUSIC_TRACK_A; // loop back to track A
+}
+
+void Audio::tick_game_music()
+{
     if (currentlyPlaying != MUSIC_TRACK_COUNT &&
         currentlyPlaying > MUSIC_TRACK_MENU)
     {
@@ -188,10 +196,7 @@ void Audio::tick_game_music() {
         sf::Music *current = track_to_music(currentlyPlaying);
 
         if (current->getStatus() == sf::SoundSource::Status::Stopped) {
-            std::cout << "Next Track\n";
-            currentlyPlaying = (track)((int)currentlyPlaying + 1);
-            if (currentlyPlaying == MUSIC_TRACK_COUNT)
-                currentlyPlaying = MUSIC_TRACK_A; // loop back to track A
+            go_to_next_game_track();
             stop_all_music();
             update_all_music_volume();
             track_to_music(currentlyPlaying)->play();

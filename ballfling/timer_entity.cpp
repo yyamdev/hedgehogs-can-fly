@@ -18,6 +18,7 @@ EntityTimer::EntityTimer() {
     p = true;
     start = false;
     finish = false;
+    tag = "timer";
 }
 
 void EntityTimer::event(sf::Event &e) {
@@ -49,7 +50,7 @@ void EntityTimer::draw(sf::RenderWindow &window) {
     }
 
     if (!enable) return;
-    
+
     window.draw(sf::Text(get_formatted_time_str(get_time()), fntUi));
 }
 
@@ -78,9 +79,9 @@ void EntityTimer::on_notify(Event event, void *data) {
 
 unsigned int EntityTimer::get_time() {
     if (finish) return millisecondsFinish;
-    
+
     if (!start) return 0;
-    
+
     if (p)
         return millisecondsBeforePause;
     else

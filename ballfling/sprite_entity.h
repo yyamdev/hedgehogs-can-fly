@@ -9,6 +9,7 @@
 class EntitySprite : public Entity {
 public:
     EntitySprite(std::string filename, float x, float y);
+    EntitySprite(std::string filename, float x, float y, float scale);
 
     void event(sf::Event &e);
     void tick(std::vector<Entity*> &entities);

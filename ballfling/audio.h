@@ -19,7 +19,8 @@ public:
 
     void tick_game_music();
     sf::Music *track_to_music(track track_enum);
-    
+    void go_to_next_game_track();
+
     void on_notify(Event event, void *data);
 
     void reload_sfx();
