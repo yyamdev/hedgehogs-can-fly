@@ -44,7 +44,6 @@ int main()
     std::cout << "debug controls:\n";
     std::cout << "F1 - screenshot\n";
     std::cout << "F2 - toggle tools mode\n";
-    std::cout << "F5 - toggle world pause\n";
 
     load_shared_res();
     load_cursor_textures();

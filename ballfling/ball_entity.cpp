@@ -406,7 +406,6 @@ void EntityBall::record_new_rest_pos() {
         angle = atan2(normal.x, -normal.y) * (180.f / 3.14f);
     }
     prevAngle = angle;
-    std::cout << "prevAngle = " << prevAngle << std::endl;
 }
 
 void EntityBall::stop_resting() {
