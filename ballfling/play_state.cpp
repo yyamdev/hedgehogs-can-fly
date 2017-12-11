@@ -17,7 +17,7 @@
 StatePlay::StatePlay(World *world, int levelNum) :
     State(world, "play"), levelNum(levelNum)
 {
-    gui.RemoveAll();
+    //gui.RemoveAll();
     world->remove_entity(ENTITY_TAG_ALL);
 
     // Decide level colour scheme

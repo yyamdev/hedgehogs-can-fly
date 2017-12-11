@@ -1,5 +1,7 @@
 #include "state.h"
 #include "build_options.h"
+#include "debug_draw.h"
+#include "imgui.h"
 
 std::stack<State*> State::states;
 
@@ -67,6 +69,10 @@ void State::tick_current() {
 void State::draw_current(sf::RenderWindow &window) {
     if (!State::states.empty())
         State::states.top()->on_draw(window);
+
+    if (edit && ImGui::CollapsingHeader("state")) {
+        ImGui::Text("Size of state stack: %i", State::states.size());
+    }
 }
 
 void State::draw_ui_current(sf::RenderWindow &window) {

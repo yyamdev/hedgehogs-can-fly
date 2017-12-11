@@ -1,33 +1,15 @@
-#include "timer_entity.h"
-#include <SFML/Graphics.hpp>
-#include "shared_res.h"
-#include "events.h"
-#include "util.h"
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <SFML/Graphics.hpp>
+#include "timer_entity.h"
+#include "shared_res.h"
+#include "events.h"
+#include "util.h"
 #include "imgui.h"
 #include "debug_draw.h"
 
-EntityTimer::EntityTimer() {
-    millisecondsPaused = 0;
-    millisecondsBeforePause = 0;
-    millisecondsFinish = 0;
-    timer.restart();
-    timerPaused.restart();
-    p = true;
-    start = false;
-    finish = false;
-    tag = "timer";
-}
-
-void EntityTimer::event(sf::Event &e) {
-}
-
-void EntityTimer::tick(std::vector<Entity*> &entities) {
-}
-
-std::string get_formatted_time_str(unsigned int millis)
+std::string EntityTimer::get_formatted_time_str(unsigned int millis)
 {
     unsigned int seconds = (millis / 1000);
     unsigned int minutes = seconds / 60;
@@ -41,8 +23,19 @@ std::string get_formatted_time_str(unsigned int millis)
     return format.str();
 }
 
-void EntityTimer::draw(sf::RenderWindow &window) {
-    static bool enable = true;
+EntityTimer::EntityTimer()
+{
+    timer.restart();
+    timerPaused.restart();
+    tag = "timer";
+}
+
+void EntityTimer::event(sf::Event &e) {}
+
+void EntityTimer::tick(std::vector<Entity*> &entities) {}
+
+void EntityTimer::draw(sf::RenderWindow &window)
+{
     if (edit && ImGui::CollapsingHeader("Timer")) {
         if (ImGui::Button("toggle")) {
             enable = !enable;
@@ -54,7 +47,8 @@ void EntityTimer::draw(sf::RenderWindow &window) {
     window.draw(sf::Text(get_formatted_time_str(get_time()), fntUi));
 }
 
-void EntityTimer::on_notify(Event event, void *data) {
+void EntityTimer::on_notify(Event event, void *data)
+{
     if (event == EVENT_BALL_FLING && !start) {
         start = true;
         timer.restart();
@@ -66,23 +60,24 @@ void EntityTimer::on_notify(Event event, void *data) {
     }
 
     if (event == EVENT_PLAY_RESUME) {
-        p = false;
+        paused = false;
         millisecondsPaused += timerPaused.getElapsedTime().asMilliseconds();
     }
 
     if (event == EVENT_PLAY_PAUSE) {
         millisecondsBeforePause = get_time();
-        p = true;
+        paused = true;
         timerPaused.restart();
     }
 }
 
-unsigned int EntityTimer::get_time() {
+unsigned int EntityTimer::get_time()
+{
     if (finish) return millisecondsFinish;
 
     if (!start) return 0;
 
-    if (p)
+    if (paused)
         return millisecondsBeforePause;
     else
         return timer.getElapsedTime().asMilliseconds() - millisecondsPaused;

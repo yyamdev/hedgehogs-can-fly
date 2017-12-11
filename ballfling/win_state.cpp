@@ -1,14 +1,14 @@
-#include "win_state.h"
-#include "world.h"
 #include <iostream>
-#include "gui.h"
 #include "SFGUI/Button.hpp"
-#include "build_options.h"
-#include "util.h"
 #include "SFGUI/Label.hpp"
 #include "SFGUI/Window.hpp"
 #include "SFGUI/Box.hpp"
 #include "SFGUI/Separator.hpp"
+#include "build_options.h"
+#include "util.h"
+#include "win_state.h"
+#include "world.h"
+#include "gui.h"
 #include "play_state.h"
 #include "save.h"
 #include "end_state.h"
@@ -25,24 +25,21 @@ sf::Color StateWin::get_clear_colour()
     return clear;
 }
 
-void StateWin::on_event(sf::Event &event) {
-}
+void StateWin::on_event(sf::Event &event) {}
 
-void StateWin::on_tick() {
-}
+void StateWin::on_tick() {}
 
-void StateWin::on_draw(sf::RenderWindow &window) {
-}
+void StateWin::on_draw(sf::RenderWindow &window) {}
 
-void StateWin::on_draw_ui(sf::RenderWindow &window) {
-}
+void StateWin::on_draw_ui(sf::RenderWindow &window) {}
 
-void StateWin::on_gain_focus() {
+void StateWin::on_gain_focus()
+{
     gui.RemoveAll();
 
-    if (!world->is_paused()) world->toggle_pause();
+    world->set_pause(true);
 
-    // create ui
+    // Create GUI.
     auto guiWinMain = sfg::Window::Create(sfg::Window::Style::BACKGROUND);
     guiWinMain->SetId("winWinMain");
     gui.Add(guiWinMain);
@@ -54,7 +51,7 @@ void StateWin::on_gain_focus() {
     guiLblTitle->SetId("lblWinTitle");
     guiBoxMain->Pack(guiLblTitle);
 
-    auto guiLblTime = sfg::Label::Create("TIME: " + get_formatted_time_str(millis));
+    auto guiLblTime = sfg::Label::Create("TIME: " + EntityTimer::get_formatted_time_str(millis));
     guiLblTime->SetId("lblWinTime");
     guiBoxMain->Pack(guiLblTime);
 
@@ -69,9 +66,18 @@ void StateWin::on_gain_focus() {
         auto guiButtonBack = sfg::Button::Create("Next");
         guiButtonBack->SetId("btnWinNext");
         guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
-                    State::push_state(new StatePlay(world, levelNum + 1));
-                    return;
-                    // TODO: Fix state system so a new play state doesn't need to be pushed here
+                    /*
+                     * Save the next level number and world pointer as member
+                     * variables cannot be accessed after this instance is
+                     * deleted.
+                     */
+                    int nextLevel = levelNum + 1;
+                    World *worldPtr = world;
+
+                    // Go back to level select and push new play state on top.
+                    while (State::get_current()->get_name() != "select")
+                        State::pop_state();
+                    State::push_state(new StatePlay(worldPtr, nextLevel));
                 }));
         guiBoxButtons->Pack(guiButtonBack);
 
@@ -79,7 +85,7 @@ void StateWin::on_gain_focus() {
         auto guiButtonSelect = sfg::Button::Create("Level Select");
         guiButtonSelect->SetId("btnWinSelect");
         guiButtonSelect->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([] (void) {
-                    // pop state back to level select
+                    // Go back to level select state.
                     while (State::get_current()->get_name() != "select")
                         State::pop_state();
                 }));
@@ -97,7 +103,7 @@ void StateWin::on_gain_focus() {
         auto guiButtonBack = sfg::Button::Create("?");
         guiButtonBack->SetId("btnWinNext");
         guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
-                    // pop state back to level select
+                    // Go back to level select and push end game state on top.
                     while (State::get_current()->get_name() != "select")
                         State::pop_state();
                     State::change_state(new StateEnd(world));
@@ -105,14 +111,14 @@ void StateWin::on_gain_focus() {
         guiBoxButtons->Pack(guiButtonBack);
     }
 
-    // position window at centre of screen
-    // needs to be done at the end so SFGUI knows how big it has to be
+    /*
+     * Position window at centre of screen. This needs to be done at the end so
+     * SFGUI knows how big it has to be.
+     */
     guiWinMain->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2 - guiWinMain->GetRequisition().x / 2.f, WINDOW_HEIGHT / 2 - guiWinMain->GetRequisition().y / 2.f - 75.f));
 }
 
-void StateWin::on_lose_focus() {
-    if (world->is_paused()) world->toggle_pause();
-}
-
-void StateWin::on_notify(Event event, void *data) {
+void StateWin::on_lose_focus()
+{
+    world->set_pause(false);
 }
