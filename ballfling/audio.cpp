@@ -67,7 +67,7 @@ Audio::Audio()
     currentlyPlaying = MUSIC_TRACK_COUNT;
     wasCurrentlyPlaying = MUSIC_TRACK_A;
 
-    musMenu.openFromFile("data/testmusic.ogg");
+    musMenu.openFromFile("data/menu.ogg");
     musMenu.setLoop(true);
 
     musGameA.openFromFile("data/a.ogg");
