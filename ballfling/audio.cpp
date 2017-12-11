@@ -134,6 +134,10 @@ void Audio::on_notify(Event event, void *data)
         update_all_music_volume();
     }
 
+    if (event == EVENT_LEVEL_COMPLETE) {
+        track_to_music(currentlyPlaying)->pause();
+    }
+
     if (event == EVENT_ENTER_MENU && currentlyPlaying != MUSIC_TRACK_MENU) {
         // When we enter a menu and we are not already playing the menu music
 
