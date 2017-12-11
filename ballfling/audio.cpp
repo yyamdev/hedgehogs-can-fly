@@ -63,17 +63,16 @@ Audio::Audio()
 
     reload_sfx();
 
-    // Init music
     currentlyPlaying = MUSIC_TRACK_COUNT;
     wasCurrentlyPlaying = MUSIC_TRACK_A;
 
-    musMenu.openFromFile("data/menu.ogg");
+    musMenu.openFromFile("data/music/menu.ogg");
     musMenu.setLoop(true);
 
-    musGameA.openFromFile("data/a.ogg");
-    musGameA.setLoop(false); // gameplay tracks are switched out when finished
+    musGameA.openFromFile("data/music/a.ogg");
+    musGameA.setLoop(false);
 
-    musGameB.openFromFile("data/b.ogg");
+    musGameB.openFromFile("data/music/b.ogg");
     musGameB.setLoop(false);
 }
 
