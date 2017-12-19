@@ -5,7 +5,7 @@
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
 
-#define VERSION_STRING "dev"
+#define VERSION_STRING "1.0"
 
 #define TITLE "Hedgehogs Can Fly"
 
