@@ -184,6 +184,7 @@
     <ClInclude Include="particle.h" />
     <ClInclude Include="pause_state.h" />
     <ClInclude Include="play_state.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="save.h" />
     <ClInclude Include="select_state.h" />
     <ClInclude Include="shared_res.h" />
@@ -201,6 +202,12 @@
     <None Include="data\terrain.frag">
       <FileType>Text</FileType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ballfling.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
