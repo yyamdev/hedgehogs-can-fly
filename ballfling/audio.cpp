@@ -74,6 +74,9 @@ Audio::Audio()
 
     musGameB.openFromFile("data/music/b.ogg");
     musGameB.setLoop(false);
+
+    musGameC.openFromFile("data/music/c.ogg");
+    musGameC.setLoop(false);
 }
 
 void Audio::stop_all_music()
@@ -81,6 +84,7 @@ void Audio::stop_all_music()
     musMenu.stop();
     musGameA.stop();
     musGameB.stop();
+    musGameC.stop();
 }
 
 void Audio::update_all_music_volume()
@@ -88,6 +92,7 @@ void Audio::update_all_music_volume()
     musMenu.setVolume((float)options.musicVolume * 100.f);
     musGameA.setVolume((float)options.musicVolume * 100.f);
     musGameB.setVolume((float)options.musicVolume * 100.f);
+    musGameC.setVolume((float)options.musicVolume * 100.f);
 }
 
 void Audio::on_notify(Event event, void *data)
@@ -171,16 +176,19 @@ void Audio::on_notify(Event event, void *data)
 
 sf::Music * Audio::track_to_music(track track_enum)
 {
-    if (track_enum == MUSIC_TRACK_MENU)
+    switch (track_enum) {
+    case MUSIC_TRACK_MENU:
         return &musMenu;
-    if (track_enum == MUSIC_TRACK_A)
+    case MUSIC_TRACK_A:
         return &musGameA;
-    if (track_enum == MUSIC_TRACK_B)
+    case MUSIC_TRACK_B:
         return &musGameB;
-    else {
-        assert(false); // Your enum is probably screweded up
-        return NULL;
+    case MUSIC_TRACK_C:
+        return &musGameC;
     }
+
+    assert(false);
+    return NULL;
 }
 
 void Audio::go_to_next_game_track()

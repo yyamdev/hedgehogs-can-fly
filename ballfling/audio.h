@@ -8,6 +8,7 @@ enum track {
     MUSIC_TRACK_MENU,
     MUSIC_TRACK_A,
     MUSIC_TRACK_B,
+    MUSIC_TRACK_C,
     MUSIC_TRACK_COUNT,
 };
 
@@ -33,4 +34,5 @@ private:
     sf::Music musMenu;
     sf::Music musGameA;
     sf::Music musGameB;
+    sf::Music musGameC;
 };
