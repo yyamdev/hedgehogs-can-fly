@@ -136,7 +136,6 @@
     <ClCompile Include="audio.cpp" />
     <ClCompile Include="ball_entity.cpp" />
     <ClCompile Include="cursor.cpp" />
-    <ClCompile Include="death_state.cpp" />
     <ClCompile Include="debug_draw.cpp" />
     <ClCompile Include="end_state.cpp" />
     <ClCompile Include="enemy_entity.cpp" />
@@ -168,7 +167,6 @@
     <ClInclude Include="ball_entity.h" />
     <ClInclude Include="build_options.h" />
     <ClInclude Include="cursor.h" />
-    <ClInclude Include="death_state.h" />
     <ClInclude Include="debug_draw.h" />
     <ClInclude Include="end_state.h" />
     <ClInclude Include="enemy_entity.h" />

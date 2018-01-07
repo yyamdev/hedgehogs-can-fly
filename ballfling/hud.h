@@ -1,34 +1,27 @@
 #pragma once
 
-// object that draws the hud
+/*
+ * Object that draws the HUD overlay onto the ball.
+ */
 
-#include "observer.h"
 #include <SFML/Graphics.hpp>
-
-#define SHOW_INITIAL_INSTRUCTIONS 1
+#include "observer.h"
 
 class EntityBall;
-extern EntityBall *ballHud;
 
 class Hud : public Observer{
 public:
     Hud();
-
     void on_notify(Event event, void *data);
-
     void draw(sf::RenderWindow &window, sf::Vector2f camera, sf::Color levelColour);
 private:
-    // mouse & dragging
-    bool dragging, canFling, canNudge;
-    sf::Vector2f mouseDragStart;
-    sf::Vector2f ballRestPos;
-    sf::Texture txtArrow;
-    sf::Texture txtBallNudge;
-    int moveCount;
-    sf::Font fntCounter;
-    bool drawArrowOnBall;
+    bool dragging = false;
+    EntityBall *ball = NULL;
 
-    // instructions
-    sf::Texture txtInstructionDrag, txtInstructionSpace;
-    sf::Sprite sprInstructionDrag, sprInstructionSpace;
+    sf::Vector2f mouseDragStart;
+
+    sf::Texture txtArrow;
+    sf::Texture txtNudge;
+    sf::Sprite sprArrow;
+    sf::Sprite sprNudge;
 };

@@ -121,8 +121,8 @@ void Audio::on_notify(Event event, void *data)
     if (event == EVENT_BALL_HIT_WATER)     sfx_play(SFX_DIEWATER);
     if (event == EVENT_ENTER_SPLASH)       sfx_play(SFX_SPLASHSC);
     if (event == EVENT_FIREWORK)           sfx_play(SFX_FIREWORK);
-    if (event == EVENT_PLAYER_START_DRAG)  sfx_play(SFX_BALLDRAG);
-    if (event == EVENT_PLAYER_END_DRAG)    sfx_play(SFX_BALLFLNG);
+    if (event == EVENT_START_DRAG)  sfx_play(SFX_BALLDRAG);
+    if (event == EVENT_END_DRAG)    sfx_play(SFX_BALLFLNG);
     if (event == EVENT_ENTER_PAUSE_SCREEN) sfx_play(SFX_ENTPAUSE);
     if (event == EVENT_LEVEL_COMPLETE)     sfx_play(SFX_LVFINISH);
 

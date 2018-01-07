@@ -10,9 +10,7 @@
 #include "particle.h"
 #include "options.h"
 #include "enemy_entity.h"
-#include "death_state.h"
 #include "state.h"
-#include "hud.h"
 #include "fireworks_entity.h"
 
 sf::Texture EntityBall::txt;
@@ -29,7 +27,7 @@ EntityBall::EntityBall() {
 }
 
 EntityBall::~EntityBall() {
-    ballHud = NULL;
+    notify(EVENT_HUD_SET_ACTIVE_BALL, NULL);
 }
 
 EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour) {
@@ -39,7 +37,7 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour) {
         textureLoaded = true;
     }
 
-    ballHud = this;
+    notify(EVENT_HUD_SET_ACTIVE_BALL, this);
     this->restartFlag = restartFlag;
     this->colour = colour;
     position = prevRest = pos;
@@ -61,6 +59,16 @@ EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour) {
     angle = 0.f;
 }
 
+bool EntityBall::can_fling()
+{
+    return canFling;
+}
+
+bool EntityBall::can_nudge()
+{
+    return canNudge;
+}
+
 void EntityBall::on_add()
 {
     // Centre camera on our position.
@@ -80,13 +88,13 @@ void EntityBall::event(sf::Event &e) {
             dragging = true;
             dragStart.x = (float)e.mouseButton.x;
             dragStart.y = (float)e.mouseButton.y;
-            notify(EVENT_PLAYER_START_DRAG, (void*)(&dragStart));
+            notify(EVENT_START_DRAG, (void*)(&dragStart));
         }
     }
     if (e.type == sf::Event::MouseButtonReleased && e.mouseButton.button == sf::Mouse::Left) {
         if (dragging) {
             dragging = false;
-            notify(EVENT_PLAYER_END_DRAG, NULL);
+            notify(EVENT_END_DRAG, NULL);
             sf::Vector2f mouse;
             mouse.x = (float)e.mouseButton.x;
             mouse.y = (float)e.mouseButton.y;
@@ -187,17 +195,11 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         }
     }
 
-    if (dead && deadTimer.getElapsedTime().asSeconds() > 2.f) {
-        std::cout << "PUSH DEATH STATE\n";
-        State::push_state(new StateDeath(world, State::get_current()->get_clear_colour()));
-    }
-
     if (rest) return;
 
     // move
     sf::Vector2f oldPos = position;
     position += velocity;
-    notify(EVENT_BALL_MOVE, (void*)(&position));
 
     // handle nudging
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && canNudge && !canFling) {
@@ -391,7 +393,6 @@ bool EntityBall::touching_wall() {
 void EntityBall::record_new_rest_pos() {
     // called when ball is at rest
     prevRest = position;
-    notify(EVENT_BALL_REST_POS, (void*)(&position));
     canFling = true;
     notify(EVENT_BALL_CHANGE_CAN_FLING, &canFling);
 
@@ -420,7 +421,6 @@ void EntityBall::reset_to_rest() {
     angle = prevAngle;
     velocity = sf::Vector2f();
 
-    notify(EVENT_BALL_REST_POS, (void*)(&position));
     canFling = true;
     notify(EVENT_BALL_CHANGE_CAN_FLING, &canFling);
 

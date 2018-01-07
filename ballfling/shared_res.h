@@ -1,6 +1,8 @@
 #pragma once
 
-// shared resources loaded at launch
+/*
+ * Shared resources loaded at game startup
+ */
 
 #include <SFML/Graphics.hpp>
 
