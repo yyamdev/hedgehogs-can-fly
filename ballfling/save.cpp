@@ -1,13 +1,24 @@
-#include "save.h"
-#include "libconfig.h"
 #include <stdio.h>
+#include "libconfig.h"
+#include "save.h"
 
 static int prog = 1;
 static bool loaded = false;
 static char *filename = "data/prog";
 static char *entry = "prog";
 
-void savegame_save();
+void savegame_save()
+{
+    config_t c;
+    config_setting_t *setting;
+    config_init(&c);
+
+    setting = config_setting_add(c.root, entry, CONFIG_TYPE_INT);
+    config_setting_set_int(setting, prog);
+
+    config_write_file(&c, filename);
+    config_destroy(&c);
+}
 
 bool savegame_is_level_unlocked(int lvl)
 {
@@ -35,19 +46,6 @@ void savegame_reset()
 {
     prog = 1;
     savegame_save();
-}
-
-void savegame_save()
-{
-    config_t c;
-    config_setting_t *setting;
-    config_init(&c);
-
-    setting = config_setting_add(c.root, entry, CONFIG_TYPE_INT);
-    config_setting_set_int(setting, prog);
-    
-    config_write_file(&c, filename);
-    config_destroy(&c);
 }
 
 void savegame_load()

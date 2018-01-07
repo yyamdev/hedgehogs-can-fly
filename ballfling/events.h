@@ -1,14 +1,12 @@
 #pragma once
 
-// list of all possible events to listen for
-// data type of the data pointer for on_notify is specified in comments
+/*
+ * All possible events. The type of the 'data' pointer for on_notify() is
+ * specified in the comments.
+ */
 
 enum Event {
-    EVENT_PLAYER_START_DRAG, // sf::Vector2f* start position
-    EVENT_PLAYER_END_DRAG, // NULL
     EVENT_TERRAIN_CHANGE, // sf::Rect<unsigned int>* pointer to rect of reigion to update
-    EVENT_BALL_REST_POS, // sf::Vector2f* pointer to new rest position
-    EVENT_BALL_MOVE, // sf::Vector2f* pointer to new position
     EVENT_BOUNCE_DOOR, // NULL
     EVENT_SMASH_DOOR, // NULL
     EVENT_BALL_CHANGE_CAN_FLING, // bool* pointer to canFling
@@ -47,4 +45,9 @@ enum Event {
     EVENT_ENTER_END_SCREEN, // NULL
 
     EVENT_PLAY_SIGNAL_LEVEL_RESTART, // NULL
+
+
+    EVENT_START_DRAG, // sf::Vector2f* start position
+    EVENT_END_DRAG, // NULL
+    EVENT_HUD_SET_ACTIVE_BALL, // Entity* pointer to ball object
 };

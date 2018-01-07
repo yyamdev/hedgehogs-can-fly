@@ -17,7 +17,6 @@ public:
     void on_event(sf::Event &event);
     void on_tick();
     void on_draw(sf::RenderWindow &window);
-    void on_draw_ui(sf::RenderWindow &window);
     void on_gain_focus();
     void on_lose_focus();
 private:

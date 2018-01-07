@@ -51,10 +51,6 @@ void StateSplash::on_draw(sf::RenderWindow &window)
     window.draw(sprSplash);
 }
 
-void StateSplash::on_draw_ui(sf::RenderWindow &window)
-{
-}
-
 void StateSplash::on_gain_focus()
 {
     notify(EVENT_ENTER_SPLASH, NULL);

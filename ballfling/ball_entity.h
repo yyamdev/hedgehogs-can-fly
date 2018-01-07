@@ -34,6 +34,8 @@ public:
     void bounce(float bounceFactor, sf::Vector2f norm);
 
     bool is_on_sand();
+    bool can_fling();
+    bool can_nudge();
 
 private:
     bool spawned_fireworks;
