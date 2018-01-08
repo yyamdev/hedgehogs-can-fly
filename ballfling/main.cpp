@@ -18,6 +18,7 @@
 #include "audio.h"
 #include "splash_state.h"
 
+// windows.h only used for a MessageBox in the case of a shader error.
 #include <windows.h>
 
 sfg::SFGUI guiManager;
@@ -36,7 +37,7 @@ int main()
         return -1;
     }
 
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), TITLE, sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Hedgehogs Can Fly", sf::Style::Close);
     window.setFramerateLimit(60);
     window.setMouseCursorVisible(false);
 

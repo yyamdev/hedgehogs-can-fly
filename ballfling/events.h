@@ -11,7 +11,6 @@ enum Event {
     EVENT_SMASH_DOOR, // NULL
     EVENT_BALL_CHANGE_CAN_FLING, // bool* pointer to canFling
     EVENT_BALL_CHANGE_CAN_NUDGE, // bool* pointer to canNudge
-    EVENT_NEW_WORLD_GRAVITY, // NULL
     EVENT_PLAY_RESUME, // NULL
     EVENT_PLAY_PAUSE, // NULL
     EVENT_BALL_FLING, // NULL
