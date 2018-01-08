@@ -54,6 +54,8 @@ private:
     EntityTerrain *terrain;
     EntityEnemy *enemy;
 
+    bool moveCamera = true;
+
     bool justSpawned;
 
     TerrainType lastTerrain, terrainFlungOn;

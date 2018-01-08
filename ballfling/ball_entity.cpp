@@ -152,9 +152,7 @@ void EntityBall::draw(sf::RenderWindow &window)
 
     if (edit && ImGui::CollapsingHeader("Ball")) {
         ImGui::Checkbox("react to input", &reactToInput);
-        ImGui::Separator();
-        ImGui::Text("wall clock: %d", clkWallTouch.getElapsedTime().asMilliseconds());
-        ImGui::Text("speed: %f", util::len(velocity));
+        ImGui::Checkbox("move camera", &moveCamera);
     }
 }
 
@@ -171,7 +169,7 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
         justSpawned = false;
     }
     // move camera
-    if (!world->is_paused() && !world->cameraFollowBall) {
+    if (!world->is_paused() && moveCamera) {
         sf::Vector2f screenSize((float)WINDOW_WIDTH, (float)WINDOW_HEIGHT);
         sf::Vector2f delta = (position - screenSize / 2.f) - world->camera;
         world->camera += delta * 0.05f;
@@ -376,9 +374,6 @@ void EntityBall::on_notify(Event event, void *data) {
     if (event == EVENT_TERRAIN_CHANGE) {
         rest = false;
         clkRest.restart();
-    }
-    if (event == EVENT_NEW_WORLD_GRAVITY) {
-        stop_resting();
     }
 }
 
