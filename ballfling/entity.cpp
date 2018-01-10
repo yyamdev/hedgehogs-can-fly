@@ -2,10 +2,8 @@
 #include "entity.h"
 #include "util.h"
 
-Entity::Entity()
+Entity::Entity() : velocity(0.f, 0.f), position(0.f, 0.f)
 {
-    velocity = sf::Vector2f(0.f, 0.f);
-    position = sf::Vector2f(0.f, 0.f);
 }
 
 bool Entity::intersects(const Entity &other)

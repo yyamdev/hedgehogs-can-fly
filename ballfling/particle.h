@@ -1,6 +1,8 @@
 #pragma once
 
-// Fast particle system.
+/*
+ * Particle system.
+ */
 
 #include <SFML/Graphics.hpp>
 

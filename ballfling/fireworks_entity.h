@@ -1,8 +1,12 @@
 #pragma once
 
-#include "entity.h"
+/*
+ * Fireworks entity for end-of-level effect.
+ * Also includes static method to create fireworks without ending the level.
+ */
+
 #include <SFML/System.hpp>
-#include "subject.h"
+#include "entity.h"
 
 class EntityFireworks : public Entity
 {
@@ -17,5 +21,5 @@ public:
     static void do_fireworks(sf::Vector2f position, int count);
 private:
     sf::Clock timer;
-    int count;
+    int count = 0;
 };

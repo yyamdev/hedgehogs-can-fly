@@ -1,49 +1,48 @@
-#include "options_state.h"
-#include "world.h"
 #include <iostream>
-#include "gui.h"
 #include "SFGUI/Button.hpp"
 #include "SFGUI/Scale.hpp"
-#include "build_options.h"
-#include "util.h"
-#include "options.h"
 #include "SFGUI/Label.hpp"
 #include "SFGUI/Window.hpp"
 #include "SFGUI/Box.hpp"
 #include "SFGUI/Separator.hpp"
 #include "SFGUI/CheckButton.hpp"
+#include "options_state.h"
+#include "world.h"
+#include "gui.h"
+#include "build_options.h"
+#include "util.h"
+#include "options.h"
 #include "save.h"
 
-StateOptions::StateOptions(World *world, bool full, sf::Color clear) : State(world, "options") {
-    this->full = full;
-    this->clear = clear;
+StateOptions::StateOptions(World *world, bool showEraseSave, sf::Color clear) :
+    State(world, "options"), showEraseSave(showEraseSave), clear(clear)
+{
 }
 
-sf::Color StateOptions::get_clear_colour() {
+sf::Color StateOptions::get_clear_colour()
+{
     return clear;
 }
 
-void StateOptions::on_event(sf::Event &event) {
+void StateOptions::on_event(sf::Event &event)
+{
 }
 
-void StateOptions::on_tick() {
+void StateOptions::on_tick()
+{
 }
 
-void StateOptions::on_draw(sf::RenderWindow &window) {
+void StateOptions::on_draw(sf::RenderWindow &window)
+{
 }
 
-void StateOptions::on_draw_ui(sf::RenderWindow &window) {
-}
+void StateOptions::on_gain_focus()
+{
+    const sf::Vector2f sliderSize(200.f, 32.f);
 
-void StateOptions::on_gain_focus() {
-    // remove all entities in world & clear ui
-    //world->remove_entity(ENTITY_TAG_ALL);
     gui.RemoveAll();
 
     options.load(CONFIG_FILENAME);
-
-    // create ui
-    sf::Vector2f sliderSize(200.f, 32.f);
 
     auto guiWinMain = sfg::Window::Create(sfg::Window::Style::BACKGROUND);
     guiWinMain->SetId("winOptionsMain");
@@ -72,7 +71,7 @@ void StateOptions::on_gain_focus() {
     guiSliderMusic->SetRequisition(sliderSize);
     guiSliderMusic->SetValue((float)options.musicVolume);
     guiSliderMusic->GetSignal(sfg::Scale::OnMouseMove).Connect(std::bind([this] (void) {
-                // Hack so users can hear music volume change with slider movement
+                // Ensure volume change can be heard with slider movement
                 options.musicVolume = (double)guiSliderMusic->GetValue();
                 notify(EVENT_CHANGE_MUSIC_VOLUME, NULL);
         }));
@@ -103,7 +102,7 @@ void StateOptions::on_gain_focus() {
     guiToggleTrail->SetActive((bool)options.trail);
     guiBoxTrail->Pack(guiToggleTrail);
 
-    if (full) {
+    if (showEraseSave) {
         auto guiBoxErase = sfg::Box::Create();
         guiBoxMain->Pack(guiBoxErase);
 
@@ -121,23 +120,18 @@ void StateOptions::on_gain_focus() {
     guiButtonBack->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonBack->GetRequisition().x / 2.f, 500.f));
     guiButtonBack->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
                 notify(EVENT_MENU_CLICK, NULL);
-                guiSliderMusic->Show(false); // neccessary to stop this widget from displaying in other menus, possibly an SFGUI bug?
-                guiSliderSfx->Show(false);   // ""
-        State::pop_state();
+                State::pop_state();
     }));
     guiBoxMain->Pack(guiButtonBack);
 
-    // position window at centre of screen
-    // needs to be done at the end so SFGUI knows how big it has to be
+    // Position window at centre of screen
     guiWinMain->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2 - guiWinMain->GetRequisition().x / 2.f, WINDOW_HEIGHT / 2 - guiWinMain->GetRequisition().y / 2.f));
 }
 
-void StateOptions::on_lose_focus() {
+void StateOptions::on_lose_focus()
+{
     options.musicVolume = (double)guiSliderMusic->GetValue();
     options.sfxVolume = (double)guiSliderSfx->GetValue();
     options.trail = (int)guiToggleTrail->IsActive();
     options.save(CONFIG_FILENAME);
-}
-
-void StateOptions::on_notify(Event event, void *data) {
 }

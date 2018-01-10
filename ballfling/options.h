@@ -1,14 +1,10 @@
 #pragma once
 
-// global game options
+/*
+ * Options that are saved externally in a file.
+ */
 
 #include <string>
-
-// config file options
-#define CONFIG_MUSIC    "music_vol"
-#define CONFIG_SFX      "sfx_vol"
-#define CONFIG_TRAIL    "trail"
-#define CONFIG_PROG     "flung"
 
 class Options {
 public:
@@ -21,4 +17,4 @@ public:
     int trail;
 };
 
-extern Options options; // global options
+extern Options options;

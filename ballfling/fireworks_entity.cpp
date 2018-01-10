@@ -1,6 +1,6 @@
+#include <iostream>
 #include "fireworks_entity.h"
 #include "particle.h"
-#include <iostream>
 #include "util.h"
 #include "state.h"
 
@@ -12,7 +12,6 @@ EntityFireworks::EntityFireworks()
 EntityFireworks::EntityFireworks(sf::Vector2f pos)
 {
     position = pos;
-    count = 0;
     timer.restart();
 }
 
