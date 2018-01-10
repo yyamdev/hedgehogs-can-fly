@@ -255,11 +255,14 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     if (terrain) {
 
         sf::Vector2f contact;
-        if (terrain->intersects_with_circle(position, velocity, collisionRadius, &contact, &position)) { // collision with terrain
+        if (terrain->intersects_with_circle(position, collisionRadius, &contact)) {
+            // Move out of intersection
+            position = contact + terrain->get_normal(contact) * collisionRadius;
+
             contactPoint = contact;
             lastContact = contact;
 
-            TerrainType t = terrain->get_pos(contactPoint);
+            TerrainType t = terrain->get_pos(contact - terrain->get_normal(contact));
             if (t == T_KILL) {
                 for (int p = 0; p < 25; ++p) {
                     add_particle(position,
@@ -272,6 +275,8 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                 notify(EVENT_BALL_HIT_WATER, NULL);
                 return;
             }
+
+
 
             if (t == T_WIN) {
                 if (!spawned_fireworks) {

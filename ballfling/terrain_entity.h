@@ -36,7 +36,7 @@ public:
     bool get_solid(sf::Vector2f pos);
     TerrainType get_pos(sf::Vector2f pos);
     sf::Vector2f get_normal(sf::Vector2f pos); // get surface normal (unit)
-    bool intersects_with_circle(sf::Vector2f pos, sf::Vector2f vel, float rad, sf::Vector2f *contact, sf::Vector2f *newPos);
+    bool intersects_with_circle(sf::Vector2f pos, float rad, sf::Vector2f *contact);
     bool loaded_successfuly();
 
     sf::Vector2f playerSpawn;
