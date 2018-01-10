@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <vector>
 #include <random>
 #include <iostream>
@@ -152,12 +153,14 @@ TerrainType EntityTerrain::get_pos(sf::Vector2f pos)
 
 sf::Vector2f EntityTerrain::get_normal(sf::Vector2f pos)
 {
+    // TODO: Fix the memory rape
+
     std::vector<sf::Vector2f> positions;
     float sampleRadius = 4;
     for (float y=-sampleRadius; y<sampleRadius + 1; ++y) {
         for (float x=-sampleRadius; x<sampleRadius + 1; ++x) {
             sf::Vector2f p(pos.x + x, pos.y + y);
-            if (pos_in_bounds(p) && get_solid(sf::Vector2f(p.x, p.y)))
+            if (pos_in_bounds(p) && (get_solid(sf::Vector2f(p.x, p.y)) || get_pos(p) == T_KILL))
                 positions.push_back(p);
         }
     }
@@ -175,74 +178,69 @@ sf::Vector2f EntityTerrain::get_normal(sf::Vector2f pos)
     return (normal / normalSize);
 }
 
-bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, sf::Vector2f vel, float rad, sf::Vector2f *contact, sf::Vector2f *newPos)
+bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, float rad, sf::Vector2f *contact)
 {
-    bool intersects = false;
     const int divisions = 32; // Number of points around the circle to sample
-
-    // Determine if circle intersects
-    sf::Vector2f contactBroad;
     float deltaAngle = (2.f * (float)M_PI) / (float)divisions;
+
+    // Determine if circle intersects (broad phase)
+    bool intersects = false;
     for (int i = 0; i < divisions; ++i) {
         float angle = (float)i * deltaAngle;
         sf::Vector2f probe(pos.x + rad * cos(angle), pos.y + rad * sin(angle));
 
-        if (get_pos(probe) == T_KILL) {
-            /*
-             * Circle intersects with kill terrain, we don't care about the
-             * precise contact point or resolution position.
-             */
-            *newPos = pos;
-            *contact = probe;
-            return true;
-        }
-
-        if (get_solid(probe)) {
+        if (get_solid(probe) || get_pos(probe) == T_KILL) {
             /*
              * Circle intersects with solid terrain.
              */
             intersects = true;
-            contactBroad = probe;
             break;
         }
     }
-    if (!intersects) return false;
-    else { // narrow phase (find contact point)
-        // this is a load of shit really... half of it probably isn't necessary
-        // doesn't account for multiple contact points so doesn't work well in tight scenarios
-        bool inside = true;
-        bool once = true;
-        *newPos = pos;
-        *contact = contactBroad;
-        float speed = fmax(1.f, util::len(vel));
-        vel = util::normalize(vel * speed);
-        if (util::len(vel) != 0.f){
-            sf::Vector2f velUnit = util::normalize(vel);
-            int max = 40;
-            int i = 0;
-            while (inside && i < max) {
-                ++i;
-                inside = false;
-                int divisions = 16;
-                float deltaAngle = (2.f * (float)M_PI) / (float)divisions;
-                for (int i=0; i<divisions; ++i) {
-                    float angle = (float)i * deltaAngle;
-                    sf::Vector2f probe(newPos->x + rad * cos(angle), newPos->y + rad * sin(angle));
-                    if (get_solid(probe)) {
-                        *contact = probe;
-                        *newPos -= velUnit;
-                        inside = true;
-                        once = false;
-                        break;
-                    }
-                }
-            }
-            if (once) {
-                *newPos -= vel;
-            }
+
+    if (!intersects) {
+        return false;
+    }
+
+    /*
+     * Find contact point (narrow phase)
+     */
+
+    // Get average of all intersection points on the edge of the circle
+    sf::Vector2f pointsAverage;
+    unsigned int numIntersections = 0;
+    for (int i = 0; i < divisions; ++i) {
+        float angle = (float)i * deltaAngle;
+        sf::Vector2f probe(pos.x + rad * cos(angle), pos.y + rad * sin(angle));
+
+        if (get_solid(probe) || get_pos(probe) == T_KILL) {
+            pointsAverage += probe;
+            ++numIntersections;
         }
+    }
+
+    if (numIntersections == divisions) {
+        /*
+         * Circle is completely inside terrain. A meaningful intersection point
+         * cannot be found.
+         */
+        *contact = pos;
         return true;
     }
+
+    assert(numIntersections != 0);
+    pointsAverage /= (float)numIntersections;
+
+    // Step towards center of circle to find edge of terrain
+    sf::Vector2f probe = pointsAverage;
+    sf::Vector2f toCenter = util::normalize(pos - pointsAverage);
+
+    while (get_solid(probe) || get_pos(probe) == T_KILL) {
+        probe += toCenter;
+    }
+
+    *contact = probe;
+    return true;
 }
 
 void EntityTerrain::event(sf::Event &e)
