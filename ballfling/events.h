@@ -6,7 +6,6 @@
  */
 
 enum Event {
-    EVENT_TERRAIN_CHANGE, // sf::Rect<unsigned int>* pointer to rect of reigion to update
     EVENT_BOUNCE_DOOR, // NULL
     EVENT_SMASH_DOOR, // NULL
     EVENT_BALL_CHANGE_CAN_FLING, // bool* pointer to canFling

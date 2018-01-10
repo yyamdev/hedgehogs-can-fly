@@ -1,23 +1,24 @@
 #pragma once
 
-// game options state
+/*
+ * Options menu state.
+ */
 
+#include "SFGUI/Scale.hpp"
+#include "SFGUI/CheckButton.hpp"
 #include "state.h"
 #include "observer.h"
 #include "subject.h"
-#include "SFGUI/Scale.hpp"
-#include "SFGUI/CheckButton.hpp"
 
 class World;
 
-class StateOptions : public State, public Observer, public Subject {
+class StateOptions : public State, public Subject {
 public:
-    StateOptions(World *world, bool full, sf::Color clear);
+    StateOptions(World *world, bool showEraseSave, sf::Color clear);
 
     void on_event(sf::Event &event);
     void on_tick();
     void on_draw(sf::RenderWindow &window);
-    void on_draw_ui(sf::RenderWindow &window);
     void on_gain_focus();
     void on_lose_focus();
 
@@ -30,6 +31,6 @@ public:
     std::shared_ptr<sfg::CheckButton> guiToggleTrail;
 
 private:
-    bool full;
+    bool showEraseSave;
     sf::Color clear;
 };

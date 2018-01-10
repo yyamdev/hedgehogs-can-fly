@@ -253,10 +253,6 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
     }
 
     if (terrain) {
-        if (terrain->get_pos(position) == T_THIN) {
-            // Hijaking this to spawn the enemy
-            notify(EVENT_BALL_HIT_TRIGGER, NULL);
-        }
 
         sf::Vector2f contact;
         if (terrain->intersects_with_circle(position, velocity, collisionRadius, &contact, &position)) { // collision with terrain
@@ -314,23 +310,6 @@ void EntityBall::tick(std::vector<Entity*> &entities) {
                 lastTerrain = T_STICKY;
                 notify(EVENT_BALL_HIT_STICKY, NULL);
             }
-            else if (t == T_THIN) {
-                // Used for something else
-                /*
-                float impactSpeed = util::len(velocity);
-                if (impactSpeed > 9.f) {
-                    // TODO -> Increase updateRect or actualy calculate it using flood fill data? (Currently can be too small)
-                    terrain->remove_flood_fill(contactPoint);
-                    sf::Rect<unsigned int> updateRect((unsigned int)position.x - 96, (unsigned int)position.y - 96, 96 * 2, 96 * 2);
-                    notify(EVENT_TERRAIN_CHANGE, &updateRect);
-                    velocity = util::normalize(velocity) * fmax(0.f, impactSpeed - 7.f);
-                    notify(EVENT_SMASH_DOOR, NULL);
-                    return;
-                } else {
-                    notify(EVENT_BOUNCE_DOOR, NULL);
-                }
-                */
-            }
             else {
                 notify(EVENT_BALL_HIT_SOLID, NULL);
                 lastTerrain = T_SOLID;
@@ -371,10 +350,6 @@ void EntityBall::bounce(float bounceFactor, sf::Vector2f norm) {
 }
 
 void EntityBall::on_notify(Event event, void *data) {
-    if (event == EVENT_TERRAIN_CHANGE) {
-        rest = false;
-        clkRest.restart();
-    }
 }
 
 bool EntityBall::is_at_rest() {

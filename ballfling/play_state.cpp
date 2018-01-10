@@ -52,7 +52,7 @@ StatePlay::StatePlay(World *world, int levelNum) :
 
     // Load level data
     std::string filename = "data/lvl" + util::to_string(levelNum) + ".png";
-    terrain = new EntityTerrain(2.f, filename, levelColour);
+    terrain = new EntityTerrain(filename, levelColour);
     if (!terrain->loaded_successfuly()) {
         return;
     }

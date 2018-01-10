@@ -1,130 +1,104 @@
-#include "terrain_entity.h"
-#include "build_options.h"
-#include "util.h"
 #include <vector>
 #include <random>
 #include <iostream>
 #include <time.h>
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include <algorithm>
+#include "terrain_entity.h"
+#include "build_options.h"
+#include "util.h"
 #include "world.h"
 #include "debug_draw.h"
 #include "imgui.h"
-#include <algorithm>
 
-EntityTerrain::EntityTerrain(float scale, std::string filename, sf::Color colour) :
-    colour(colour), filename(filename), scale(scale)
+EntityTerrain::EntityTerrain(std::string filename, sf::Color colour) :
+    colour(colour), filename(filename)
 {
-    // load map image
+    tag = "terrain";
+
+    // Load image
     sf::Image imgMap;
     if (!imgMap.loadFromFile(filename)) {
         error = true;
         return;
     }
-    // properties
     size = imgMap.getSize();
-    tag = "terrain";
-    render = true;
-    // allocate terrain data memory & load map into it
-    terrain = new sf::Uint8[size.x * size.y * 4]; // 4 x 8 bit colour components for each pixel
-    memcpy((void*)terrain, (void*)imgMap.getPixelsPtr(), (size_t)(size.x * size.y * 4));
-    txtTerrainData.create(size.x, size.y); // for sfml rendering (passed to shader)
-    data_pass();
-    txtTerrainData.update(terrain); // update data texture
-    // load front-end textures
-    txtSolid.loadFromFile("data/solid.png");
-    txtSolid.setRepeated(true);
-    txtWater.loadFromFile("data/water.png");
-    txtWater.setRepeated(true);
-    txtBouncy.loadFromFile("data/bouncy.png");
-    txtBouncy.setRepeated(true);
-    txtSlow.loadFromFile("data/slow.png");
-    txtSlow.setRepeated(true);
-    txtSticky.loadFromFile("data/sticky.png");
-    txtSticky.setRepeated(true);
-    txtFinish.loadFromFile("data/finish.png");
-    txtFinish.setRepeated(true);
-    // load fragment shader
-    shdTerrain.loadFromFile("data/terrain.frag", sf::Shader::Fragment);
-    editMode = false;
-    drawTerrainNormals = false;
-}
 
-void EntityTerrain::data_pass() {
-    // iterate though map and spawn/store locations of entities
-    // erase data pixels & comments
+    // Copy raw pixel data from image into allocated buffer
+    unsigned int bytesPerPixel = 4;
+    terrain = new sf::Uint8[size.x * size.y * bytesPerPixel];
+    memcpy((void*)terrain, (void*)imgMap.getPixelsPtr(), (size_t)(size.x * size.y * bytesPerPixel));
+
+    // Find player start position
     for (unsigned int i=0; i< size.x * size.y * 4; i += 4) {
         if (terrain[i + 0] == 255 &&
             terrain[i + 1] == 127 &&
             terrain[i + 2] == 1) {
-            // player
+
+            // Save position
             playerSpawn.x = (float)((i / 4) % size.x);
             playerSpawn.y = (float)((i / 4) / size.x);
-            // erase
-            terrain[i + 0] = 0;
-            terrain[i + 1] = 0;
-            terrain[i + 2] = 0;
-        }
-        else if (terrain[i + 0] == 239 &&
-                 terrain[i + 1] == 228 &&
-                 terrain[i + 2] == 176) {
-            // erase comment
+
+            // Make this pixel blank
             terrain[i + 0] = 0;
             terrain[i + 1] = 0;
             terrain[i + 2] = 0;
         }
     }
+
+    // Create SFML texture from pixel data to be passed to shader for rendering
+    txtTerrainData.create(size.x, size.y);
+    txtTerrainData.update(terrain);
+
+    // Load front-end textures
+    if (!txtSolid.loadFromFile("data/solid.png")   ||
+        !txtWater.loadFromFile("data/water.png")   ||
+        !txtBouncy.loadFromFile("data/bouncy.png") ||
+        !txtSlow.loadFromFile("data/slow.png")     ||
+        !txtSticky.loadFromFile("data/sticky.png") ||
+        !txtFinish.loadFromFile("data/finish.png")) {
+
+        error = true;
+        return;
+    }
+
+    txtSolid.setRepeated(true);
+    txtWater.setRepeated(true);
+    txtBouncy.setRepeated(true);
+    txtSlow.setRepeated(true);
+    txtSticky.setRepeated(true);
+    txtFinish.setRepeated(true);
+
+    sprTerrain.setTexture(txtSolid); // I think this needs to be set for size only?
+    sprTerrain.setTextureRect(sf::IntRect(0, 0, (int)size.x, (int)size.y));
+
+    // Load fragment shader
+    if (!shdTerrain.loadFromFile("data/terrain.frag", sf::Shader::Fragment)) {
+        error = true;
+    }
 }
 
-EntityTerrain::~EntityTerrain() {
-    // free terrain data memory
+EntityTerrain::~EntityTerrain()
+{
     delete[] terrain;
 }
 
-sf::Vector2u EntityTerrain::get_size() {
+sf::Vector2u EntityTerrain::get_size()
+{
     return size;
 }
 
-void EntityTerrain::set_solid(sf::Vector2f pos, bool solid) {
-    if (!pos_in_bounds(pos))
-        return;
-    unsigned int base = (unsigned int)(((unsigned int)pos.y * size.x + (unsigned int)pos.x) * 4);
-    if (solid) { // set to white (solid)
-        terrain[base + 0] = 255;
-        terrain[base + 1] = 255;
-        terrain[base + 2] = 255;
-        terrain[base + 3] = 255;
-    } else { // set to black (empty)
-        terrain[base + 0] = 0;
-        terrain[base + 1] = 0;
-        terrain[base + 2] = 0;
-        terrain[base + 3] = 255;
-    }
+bool EntityTerrain::loaded_successfuly()
+{
+    return !error;
 }
 
-void EntityTerrain::remove_flood_fill(sf::Vector2f pos) {
-    unsigned int base = (unsigned int)(((unsigned int)pos.y * size.x + (unsigned int)pos.x) * 4);
-    flood_fill(pos, sf::Color::Black, sf::Color(terrain[base], terrain[base + 1], terrain[base + 2], 255));
-}
-
-void EntityTerrain::flood_fill(sf::Vector2f pos, sf::Color replacement, sf::Color old) {
-    // may crash if near edge of map
-    if (replacement == old) return;
-    unsigned int base = (unsigned int)(((unsigned int)pos.y * size.x + (unsigned int)pos.x) * 4);
-    if (old != sf::Color(terrain[base], terrain[base + 1], terrain[base + 2], 255)) return;
-    terrain[base] = replacement.r;
-    terrain[base + 1] = replacement.g;
-    terrain[base + 2] = replacement.b;
-    flood_fill(pos + sf::Vector2f(1.f, 0.f), replacement, old);
-    flood_fill(pos + sf::Vector2f(-1.f, 0.f), replacement, old);
-    flood_fill(pos + sf::Vector2f(0.f, 1.f), replacement, old);
-    flood_fill(pos + sf::Vector2f(0.f, -1.f), replacement, old);
-    return;
-}
-
-bool EntityTerrain::get_solid(sf::Vector2f pos) {
+bool EntityTerrain::get_solid(sf::Vector2f pos)
+{
     if (!pos_in_bounds(pos))
         return false;
+
     unsigned int base = (unsigned int)(((unsigned int)pos.y * size.x + (unsigned int)pos.x) * 4);
     return !(terrain[base + 0] == 0 &&
              terrain[base + 1] == 0 &&
@@ -143,9 +117,11 @@ bool EntityTerrain::get_solid(sf::Vector2f pos) {
              terrain[base + 2] == 0);
 }
 
-TerrainType EntityTerrain::get_pos(sf::Vector2f pos) {
+TerrainType EntityTerrain::get_pos(sf::Vector2f pos)
+{
     if (!pos_in_bounds(pos))
         return T_BLANK;
+
     unsigned int base = (unsigned int)(((unsigned int)pos.y * size.x + (unsigned int)pos.x) * 4);
     if (terrain[base + 0] == 255 &&
         terrain[base + 1] == 255 &&
@@ -167,10 +143,6 @@ TerrainType EntityTerrain::get_pos(sf::Vector2f pos) {
         terrain[base + 1] == 174 &&
         terrain[base + 2] == 201) return T_STICKY;
 
-    if (terrain[base + 0] == 255 &&
-        terrain[base + 1] == 242 &&
-        terrain[base + 2] == 0) return T_THIN;
-
     if (terrain[base + 0] == 237 &&
         terrain[base + 1] == 28 &&
         terrain[base + 2] == 36) return T_WIN;
@@ -178,47 +150,8 @@ TerrainType EntityTerrain::get_pos(sf::Vector2f pos) {
     return T_BLANK;
 }
 
-void EntityTerrain::set_solid() {
-    for (unsigned int i=0; i<size.x * size.y * 4; i+=4) {
-        // set to white (solid)
-        terrain[i + 0] = 255;
-        terrain[i + 1] = 255;
-        terrain[i + 2] = 255;
-        terrain[i + 3] = 255;
-    }
-}
-
-void EntityTerrain::set_empty() {
-    for (unsigned int i=0; i<size.x * size.y * 4; i+=4) {
-        // set to black (empty)
-        terrain[i + 0] = 0;
-        terrain[i + 1] = 0;
-        terrain[i + 2] = 0;
-        terrain[i + 3] = 255;
-    }
-}
-
-void EntityTerrain::set_rectangle(sf::FloatRect rect, bool solid) {
-    for (float y=rect.top; y<rect.top + rect.height; ++y) {
-        for (float x=rect.left; x<rect.left + rect.width; ++x) {
-            set_solid(sf::Vector2f(x, y), solid);
-        }
-    }
-}
-
-void EntityTerrain::set_circle(sf::Vector2f center, float rad, bool solid) {
-    sf::FloatRect bound(center.x - rad, center.y - rad, rad * 2.f, rad * 2);
-    for (float y=bound.top; y<bound.top + bound.height; ++y) {
-        for (float x=bound.left; x<bound.left + bound.width; ++x) {
-            float dx = center.x - x;
-            float dy = center.y - y;
-            if ((dx * dx + dy * dy) < (rad * rad))
-                set_solid(sf::Vector2f(x, y), solid);
-        }
-    }
-}
-
-sf::Vector2f EntityTerrain::get_normal(sf::Vector2f pos) {
+sf::Vector2f EntityTerrain::get_normal(sf::Vector2f pos)
+{
     std::vector<sf::Vector2f> positions;
     float sampleRadius = 4;
     for (float y=-sampleRadius; y<sampleRadius + 1; ++y) {
@@ -242,31 +175,35 @@ sf::Vector2f EntityTerrain::get_normal(sf::Vector2f pos) {
     return (normal / normalSize);
 }
 
-sf::Vector2f EntityTerrain::get_normal_ground(sf::Vector2f pos) {
-    while (!get_solid(pos)) {
-        pos.y += 1;
-    }
-    return get_normal(pos);
-}
-
-bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, sf::Vector2f vel, float rad, sf::Vector2f *contact, sf::Vector2f *newPos) {
-    // broad phase
+bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, sf::Vector2f vel, float rad, sf::Vector2f *contact, sf::Vector2f *newPos)
+{
     bool intersects = false;
-    int divisions = 16;
+    const int divisions = 32; // Number of points around the circle to sample
+
+    // Determine if circle intersects
     sf::Vector2f contactBroad;
     float deltaAngle = (2.f * (float)M_PI) / (float)divisions;
-    for (int i=0; i<divisions; ++i) {
+    for (int i = 0; i < divisions; ++i) {
         float angle = (float)i * deltaAngle;
         sf::Vector2f probe(pos.x + rad * cos(angle), pos.y + rad * sin(angle));
+
         if (get_pos(probe) == T_KILL) {
+            /*
+             * Circle intersects with kill terrain, we don't care about the
+             * precise contact point or resolution position.
+             */
             *newPos = pos;
             *contact = probe;
             return true;
         }
+
         if (get_solid(probe)) {
+            /*
+             * Circle intersects with solid terrain.
+             */
             intersects = true;
             contactBroad = probe;
-            break; // circle definitely intersects
+            break;
         }
     }
     if (!intersects) return false;
@@ -308,24 +245,18 @@ bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, sf::Vector2f vel, f
     }
 }
 
-void EntityTerrain::event(sf::Event &e) {
-    if (e.type == sf::Event::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Right && !sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
-        //std::cout << "TODO -> EVENT_TERRAIN_CHANGED if this code uses set_circle\n";
-        //set_circle(sf::Vector2f((float)e.mouseButton.x + world->camera.x, (float)e.mouseButton.y + world->camera.y), 25, false);
-    }
+void EntityTerrain::event(sf::Event &e)
+{
 }
 
-void EntityTerrain::tick(std::vector<Entity*> &entities) {
+void EntityTerrain::tick(std::vector<Entity*> &entities)
+{
     world->set_camera_clamp(sf::Vector2f(0.f, 0.f), sf::Vector2f((float)size.x, (float)size.y));
 }
 
-void EntityTerrain::draw(sf::RenderWindow &window) {
-    static bool drawGrid = false;
+void EntityTerrain::draw(sf::RenderWindow &window)
+{
     if (render) {
-        // create terrain image sprite
-        sf::Sprite sprTerrain(txtSolid); // I think this has to be set for size only?
-        sprTerrain.setTextureRect(sf::IntRect(0, 0, (int)size.x, (int)size.y));
-        // pass parameters into shader
         shdTerrain.setParameter("txtSolid", txtSolid);
         shdTerrain.setParameter("txtKill", txtWater);
         shdTerrain.setParameter("txtBouncy", txtBouncy);
@@ -339,17 +270,16 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
         shdTerrain.setParameter("screenHeight", (float)WINDOW_HEIGHT);
         shdTerrain.setParameter("cameraX", world->camera.x);
         shdTerrain.setParameter("cameraY", world->camera.y);
-        shdTerrain.setParameter("grid", drawGrid);
         shdTerrain.setParameter("edgeColour", colour);
+
         sprTerrain.setPosition(-world->camera);
-        window.draw(sprTerrain, &shdTerrain); // draw
+        window.draw(sprTerrain, &shdTerrain);
     }
 
     if (edit && ImGui::CollapsingHeader("Terrain")) {
         ImGui::TextDisabled(filename.c_str());
         ImGui::Checkbox("render", &render);
-        ImGui::Checkbox("grid effect", &drawGrid);
-        ImGui::Checkbox("Draw terrain normals", &drawTerrainNormals);
+        ImGui::Checkbox("draw terrain normals", &drawTerrainNormals);
     }
 
     if (drawTerrainNormals) {
@@ -361,25 +291,4 @@ void EntityTerrain::draw(sf::RenderWindow &window) {
         draw_vector(mouse, normal, 50.f, sf::Color::Yellow, window);
     }
 
-}
-
-void EntityTerrain::on_notify(Event event, void *data) {
-    if (event == EVENT_TERRAIN_CHANGE) {
-        // update part of the terrain texture from terrain data data
-        sf::Rect<unsigned int> updateBounds = *(sf::Rect<unsigned int>*)data;
-        sf::Uint8 *terrainUpdate = new sf::Uint8[updateBounds.width * updateBounds.height * 4];
-        sf::Uint8 *terrainStart = &terrain[(updateBounds.top * size.x + updateBounds.left) * 4];
-        for (int row = 0; row < (int)updateBounds.height; ++row) { // create continuous buffer for update reigion
-            memcpy( &terrainUpdate[row * updateBounds.width * 4],
-                    &terrainStart [row * size.x * 4],
-                    updateBounds.width * 4);
-        }
-        txtTerrainData.update(terrainUpdate, updateBounds.width, updateBounds.height, updateBounds.left, updateBounds.top); // update data texture
-        delete[] terrainUpdate;
-    }
-}
-
-bool EntityTerrain::loaded_successfuly()
-{
-    return !error;
 }

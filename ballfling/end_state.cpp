@@ -11,9 +11,13 @@
 #include "shared_res.h"
 #include "cursor.h"
 
-StateEnd::StateEnd(World *world) : State(world, "end") {}
+StateEnd::StateEnd(World *world) : State(world, "end")
+{
+}
 
-void StateEnd::on_event(sf::Event &event) {}
+void StateEnd::on_event(sf::Event &event)
+{
+}
 
 sf::Color StateEnd::get_clear_colour()
 {
@@ -26,7 +30,7 @@ void StateEnd::on_gain_focus()
     guiButtonSelect = sfg::Button::Create("Back");
     guiButtonSelect->SetId("btnDeathSelect");
     guiButtonSelect->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([] (void) {
-        State::pop_state(); // pop state back to level select
+        State::pop_state(); // Pop state back to level select
     }));
     guiButtonSelect->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2 - guiButtonSelect->GetRequisition().x / 2.f, 500.f));
 
@@ -36,8 +40,6 @@ void StateEnd::on_gain_focus()
     set_cursor(CURSOR_POINTER);
     notify(EVENT_ENTER_END_SCREEN, NULL);
 }
-
-void StateEnd::on_lose_focus() {}
 
 void StateEnd::on_tick()
 {
@@ -80,5 +82,3 @@ void StateEnd::on_draw(sf::RenderWindow &window)
         window.draw(sprMsg);
     }
 }
-
-void StateEnd::on_draw_ui(sf::RenderWindow &window) {}
