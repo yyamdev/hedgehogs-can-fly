@@ -1,75 +1,85 @@
-// fragment shader for rendering terrain
+/*
+ * Terrain GLSL fragment shader.
+ *
+ * "data coordinate"     measured in pixels
+ * "texture coordinate"  0.0 - 1.0 scale
+ *
+ * Y axis is flipped.
+ */
 
-uniform sampler2D txtSolid;   // solid terrain image texture
-uniform sampler2D txtKill;    // ^
-uniform sampler2D txtBouncy;  // ^
-uniform sampler2D txtSlow;    // ^
-uniform sampler2D txtSticky;  // ^
-uniform sampler2D txtFinish;  // ^
-uniform sampler2D txtData;    // terrain data texture
-uniform vec4 edgeColour;
-uniform float sizeX;          // size of rendering space
-uniform float sizeY;          // ^
-uniform float screenWidth;    // width of the screen in pixels
-uniform float screenHeight;   // ^
+// Terrain data
+uniform sampler2D txtData;
+
+// Terrain textures
+uniform sampler2D txtSolid;
+uniform sampler2D txtKill;
+uniform sampler2D txtBouncy;
+uniform sampler2D txtSlow;
+uniform sampler2D txtSticky;
+uniform sampler2D txtFinish;
+
+// Size of rendering space (px)
+uniform float sizeX;
+uniform float sizeY;
+
+// Size of screen (px)
+uniform float screenWidth;
+uniform float screenHeight;
+
 uniform float cameraX;
 uniform float cameraY;
+uniform vec4 edgeColour;
 
-vec4 texture_coordinate(vec4 dataCoord) {
-    return vec4(dataCoord.x / sizeX, (screenHeight - dataCoord.y) / sizeY, dataCoord.z, dataCoord.a);
+vec4 sample_terrain_texture(vec4 dataCoord)
+{
+    vec4 textureCoord = vec4(dataCoord.x / sizeX, (screenHeight - dataCoord.y) / sizeY, dataCoord.z, dataCoord.a);
+    vec4 sample = texture2D(txtData, textureCoord.xy);
+    return sample * 255;
 }
 
-bool edge(vec4 pos) {
-    // Is pos near empty space?
+bool edge(vec4 dataCoord)
+{
     float rad = 3.0;
     for (float y = -rad; y < rad + 1.0; ++y) {
         for (float x = -rad; x < rad + 1.0; ++x) {
-            vec4 probe;
-            probe.x = pos.x + (x / sizeX);
-            probe.y = pos.y + (y / sizeY);
-            probe.z = pos.z;
-            probe.a = pos.a;
-            vec4 dataPixel = texture2D(txtData, probe.xy);
-            dataPixel.x *= 255;
-            dataPixel.y *= 255;
-            dataPixel.z *= 255;
-            dataPixel.a *= 255;
+            vec4 probe = vec4(dataCoord.x + x, dataCoord.y + y, dataCoord.z, dataCoord.a);
+            vec4 dataPixel = sample_terrain_texture(probe);
+
             if ((dataPixel.r == 0 && dataPixel.g == 128 && dataPixel.b == 128) ||
                 (dataPixel.r == 0 && dataPixel.g == 0 && dataPixel.b == 0)) {
-                // Probed empty space.
+                // Probed empty space or 'kill' terrain
                 return true;
             }
         }
     }
+
     return false;
 }
 
-void main() {
-    // calculate texture lookup coordinates
+void main()
+{
+    // Calculate texture lookup coordinates
     vec4 dataCoord;
     dataCoord.x = gl_FragCoord.x + cameraX;
     dataCoord.y = gl_FragCoord.y - cameraY;
-    vec4 dataTexCoord = texture_coordinate(dataCoord);
 
-    if (dataCoord.x >= cameraX && screenHeight - dataCoord.y >= cameraY && dataCoord.x < cameraX + screenWidth && screenHeight - dataCoord.y < cameraY + screenHeight) {
-        // lookup terrain type in map file
-        vec4 dataPixel = texture2D(txtData, dataTexCoord.xy);
-        //vec4 dataPixel = vec4(0.0, 0.0, 0.0, 0.0);
-        //dataPixel.xyza *= 255;
-        dataPixel.x *= 255;
-        dataPixel.y *= 255;
-        dataPixel.z *= 255;
-        dataPixel.a *= 255;
+    if (dataCoord.x >= cameraX &&
+        screenHeight - dataCoord.y >= cameraY &&
+        dataCoord.x < cameraX + screenWidth &&
+        screenHeight - dataCoord.y < cameraY + screenHeight) {
+
         vec4 pixel = vec4(0.0, 0.0, 0.0, 1.0);
 
-        // sample from correct terrain texture
+        // Lookup pixel in terrain data texture
+        vec4 dataPixel = sample_terrain_texture(dataCoord);
+
+        // Determine the terrain type and sample the rendered pixel from the corresponding texture
         if (dataPixel.r == 0 && dataPixel.g == 128 && dataPixel.b == 128) {
             pixel = texture2D(txtKill, gl_TexCoord[0].xy);
             gl_FragColor = gl_Color * pixel;
-            //gl_FragColor.a = 0.5;
         }
         else if (dataPixel.r == 255 && dataPixel.g == 255 && dataPixel.b == 255) {
-            if (edge(dataTexCoord))
+            if (edge(dataCoord))
                 pixel = edgeColour;
             else
                 pixel = texture2D(txtSolid, gl_TexCoord[0].xy);
