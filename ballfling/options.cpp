@@ -22,9 +22,9 @@ void Options::load(std::string filename)
     if (!config_read_file(&c, filename.c_str())) {
         // No config file, use default values:
         config_destroy(&c);
-        musicVolume = .5f;
-        sfxVolume = .5f;
-        trail = true;
+        musicVolume = .9f;
+        sfxVolume = .65f;
+        trail = false;
         return;
     }
 
