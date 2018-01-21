@@ -21,14 +21,28 @@ void EntityFireworks::event(sf::Event &e)
 
 void EntityFireworks::do_fireworks(sf::Vector2f position, int count)
 {
+    sf::Color colors[] = {
+        sf::Color::White,
+        sf::Color::Black,
+        sf::Color::Blue,
+        sf::Color::Green,
+        sf::Color::Magenta,
+        sf::Color::Red,
+        sf::Color::Cyan,
+    };
+
+    unsigned int color1 = util::rnd(0, sizeof(colors) / sizeof(colors[0]));
+    unsigned int color2 = util::rnd(0, sizeof(colors) / sizeof(colors[0]));
+
     for (int i = 0; i < count; ++i)
     {
         add_particle(position,
                      sf::Vector2f(util::rnd(-2.f, 2.f), util::rnd(-3.f, -1.f)),
                      sf::Vector2f(0.f, 0.1f),
-                     util::choose(sf::Color::Yellow, sf::Color::White),
+                     util::choose(colors[color1], colors[color2]),
                      360);
     }
+
     notify(EVENT_FIREWORK, NULL);
 }
 
