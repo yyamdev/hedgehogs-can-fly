@@ -97,10 +97,22 @@ void StateOptions::on_gain_focus()
     guiLblTrail->SetId("lblOptionsTrail");
     guiBoxTrail->Pack(guiLblTrail);
 
-    guiToggleTrail = sfg::CheckButton::Create("Trail");
+    guiToggleTrail = sfg::CheckButton::Create("");
     guiToggleTrail->SetId("tglOptionsTrail");
     guiToggleTrail->SetActive((bool)options.trail);
     guiBoxTrail->Pack(guiToggleTrail);
+
+    auto guiBoxPower = sfg::Box::Create();
+    guiBoxMain->Pack(guiBoxPower);
+
+    auto guiLblPower = sfg::Label::Create("Power Indicator");
+    guiLblPower->SetId("lblOptionsPower");
+    guiBoxPower->Pack(guiLblPower);
+
+    guiTogglePower = sfg::CheckButton::Create("");
+    guiTogglePower->SetId("tglOptionsPower");
+    guiTogglePower->SetActive((bool)options.power);
+    guiBoxPower->Pack(guiTogglePower);
 
     if (showEraseSave) {
         auto guiBoxErase = sfg::Box::Create();
@@ -133,5 +145,6 @@ void StateOptions::on_lose_focus()
     options.musicVolume = (double)guiSliderMusic->GetValue();
     options.sfxVolume = (double)guiSliderSfx->GetValue();
     options.trail = (int)guiToggleTrail->IsActive();
+    options.power = (int)guiTogglePower->IsActive();
     options.save(CONFIG_FILENAME);
 }

@@ -17,6 +17,7 @@ public:
 private:
     bool dragging = false;
     EntityBall *ball = NULL;
+    float power = 0.f;
 
     sf::Vector2f mouseDragStart;
 

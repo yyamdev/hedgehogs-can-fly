@@ -18,8 +18,8 @@ sf::Texture EntityBall::txtPoint;
 bool EntityBall::textureLoaded = false;
 
 const float BALL_TERM_VEL = 9.f;
-const float BALL_MAX_LAUNCH_SPEED = 14.f;
-const float BALL_MAX_LAUNCH_SPEED_NERF = 8.f;
+const float BALL_MAX_LAUNCH_SPEED = 12.f;
+const float BALL_MAX_LAUNCH_SPEED_NERF = 6.f;
 const float BALL_MAX_SPEED = 14.f;
 
 EntityBall::EntityBall() {
@@ -103,10 +103,10 @@ void EntityBall::event(sf::Event &e) {
                 float speed = 0.f;
                 if (lastTerrain == T_SLOW) {
                     speed = util::len(mouse - dragStart) / 25.f;
-                    speed = util::clamp(speed, 0.f, BALL_MAX_LAUNCH_SPEED_NERF - 2.f);
+                    speed = util::clamp(speed, 0.f, BALL_MAX_LAUNCH_SPEED_NERF);
                 } else {
                     speed = util::len(mouse - dragStart) / 15.f;
-                    speed = util::clamp(speed, 0.f, BALL_MAX_LAUNCH_SPEED - 2.f);
+                    speed = util::clamp(speed, 0.f, BALL_MAX_LAUNCH_SPEED);
                 }
                 sf::Vector2f start = position;
                 dir = dir / util::len(dir) * speed;

@@ -104,7 +104,7 @@ Label {
     FontSize: 64;
     FontName: data/fgd.ttf;
 }
-#lblOptionsMusic, #lblOptionsSfx, #lblOptionsTrail {
+#lblOptionsMusic, #lblOptionsSfx, #lblOptionsTrail, #lblOptionsPower {
     Color: #008888ff;
     FontSize: 16;
 }

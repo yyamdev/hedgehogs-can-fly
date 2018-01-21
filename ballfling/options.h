@@ -15,6 +15,7 @@ public:
     double musicVolume;
     double sfxVolume;
     int trail;
+    int power;
 };
 
 extern Options options;

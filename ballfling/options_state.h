@@ -29,6 +29,7 @@ public:
     std::shared_ptr<sfg::Scale> guiSliderMusic;
     std::shared_ptr<sfg::Scale> guiSliderSfx;
     std::shared_ptr<sfg::CheckButton> guiToggleTrail;
+    std::shared_ptr<sfg::CheckButton> guiTogglePower;
 
 private:
     bool showEraseSave;

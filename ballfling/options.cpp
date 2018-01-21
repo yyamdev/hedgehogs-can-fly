@@ -8,6 +8,7 @@ Options options;
 const char* config_string_music = "music_vol";
 const char* config_string_sfx   = "sfx_vol";
 const char* config_string_trail = "trail";
+const char* config_string_power = "power";
 
 Options::Options()
 {
@@ -25,12 +26,14 @@ void Options::load(std::string filename)
         musicVolume = .9f;
         sfxVolume = .65f;
         trail = false;
+        power = true;
         return;
     }
 
     config_lookup_float(&c, config_string_music, &musicVolume);
     config_lookup_float(&c, config_string_sfx, &sfxVolume);
     config_lookup_bool (&c, config_string_trail, &trail);
+    config_lookup_bool (&c, config_string_power, &power);
     config_destroy(&c);
 }
 
@@ -48,6 +51,9 @@ void Options::save(std::string filename)
 
     setting = config_setting_add(c.root, config_string_trail, CONFIG_TYPE_BOOL);
     config_setting_set_bool(setting, trail);
+
+    setting = config_setting_add(c.root, config_string_power, CONFIG_TYPE_BOOL);
+    config_setting_set_bool(setting, power);
 
     config_write_file(&c, filename.c_str());
     config_destroy(&c);

@@ -6,6 +6,7 @@
 #include "build_options.h"
 #include "ball_entity.h"
 #include "cursor.h"
+#include "options.h"
 
 const float rad_to_deg = 180.f / 3.14159227f;
 
@@ -37,17 +38,37 @@ void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera, sf::Color levelCol
         sf::Vector2f dir = mouse - mouseDragStart;
         if (ball->is_on_sand()) {
             speed = util::len(dir) / 25.f;
-            speed = util::clamp(speed, 0.f, BALL_MAX_LAUNCH_SPEED_NERF - 2.f);
+            speed = util::clamp(speed, 0.f, BALL_MAX_LAUNCH_SPEED_NERF);
         } else {
             speed = util::len(dir) / 15.f;
-            speed = util::clamp(speed, 0.f, BALL_MAX_LAUNCH_SPEED - 2.f);
+            speed = util::clamp(speed, 0.f, BALL_MAX_LAUNCH_SPEED);
         }
 
+        power = speed / BALL_MAX_LAUNCH_SPEED;
+
         sprArrow.setPosition(ball->position - camera);
-        sprArrow.setScale(sf::Vector2f(fmin(1.f, speed / BALL_MAX_LAUNCH_SPEED), 1.f));
+        sprArrow.setScale(sf::Vector2f(fmin(1.f, power), 1.f));
         sprArrow.setRotation(atan2f(dir.y, dir.x) * rad_to_deg);
         sprArrow.setColor(sf::Color(255, 255, 255, 128));
         window.draw(sprArrow);
+    }
+
+    // Draw power bar
+    if ((bool)options.power) {
+        sf::RectangleShape powerBar;
+        float x = 128.f, y = 10.f, width = 256.f, height = 16.f;
+        sf::Uint8 alpha = dragging ? 198 : 64;
+
+        powerBar.setPosition(x, y);
+        powerBar.setSize(sf::Vector2f(width, height));
+        powerBar.setFillColor(sf::Color(128,128,128, alpha));
+        powerBar.setOutlineThickness(2.f);
+        powerBar.setOutlineColor(sf::Color(255, 255, 255, alpha));
+        window.draw(powerBar);
+
+        powerBar.setSize(sf::Vector2f(width * power, height));
+        powerBar.setFillColor(sf::Color(255, 0, 0, alpha));
+        window.draw(powerBar);
     }
 
     // Draw nudge indicator
