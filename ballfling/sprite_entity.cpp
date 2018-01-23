@@ -3,7 +3,7 @@
 #include "sprite_entity.h"
 #include "world.h"
 
-EntitySprite::EntitySprite(std::string filename, float x, float y, float scale)
+EntitySprite::EntitySprite(std::string filename, float x, float y, float scale, float angle)
 {
     txt.loadFromFile(filename);
     spr.setTexture(txt);
@@ -12,14 +12,23 @@ EntitySprite::EntitySprite(std::string filename, float x, float y, float scale)
     position.y = y;
     spr.setPosition(x, y);
     spr.setScale(scale, scale);
+    spr.setRotation(angle);
     tag = filename;
 };
 
 EntitySprite::EntitySprite(std::string filename, float x, float y) :
-    EntitySprite(filename, x, y, 1.f)
-{}
+    EntitySprite(filename, x, y, 1.f, 0.f)
+{
+}
 
-void EntitySprite::event(sf::Event &e) {}
+EntitySprite::EntitySprite(std::string filename, float x, float y, float scale) :
+    EntitySprite(filename, x, y, scale, 0.f)
+{
+}
+
+void EntitySprite::event(sf::Event &e)
+{
+}
 
 void EntitySprite::tick(std::vector<Entity*> &entities)
 {

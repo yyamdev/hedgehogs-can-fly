@@ -41,6 +41,8 @@ StatePlay::StatePlay(World *world, int levelNum) :
         world->add_entity(new EntitySprite("data/how_to_fling.png", 2636.f, 1299.f));
         world->add_entity(new EntitySprite("data/how_to_nudge.png", 4079.f, 1232.f));
         world->add_entity(new EntitySprite("data/how_to_pause.png", 2829.f,  199.f));
+        world->add_entity(new EntitySprite("data/nudge_instruction.png", 3317.f,  448.f, .5f));
+        world->add_entity(new EntitySprite("data/arrow_instruction.png", 3519.f,  666.f, 1.f, -110.f));
         break;
     case 5:
         world->add_entity(new EntitySprite("data/dude.png", 4664.f, 1544.f, 3.f));
