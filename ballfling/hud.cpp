@@ -59,6 +59,7 @@ void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera, sf::Color levelCol
         float x = 128.f, y = 10.f, width = 256.f, height = 16.f;
         sf::Uint8 alpha = dragging ? 198 : 64;
 
+        // Background
         powerBar.setPosition(x, y);
         powerBar.setSize(sf::Vector2f(width, height));
         powerBar.setFillColor(sf::Color(128,128,128, alpha));
@@ -66,6 +67,12 @@ void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera, sf::Color levelCol
         powerBar.setOutlineColor(sf::Color(255, 255, 255, alpha));
         window.draw(powerBar);
 
+        // Previous power
+        powerBar.setSize(sf::Vector2f(width * powerPrev, height));
+        powerBar.setFillColor(sf::Color(128, 0, 0, alpha));
+        window.draw(powerBar);
+
+        // Current power
         powerBar.setSize(sf::Vector2f(width * power, height));
         powerBar.setFillColor(sf::Color(255, 0, 0, alpha));
         window.draw(powerBar);
@@ -96,6 +103,7 @@ void Hud::on_notify(Event event, void *data) {
     }
     if (event == EVENT_END_DRAG) {
         dragging = false;
+        powerPrev = power;
     }
     if (event == EVENT_HUD_SET_ACTIVE_BALL) {
         ball = (EntityBall*)data;
