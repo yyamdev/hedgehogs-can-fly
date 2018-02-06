@@ -31,7 +31,7 @@ public:
 
 private:
     bool initSuccess = false;
-    sf::Color levelColour; // Colour wall edges
+    sf::Color levelColour; // Colour of wall edges
     sf::Color backgroundColor; // Clear colour
     int levelNum;
 
@@ -42,6 +42,4 @@ private:
     Hud hud;
 
     bool restartOnResume = false;
-    int startScreenState = 0;
-    int counterStart = 0;
 };

@@ -17,7 +17,6 @@
 StatePlay::StatePlay(World *world, int levelNum) :
     State(world, "play"), levelNum(levelNum)
 {
-    //gui.RemoveAll();
     world->remove_entity(ENTITY_TAG_ALL);
 
     // Decide level colour scheme
@@ -34,21 +33,49 @@ StatePlay::StatePlay(World *world, int levelNum) :
         backgroundColor = sf::Color(69, 40, 60);
     }
 
-    // Add background sprites
+    // Add background sprites for each level
     switch (levelNum) {
     case 1:
-        // Instructions
+        world->add_entity(new EntitySprite("data/lvl1txt.png", 2898.f, 1625.f));
         world->add_entity(new EntitySprite("data/how_to_fling.png", 2636.f, 1299.f));
         world->add_entity(new EntitySprite("data/how_to_nudge.png", 4079.f, 1232.f));
         world->add_entity(new EntitySprite("data/how_to_pause.png", 2829.f,  199.f));
         world->add_entity(new EntitySprite("data/nudge_instruction.png", 3317.f,  448.f, .5f));
         world->add_entity(new EntitySprite("data/arrow_instruction.png", 3519.f,  666.f, 1.f, -110.f));
         break;
+    case 2:
+        world->add_entity(new EntitySprite("data/lvl2txt.png", 1647.f, 2165.f));
+        break;
+    case 3:
+        world->add_entity(new EntitySprite("data/lvl3txt.png", 451.f, 1313.f));
+        break;
+    case 4:
+        world->add_entity(new EntitySprite("data/lvl4txt.png", 2562.f, 1873.f));
+        break;
     case 5:
+        world->add_entity(new EntitySprite("data/lvl5txt.png", 402.f, 2830.f));
         world->add_entity(new EntitySprite("data/dude.png", 4664.f, 1544.f, 3.f));
+        break;
+    case 6:
+        world->add_entity(new EntitySprite("data/lvl6txt.png", 253.f, 768.f));
+        break;
+    case 7:
+        world->add_entity(new EntitySprite("data/lvl7txt.png", 1587.f, 1695.f));
         break;
     case 8:
         world->add_entity(new EntitySprite("data/frame.png", 1700.f, 615.f));
+        break;
+    case 9:
+        world->add_entity(new EntitySprite("data/lvl9txt.png", 350.f, 2630.f));
+        break;
+    case 10:
+        world->add_entity(new EntitySprite("data/lvl10txt.png", 350.f, 2630.f));
+        break;
+    case 11:
+        world->add_entity(new EntitySprite("data/lvl11txt.png", 350.f, 2630.f));
+        break;
+    case 12:
+        world->add_entity(new EntitySprite("data/lvl12txt.png", 350.f, 2630.f));
         break;
     }
 
@@ -84,65 +111,17 @@ void StatePlay::on_event(sf::Event &event)
         notify(EVENT_PLAY_PAUSE, NULL);
         State::push_state(new StatePause(world, backgroundColor));
     }
-
-    if (event.type == sf::Event::MouseButtonPressed && startScreenState == 0) {
-        startScreenState = 1;
-        counterStart = 256;
-    }
 }
 
 void StatePlay::on_tick()
 {
     if (!world->is_paused())
         particles_tick(world->camera);
-
-    if (startScreenState == 0) {
-        ++counterStart;
-        if (counterStart >= 200) {
-            startScreenState = 1;
-            counterStart = 256;
-        }
-    }
-
-    if (startScreenState == 1) {
-        counterStart -= 4;
-        if (counterStart < 0) {
-            startScreenState = 2;
-        }
-    }
 }
 
 void StatePlay::on_draw(sf::RenderWindow &window)
 {
     particles_draw(window, world->camera);
-
-    sf::Uint8 startAlpha = 255;
-
-    sf::Sprite sprStart(txtStart);
-    sprStart.setOrigin(sf::Vector2f(112.f, 112.f));
-    sprStart.setPosition(WINDOW_WIDTH / 2.f, WINDOW_HEIGHT / 2.f);
-    sprStart.setScale(sf::Vector2f(.7f, .7f));
-
-    sf::Text txtLvl(util::to_string(levelNum), fntUi, 80);
-    txtLvl.setOrigin(txtLvl.getLocalBounds().width, txtLvl.getLocalBounds().height);
-    txtLvl.setPosition(sf::Vector2f(WINDOW_WIDTH / 2.f, WINDOW_HEIGHT / 2.f));
-    txtLvl.setColor(sf::Color(95, 205, 228, startAlpha));
-    if (levelNum == 1)
-        txtLvl.move(4.f, 6.f);
-    else if (levelNum < 10)
-        txtLvl.move(14.f, 6.f);
-    else
-        txtLvl.move(20.f, 6.f);
-
-    if (startScreenState == 1) {
-        sprStart.setColor(sf::Color(255, 255, 255, counterStart));
-        txtLvl.setColor(sf::Color(95, 205, 228, counterStart));
-    }
-
-    if (startScreenState == 0 || startScreenState == 1) {
-        window.draw(sprStart);
-        window.draw(txtLvl);
-    }
 }
 
 void StatePlay::on_draw_ui(sf::RenderWindow &window)
