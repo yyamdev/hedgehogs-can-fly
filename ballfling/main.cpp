@@ -18,7 +18,6 @@
 #include "audio.h"
 #include "splash_state.h"
 
-// windows.h only used for a MessageBox in the case of a shader error.
 #include <windows.h>
 
 sfg::SFGUI guiManager;
