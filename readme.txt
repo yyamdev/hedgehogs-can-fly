@@ -1,6 +1,6 @@
 Hedgehogs Can Fly
 
-2D physics platformer
+2D physics platformer in C++
 
 Game Page: gamejolt.com/games/hogscanfly/281774
 
@@ -9,4 +9,4 @@ Dependencies:
  - SFGUI
  - libconfig
  - imgui
- - windows.h (only a few)
+ - windows.h (minimal, see main.cpp)
