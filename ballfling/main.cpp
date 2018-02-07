@@ -55,8 +55,12 @@ int main()
 
     State::change_state(new StateSplash(&world));
 
-    sf::Clock imguiDelta;
+    sf::Clock imguiDelta, frameClock;
+    sf::Uint64 frameTime = 0, frameTimeMax = 16 * 1000;
+
     while (window.isOpen()) {
+        frameClock.restart();
+
         sf::Event e;
         while (window.pollEvent(e)) {
             ImGui::SFML::ProcessEvent(e);
@@ -108,8 +112,20 @@ int main()
             }
         }
 
+        if (edit && ImGui::CollapsingHeader("Performance")) {
+            ImGui::LabelText("Frame Time", "%ius", frameTime);
+            ImGui::LabelText("% of Budget", "%f%%", ((float)frameTime / frameTimeMax) * 100.f);
+        }
+
         ImGui::Render();
         draw_cursor(window);
+
+        /*
+         * We must end the frame timing here because SFML will sleep in the next
+         * function call (to run this loop at 60 fps).
+         */
+        frameTime = frameClock.getElapsedTime().asMicroseconds();
+
         window.display();
     }
 
