@@ -229,7 +229,6 @@ void EntityBall::tick(std::vector<Entity*> &entities)
                 spawned_fireworks = true;
                 notify(EVENT_LEVEL_COMPLETE, NULL);
             }
-            return;
         }
 
         // Handle regular terrain types
