@@ -83,7 +83,7 @@ void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera, sf::Color levelCol
         sf::Vector2f dir = mouse - (ball->position - camera);
         sprNudge.setPosition(ball->position - camera);
         sprNudge.setRotation(atan2f(dir.y, dir.x) * rad_to_deg);
-        sprNudge.setColor(sf::Color(levelColour.r, levelColour.g, levelColour.b, 128));
+        sprNudge.setColor(sf::Color(levelColour.r, levelColour.g, levelColour.b, 32));
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             sprNudge.setColor(levelColour);
             sprNudge.setScale(sf::Vector2f(1.2f, 1.2f));
