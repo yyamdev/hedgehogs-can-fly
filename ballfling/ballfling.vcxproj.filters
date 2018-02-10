@@ -147,9 +147,6 @@
     <ClInclude Include="splash_state.h">
       <Filter>Header Files\game\state</Filter>
     </ClInclude>
-    <ClInclude Include="enemy_entity.h">
-      <Filter>Header Files\game\world</Filter>
-    </ClInclude>
     <ClInclude Include="save.h">
       <Filter>Header Files\game</Filter>
     </ClInclude>
@@ -247,9 +244,6 @@
     </ClCompile>
     <ClCompile Include="splash_state.cpp">
       <Filter>Source Files\game\state</Filter>
-    </ClCompile>
-    <ClCompile Include="enemy_entity.cpp">
-      <Filter>Source Files\game\world</Filter>
     </ClCompile>
     <ClCompile Include="save.cpp">
       <Filter>Source Files\game</Filter>

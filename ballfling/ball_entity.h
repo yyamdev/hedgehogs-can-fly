@@ -1,6 +1,8 @@
 #pragma once
 
-// bouncy ball
+/*
+ * Player entity.
+ */
 
 #include "entity.h"
 #include "subject.h"
@@ -8,15 +10,13 @@
 #include "terrain_entity.h"
 
 class EntityTerrain;
-class EntityEnemy;
 
 extern const float BALL_TERM_VEL;
 extern const float BALL_MAX_LAUNCH_SPEED;
 extern const float BALL_MAX_LAUNCH_SPEED_NERF;
 extern const float BALL_MAX_SPEED;
 
-
-class EntityBall : public Entity, public Observer {
+class EntityBall : public Entity {
 public:
     EntityBall();
     EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour);
@@ -28,7 +28,6 @@ public:
     void tick(std::vector<Entity*> &entities);
     void draw(sf::RenderWindow &window);
 
-    void on_notify(Event event, void *data);
     bool is_at_rest();
 
     void bounce(float bounceFactor, sf::Vector2f norm);
@@ -38,7 +37,7 @@ public:
     bool can_nudge();
 
 private:
-    bool spawned_fireworks;
+    bool spawned_fireworks = false;
     bool *restartFlag;
     static sf::Texture txt;
     static sf::Texture txtPoint;
@@ -46,31 +45,29 @@ private:
     sf::Sprite spr, sprPoint;
     sf::Color colour;
     sf::Vector2f mouse;
-    float angle;
+    float angle = 0.f;
     float xDirection; //  1 >
                       // -1 <
 
 
-    EntityTerrain *terrain;
-    EntityEnemy *enemy;
+    EntityTerrain *terrain = NULL;
 
     bool moveCamera = true;
 
-    bool justSpawned;
+    bool justSpawned = false;
 
     TerrainType lastTerrain, terrainFlungOn;
 
-    bool reactToInput;
+    bool reactToInput = true;
 
-    bool dead;
+    bool dead = false;
     sf::Clock deadTimer;
 
     sf::Vector2f lastContact;
 
     // physics
-    sf::Vector2f contactPoint;
     sf::Clock clkRest;
-    bool rest;
+    bool rest = false;
     sf::Vector2f prevRest;
     float prevAngle;
     void record_new_rest_pos();
@@ -78,13 +75,13 @@ private:
     void reset_to_rest();
 
     // moving
-    bool dragging;
+    bool dragging = false;
     sf::Vector2f dragStart;
-    bool canFling;
-    bool canNudge;
+    bool canFling = false;
+    bool canNudge = true;
     sf::Clock clkFlingTimer;
-    float nudgeStr;
-    float maxFlingVelocity;
+    float nudgeStr = .04f;
+    float maxFlingVelocity = 1.2f; // if ball is faster than this, you can't start a fling
 
     sf::Clock clkWallTouch;
     bool touching_wall();
