@@ -23,66 +23,44 @@ public:
     ~EntityBall();
 
     void on_add();
-
     void event(sf::Event &e);
     void tick(std::vector<Entity*> &entities);
     void draw(sf::RenderWindow &window);
 
     bool is_at_rest();
-
-    void bounce(float bounceFactor, sf::Vector2f norm);
-
     bool is_on_sand();
     bool can_fling();
-    bool can_nudge();
 
 private:
-    bool spawned_fireworks = false;
-    bool *restartFlag;
-    static sf::Texture txt;
-    static sf::Texture txtPoint;
-    static bool textureLoaded;
-    sf::Sprite spr, sprPoint;
-    sf::Color colour;
-    sf::Vector2f mouse;
-    float angle = 0.f;
-    float xDirection; //  1 >
-                      // -1 <
-
-
-    EntityTerrain *terrain = NULL;
-
-    bool moveCamera = true;
-
-    bool justSpawned = false;
-
-    TerrainType lastTerrain, terrainFlungOn;
-
-    bool reactToInput = true;
-
-    bool dead = false;
-    sf::Clock deadTimer;
-
-    sf::Vector2f lastContact;
-
-    // physics
-    sf::Clock clkRest;
-    bool rest = false;
-    sf::Vector2f prevRest;
-    float prevAngle;
     void record_new_rest_pos();
     void stop_resting();
     void reset_to_rest();
-
-    // moving
-    bool dragging = false;
-    sf::Vector2f dragStart;
-    bool canFling = false;
-    bool canNudge = true;
-    sf::Clock clkFlingTimer;
-    float nudgeStr = .04f;
-    float maxFlingVelocity = 1.2f; // if ball is faster than this, you can't start a fling
-
-    sf::Clock clkWallTouch;
     bool touching_wall();
+
+    bool moveCamera = true;
+    bool reactToInput = true;
+    bool justSpawned = false;
+    bool spawned_fireworks = false;
+    bool rest = false;
+    bool dragging = false;
+    bool canFling = false;
+
+    float angle = 0.f, prevAngle = 0.f;
+    float xDirection;
+    float nudgeStr = .04f;
+    float maxFlingVelocity = 1.2f;
+
+    sf::Vector2f mouse;
+    sf::Vector2f lastContact;
+    sf::Vector2f prevRest;
+    sf::Vector2f dragStart;
+
+    sf::Clock clkRest;
+    sf::Clock clkFlingTimer;
+    sf::Clock clkWallTouch;
+
+    sf::Sprite spr;
+    sf::Color colour;
+    EntityTerrain *terrain = NULL;
+    TerrainType lastTerrain, terrainFlungOn;
 };

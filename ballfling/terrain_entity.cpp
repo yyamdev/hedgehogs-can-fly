@@ -198,9 +198,8 @@ bool EntityTerrain::intersects_with_circle(sf::Vector2f pos, float rad, sf::Vect
         }
     }
 
-    if (!intersects) {
+    if (!intersects)
         return false;
-    }
 
     /*
      * Find contact point (narrow phase)

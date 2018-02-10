@@ -12,10 +12,8 @@
 #include "options.h"
 #include "state.h"
 
-// Static members
-sf::Texture EntityBall::txt;
-sf::Texture EntityBall::txtPoint;
-bool EntityBall::textureLoaded = false;
+static sf::Texture txt;
+static bool txtLoaded = false;
 
 const float BALL_TERM_VEL = 9.f;
 const float BALL_MAX_LAUNCH_SPEED = 12.f;
@@ -34,10 +32,9 @@ EntityBall::~EntityBall()
 
 EntityBall::EntityBall(sf::Vector2f pos, sf::Vector2f vel, sf::Color colour)
 {
-    if (!textureLoaded) {
+    if (!txtLoaded) {
         txt.loadFromFile("data/ball.png");
-        txtPoint.loadFromFile("data/point.png");
-        textureLoaded = true;
+        txtLoaded = true;
     }
 
     collisionRadius = 10.f;
@@ -82,6 +79,7 @@ void EntityBall::event(sf::Event &e)
             mouse.x = (float)e.mouseButton.x;
             mouse.y = (float)e.mouseButton.y;
             sf::Vector2f dir = mouse - dragStart;
+
             if (util::len(dir) != 0.f) {
                 float speed = 0.f;
                 if (lastTerrain == T_SLOW) {
@@ -94,7 +92,7 @@ void EntityBall::event(sf::Event &e)
                 sf::Vector2f start = position;
                 dir = dir / util::len(dir) * speed;
 
-                if (canFling || canNudge) {
+                if (canFling) {
                     if (canFling) {
                         record_new_rest_pos();
                         velocity = dir;
@@ -102,6 +100,7 @@ void EntityBall::event(sf::Event &e)
                     }
                 }
             }
+
             terrainFlungOn = lastTerrain;
             prevAngle = angle;
             notify(EVENT_BALL_FLING, NULL);
@@ -114,17 +113,15 @@ void EntityBall::draw(sf::RenderWindow &window)
     if (!world->is_paused())
         angle += velocity.x * 2.f;
 
-    if (!dead) {
-        spr.setTexture(txt);
-        spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
-        spr.setPosition(position - world->camera);
-        spr.setRotation(angle);
+    spr.setTexture(txt);
+    spr.setOrigin(sf::Vector2f(collisionRadius, collisionRadius));
+    spr.setPosition(position - world->camera);
+    spr.setRotation(angle);
 
-        if (rest && dragging)
-            spr.setScale((int)dragStart.x < sf::Mouse::getPosition(window).x ? 1.f : -1.f, 1.f);
+    if (rest && dragging)
+        spr.setScale((int)dragStart.x < sf::Mouse::getPosition(window).x ? 1.f : -1.f, 1.f);
 
-        window.draw(spr);
-    }
+    window.draw(spr);
 
     if (util::len(velocity) > 0.f && (bool)options.trail && !world->is_paused())
         add_particle(position, sf::Vector2f(), sf::Vector2f(0.f, 0.f), colour, 120);
@@ -152,7 +149,7 @@ void EntityBall::tick(std::vector<Entity*> &entities)
     position += velocity;
 
     // Nudge
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && canNudge && !canFling) {
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !canFling) {
         sf::Vector2f dir = util::normalize(mouse - (position - world->camera));
         velocity += dir * nudgeStr;
     }
@@ -172,12 +169,6 @@ void EntityBall::tick(std::vector<Entity*> &entities)
     else if (util::len(velocity) > 2.f * maxFlingVelocity && !touching_wall() && canFling) // NOTE: why x2?
         canFling = false;
     notify(EVENT_BALL_CHANGE_CAN_FLING, (void*)(&canFling));
-
-    // Update canNudge
-    // TODO: Remove because this is never false.
-    assert(canNudge == true);
-    canNudge = true;
-    notify(EVENT_BALL_CHANGE_CAN_NUDGE, (void*)(&canNudge));
 
     // Apply gravity
     velocity += world->gravity;
@@ -288,40 +279,34 @@ void EntityBall::tick(std::vector<Entity*> &entities)
             }
         }
 
-        bounce(bounceFactor, terrain->get_normal(contact));
+        // Bounce
+        sf::Vector2f normal = terrain->get_normal(contact);
+        float impactSpeed = util::len(velocity);
+        sf::Vector2f impactDirection;
+        if (impactSpeed != 0.f)
+            impactDirection = util::normalize(velocity);
+        sf::Vector2f reflect = velocity - 2.f * normal * (util::dot(velocity, normal));
+
+        sf::Vector2f bounce;
+
+        if (impactSpeed > 0.2f)
+            bounce = reflect * bounceFactor;
+
+        if (util::dot(normal, util::normalize(reflect)) < 0.3f)
+            bounce += normal;
+
+        velocity = bounce;
     }
 
 }
 
-void EntityBall::bounce(float bounceFactor, sf::Vector2f norm)
-{
-    float impactSpeed = util::len(velocity);
-    sf::Vector2f impactDirection;
-    if (impactSpeed != 0.f)
-        impactDirection = util::normalize(velocity);
-
-    sf::Vector2f normal = util::normalize(norm);
-    sf::Vector2f reflect = velocity - 2.f * normal * (util::dot(velocity, normal));
-    sf::Vector2f bounce;
-
-    if (impactSpeed > 0.2f)
-        bounce = reflect * bounceFactor;
-
-    if (util::dot(normal, util::normalize(reflect)) < 0.3f)
-        bounce += normal;
-
-    velocity = bounce;
-}
-
 void EntityBall::record_new_rest_pos()
 {
-    // Called when ball has started resting
     prevRest = position;
     canFling = true;
     notify(EVENT_BALL_CHANGE_CAN_FLING, &canFling);
 
-    velocity.x = 0.f;
-    velocity.y = 0.f;
+    velocity = sf::Vector2f();
 
     if (!terrain)
         angle = 0.f;
@@ -329,6 +314,7 @@ void EntityBall::record_new_rest_pos()
         sf::Vector2f normal = terrain->get_normal(lastContact);
         angle = atan2(normal.x, -normal.y) * (180.f / 3.14f);
     }
+
     prevAngle = angle;
 }
 
@@ -370,9 +356,4 @@ bool EntityBall::touching_wall()
 bool EntityBall::can_fling()
 {
     return canFling;
-}
-
-bool EntityBall::can_nudge()
-{
-    return canNudge;
 }

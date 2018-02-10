@@ -79,7 +79,7 @@ void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera, sf::Color levelCol
     }
 
     // Draw nudge indicator
-    if (ball->can_nudge() && !ball->can_fling()) {
+    if (!ball->can_fling()) {
         sf::Vector2f dir = mouse - (ball->position - camera);
         sprNudge.setPosition(ball->position - camera);
         sprNudge.setRotation(atan2f(dir.y, dir.x) * rad_to_deg);
@@ -91,9 +91,11 @@ void Hud::draw(sf::RenderWindow &window, sf::Vector2f camera, sf::Color levelCol
         window.draw(sprNudge);
     }
 
-    // set cursors
-    if (ball->can_nudge()) set_cursor(CURSOR_CROSS);
-    if (ball->can_fling()) set_cursor(CURSOR_RETICLE);
+    // Set cursors
+    if (ball->can_fling())
+        set_cursor(CURSOR_RETICLE);
+    else
+        set_cursor(CURSOR_CROSS);
 }
 
 void Hud::on_notify(Event event, void *data) {
@@ -101,10 +103,12 @@ void Hud::on_notify(Event event, void *data) {
         mouseDragStart = *((sf::Vector2f*)data);
         dragging = true;
     }
+
     if (event == EVENT_END_DRAG) {
         dragging = false;
         powerPrev = power;
     }
+
     if (event == EVENT_HUD_SET_ACTIVE_BALL) {
         ball = (EntityBall*)data;
     }
