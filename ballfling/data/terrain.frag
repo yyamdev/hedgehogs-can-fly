@@ -90,6 +90,10 @@ void main()
                 pixel = texture2D(txtSolid, gl_TexCoord[0].xy);
             gl_FragColor = gl_Color * pixel;
         }
+        else if (dataPixel.r == 128 && dataPixel.g == 128 && dataPixel.b == 128) {
+            pixel = texture2D(txtSolid, gl_TexCoord[0].xy);
+            gl_FragColor = gl_Color * pixel;
+        }
         else if (dataPixel.r == 67 && dataPixel.g == 191 && dataPixel.b == 6) {
             pixel = texture2D(txtBouncy, gl_TexCoord[0].xy);
             gl_FragColor = gl_Color * pixel;
