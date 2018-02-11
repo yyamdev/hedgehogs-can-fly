@@ -99,11 +99,11 @@ void StateOptions::on_gain_focus()
     auto guiBoxTrail = sfg::Box::Create();
     guiBoxMain->Pack(guiBoxTrail);
 
-    auto guiLblTrail = sfg::Label::Create("Trail");
+    auto guiLblTrail = sfg::Label::Create("");
     guiLblTrail->SetId("lblOptionsTrail");
     guiBoxTrail->Pack(guiLblTrail);
 
-    guiToggleTrail = sfg::CheckButton::Create("");
+    guiToggleTrail = sfg::CheckButton::Create("show particle trail");
     guiToggleTrail->SetId("tglOptionsTrail");
     guiToggleTrail->SetActive((bool)options.trail);
     guiBoxTrail->Pack(guiToggleTrail);
@@ -111,11 +111,11 @@ void StateOptions::on_gain_focus()
     auto guiBoxPower = sfg::Box::Create();
     guiBoxMain->Pack(guiBoxPower);
 
-    auto guiLblPower = sfg::Label::Create("Power Indicator");
+    auto guiLblPower = sfg::Label::Create("");
     guiLblPower->SetId("lblOptionsPower");
     guiBoxPower->Pack(guiLblPower);
 
-    guiTogglePower = sfg::CheckButton::Create("");
+    guiTogglePower = sfg::CheckButton::Create("show power indicator");
     guiTogglePower->SetId("tglOptionsPower");
     guiTogglePower->SetActive((bool)options.power);
     guiBoxPower->Pack(guiTogglePower);
@@ -123,11 +123,11 @@ void StateOptions::on_gain_focus()
     auto guiBoxFullscreen = sfg::Box::Create();
     guiBoxMain->Pack(guiBoxFullscreen);
 
-    auto guiLblFullscreen = sfg::Label::Create("Fullscreen");
+    auto guiLblFullscreen = sfg::Label::Create("");
     guiLblFullscreen->SetId("lblOptionsFullscreen");
     guiBoxFullscreen->Pack(guiLblFullscreen);
 
-    guiToggleFullscreen = sfg::CheckButton::Create("");
+    guiToggleFullscreen = sfg::CheckButton::Create("fullscreen");
     guiToggleFullscreen->SetId("tglOptionsFullscreen");
     guiToggleFullscreen->SetActive((bool)options.fullscreen);
     guiBoxFullscreen->Pack(guiToggleFullscreen);
@@ -135,11 +135,11 @@ void StateOptions::on_gain_focus()
     auto guiBoxEdges = sfg::Box::Create();
     guiBoxMain->Pack(guiBoxEdges);
 
-    auto guiLblEdges = sfg::Label::Create("Render Terrain Edges");
+    auto guiLblEdges = sfg::Label::Create("");
     guiLblEdges->SetId("lblOptionsEdges");
     guiBoxEdges->Pack(guiLblEdges);
 
-    guiToggleEdges = sfg::CheckButton::Create("");
+    guiToggleEdges = sfg::CheckButton::Create("show terrain edges");
     guiToggleEdges->SetId("tglOptionsEdges");
     guiToggleEdges->SetActive((bool)options.edges);
     guiBoxEdges->Pack(guiToggleEdges);
