@@ -28,6 +28,8 @@ uniform float screenHeight;
 
 uniform float cameraX;
 uniform float cameraY;
+
+uniform float renderEdges;
 uniform vec4 edgeColour;
 
 vec4 sample_terrain_texture(vec4 dataCoord)
@@ -39,6 +41,9 @@ vec4 sample_terrain_texture(vec4 dataCoord)
 
 bool edge(vec4 dataCoord)
 {
+    if (renderEdges == 0)
+        return false;
+
     float rad = 3.0;
     for (float y = -rad; y < rad + 1.0; ++y) {
         for (float x = -rad; x < rad + 1.0; ++x) {

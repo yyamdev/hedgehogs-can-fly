@@ -132,6 +132,18 @@ void StateOptions::on_gain_focus()
     guiToggleFullscreen->SetActive((bool)options.fullscreen);
     guiBoxFullscreen->Pack(guiToggleFullscreen);
 
+    auto guiBoxEdges = sfg::Box::Create();
+    guiBoxMain->Pack(guiBoxEdges);
+
+    auto guiLblEdges = sfg::Label::Create("Render Terrain Edges");
+    guiLblEdges->SetId("lblOptionsEdges");
+    guiBoxEdges->Pack(guiLblEdges);
+
+    guiToggleEdges = sfg::CheckButton::Create("");
+    guiToggleEdges->SetId("tglOptionsEdges");
+    guiToggleEdges->SetActive((bool)options.edges);
+    guiBoxEdges->Pack(guiToggleEdges);
+
     if (showEraseSave) {
         auto guiBoxErase = sfg::Box::Create();
         guiBoxMain->Pack(guiBoxErase);
@@ -165,5 +177,6 @@ void StateOptions::on_lose_focus()
     options.trail = (int)guiToggleTrail->IsActive();
     options.power = (int)guiTogglePower->IsActive();
     options.fullscreen = (int)guiToggleFullscreen->IsActive();
+    options.edges = (int)guiToggleEdges->IsActive();
     options.save(CONFIG_FILENAME);
 }

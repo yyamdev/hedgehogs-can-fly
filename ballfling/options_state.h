@@ -31,6 +31,7 @@ public:
     std::shared_ptr<sfg::CheckButton> guiToggleTrail;
     std::shared_ptr<sfg::CheckButton> guiTogglePower;
     std::shared_ptr<sfg::CheckButton> guiToggleFullscreen;
+    std::shared_ptr<sfg::CheckButton> guiToggleEdges;
 
 private:
     bool showEraseSave;

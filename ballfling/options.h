@@ -17,6 +17,7 @@ public:
     int trail;
     int power;
     int fullscreen;
+    int edges;
 };
 
 extern Options options;

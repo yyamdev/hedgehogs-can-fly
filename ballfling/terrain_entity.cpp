@@ -12,6 +12,7 @@
 #include "world.h"
 #include "debug_draw.h"
 #include "imgui.h"
+#include "options.h"
 
 EntityTerrain::EntityTerrain(std::string filename, sf::Color colour) :
     colour(colour), filename(filename)
@@ -268,6 +269,7 @@ void EntityTerrain::draw(sf::RenderWindow &window)
         shdTerrain.setParameter("cameraX", world->camera.x);
         shdTerrain.setParameter("cameraY", world->camera.y);
         shdTerrain.setParameter("edgeColour", colour);
+        shdTerrain.setParameter("renderEdges", (bool)options.edges == true ? 1.f : 0.f);
 
         sprTerrain.setPosition(-world->camera);
         window.draw(sprTerrain, &shdTerrain);
