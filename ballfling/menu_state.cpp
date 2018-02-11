@@ -94,10 +94,18 @@ void StateMenu::on_gain_focus()
 
     auto guiButtonOptions = sfg::Button::Create("Options");
     guiButtonOptions->SetId("btnMenuOptions");
-    guiButtonOptions->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonOptions->GetRequisition().x / 2.f, 425.f));
+    guiButtonOptions->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonOptions->GetRequisition().x / 2.f, 400.f));
     gui.Add(guiButtonOptions);
     guiButtonOptions->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
                 notify(EVENT_MENU_CLICK, NULL);
                 State::push_state(new StateOptions(world, true, sf::Color::Black));
+            }));
+
+    auto guiButtonQuit = sfg::Button::Create("Quit");
+    guiButtonQuit->SetId("btnMenuQuit");
+    guiButtonQuit->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2.f - guiButtonQuit->GetRequisition().x / 2.f, 475.f));
+    gui.Add(guiButtonQuit);
+    guiButtonQuit->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([this] (void) {
+                exit(0);
             }));
 }
