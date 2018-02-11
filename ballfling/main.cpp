@@ -120,13 +120,14 @@ int main()
         ImGui::Render();
         draw_cursor(window);
 
+        window.display();
+
         /*
-         * We must end the frame timing here because SFML will sleep in the next
-         * function call (to run this loop at 60 fps).
+         * SFML is set to a max fps of 60 so window.display() will block for the
+         * remaining time in the frame. This means that the best case frameTime
+         * is ~16ms.
          */
         frameTime = frameClock.getElapsedTime().asMicroseconds();
-
-        window.display();
     }
 
     ImGui::SFML::Shutdown();
