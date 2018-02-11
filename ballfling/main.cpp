@@ -17,11 +17,23 @@
 #include "particle.h"
 #include "audio.h"
 #include "splash_state.h"
+#include "options.h"
+#include "window.h"
 
 #include <windows.h>
 
 sfg::SFGUI guiManager;
 sfg::Desktop gui;
+sf::RenderWindow window;
+
+void reconfigure_window(bool fullscreen)
+{
+    window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT),
+                  "Hedgehogs Can Fly",
+                  sf::Style::Close | (fullscreen ? sf::Style::Fullscreen : sf::Style::None));
+    window.setFramerateLimit(60);
+    window.setMouseCursorVisible(false);
+}
 
 // Only open console window in debug mode
 #ifndef _DEBUG
@@ -36,9 +48,7 @@ int main()
         return -1;
     }
 
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Hedgehogs Can Fly", sf::Style::Close);
-    window.setFramerateLimit(60);
-    window.setMouseCursorVisible(false);
+    reconfigure_window(options.fullscreen != 0);
 
     std::cout << "OpenGL version: " << window.getSettings().majorVersion << "." << window.getSettings().minorVersion << std::endl;
     std::cout << "debug controls:\n";

@@ -4,8 +4,8 @@
  * General program wide compilation settings.
  */
 
-#define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 600
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 720
 
 #define VERSION_STRING "rc2"
 

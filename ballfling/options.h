@@ -16,6 +16,7 @@ public:
     double sfxVolume;
     int trail;
     int power;
+    int fullscreen;
 };
 
 extern Options options;

@@ -13,10 +13,12 @@
 #include "util.h"
 #include "options.h"
 #include "save.h"
+#include "window.h"
 
 StateOptions::StateOptions(World *world, bool showEraseSave, sf::Color clear) :
     State(world, "options"), showEraseSave(showEraseSave), clear(clear)
 {
+    fullscreenPrev = (bool)options.fullscreen;
 }
 
 sf::Color StateOptions::get_clear_colour()
@@ -30,6 +32,10 @@ void StateOptions::on_event(sf::Event &event)
 
 void StateOptions::on_tick()
 {
+    if (fullscreenPrev != guiToggleFullscreen->IsActive()) {
+        fullscreenPrev = !fullscreenPrev;
+        reconfigure_window(fullscreenPrev);
+    }
 }
 
 void StateOptions::on_draw(sf::RenderWindow &window)
@@ -114,6 +120,18 @@ void StateOptions::on_gain_focus()
     guiTogglePower->SetActive((bool)options.power);
     guiBoxPower->Pack(guiTogglePower);
 
+    auto guiBoxFullscreen = sfg::Box::Create();
+    guiBoxMain->Pack(guiBoxFullscreen);
+
+    auto guiLblFullscreen = sfg::Label::Create("Fullscreen");
+    guiLblFullscreen->SetId("lblOptionsFullscreen");
+    guiBoxFullscreen->Pack(guiLblFullscreen);
+
+    guiToggleFullscreen = sfg::CheckButton::Create("");
+    guiToggleFullscreen->SetId("tglOptionsFullscreen");
+    guiToggleFullscreen->SetActive((bool)options.fullscreen);
+    guiBoxFullscreen->Pack(guiToggleFullscreen);
+
     if (showEraseSave) {
         auto guiBoxErase = sfg::Box::Create();
         guiBoxMain->Pack(guiBoxErase);
@@ -146,5 +164,6 @@ void StateOptions::on_lose_focus()
     options.sfxVolume = (double)guiSliderSfx->GetValue();
     options.trail = (int)guiToggleTrail->IsActive();
     options.power = (int)guiTogglePower->IsActive();
+    options.fullscreen = (int)guiToggleFullscreen->IsActive();
     options.save(CONFIG_FILENAME);
 }
