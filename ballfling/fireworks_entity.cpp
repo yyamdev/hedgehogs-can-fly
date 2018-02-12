@@ -6,10 +6,11 @@
 
 EntityFireworks::EntityFireworks()
 {
-    EntityFireworks(sf::Vector2f(0.f, 0.f));
+    EntityFireworks(sf::Vector2f(0.f, 0.f), false);
 }
 
-EntityFireworks::EntityFireworks(sf::Vector2f pos)
+EntityFireworks::EntityFireworks(sf::Vector2f pos, bool endLevel) :
+    endLevel(endLevel)
 {
     position = pos;
     timer.restart();
@@ -86,7 +87,8 @@ void EntityFireworks::tick(std::vector<Entity*> &entities)
     case 4:
         if (time > 2.f)
         {
-            notify(EVENT_BALL_HIT_FINISH, NULL);
+            if (endLevel)
+                notify(EVENT_BALL_HIT_FINISH, NULL);
             ++count;
         }
         break;

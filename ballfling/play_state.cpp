@@ -54,7 +54,7 @@ StatePlay::StatePlay(World *world, int levelNum) :
         break;
     case 5:
         world->add_entity(new EntitySprite("data/lvl5txt.png", 402.f, 2830.f));
-        world->add_entity(new EntitySprite("data/dude.png", 4664.f, 1544.f, 3.f));
+        world->add_entity(new EntitySprite("data/dude.png", 4664.f, 1544.f, 3.f, 0.f, true));
         break;
     case 6:
         world->add_entity(new EntitySprite("data/lvl6txt.png", 253.f, 768.f));
@@ -63,7 +63,7 @@ StatePlay::StatePlay(World *world, int levelNum) :
         world->add_entity(new EntitySprite("data/lvl7txt.png", 1587.f, 1695.f));
         break;
     case 8:
-        world->add_entity(new EntitySprite("data/frame.png", 1700.f, 615.f));
+        world->add_entity(new EntitySprite("data/frame.png", 1700.f, 615.f, 1.f, 0.f, true));
         world->add_entity(new EntitySprite("data/lvl8txt.png", 1026.f, 1926.f));
         break;
     case 9:

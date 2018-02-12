@@ -225,7 +225,7 @@ void EntityBall::tick(std::vector<Entity*> &entities)
         if (t == T_WIN) {
             if (!spawned_fireworks) {
                 reactToInput = false;
-                world->add_entity(new EntityFireworks(position));
+                world->add_entity(new EntityFireworks(position, true));
                 spawned_fireworks = true;
                 notify(EVENT_LEVEL_COMPLETE, NULL);
             }

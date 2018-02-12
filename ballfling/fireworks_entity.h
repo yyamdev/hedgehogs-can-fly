@@ -12,7 +12,7 @@ class EntityFireworks : public Entity
 {
 public:
     EntityFireworks();
-    EntityFireworks(sf::Vector2f pos);
+    EntityFireworks(sf::Vector2f pos, bool endLevel);
 
     void event(sf::Event &e);
     void tick(std::vector<Entity*> &entities);
@@ -22,4 +22,5 @@ public:
 private:
     sf::Clock timer;
     int count = 0;
+    bool endLevel = false;
 };
