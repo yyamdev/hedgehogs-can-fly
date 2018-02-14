@@ -32,7 +32,7 @@ void StateEnd::on_gain_focus()
     guiButtonSelect->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind([] (void) {
         State::pop_state(); // Pop state back to level select
     }));
-    guiButtonSelect->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2 - guiButtonSelect->GetRequisition().x / 2.f, 500.f));
+    guiButtonSelect->SetPosition(sf::Vector2f(WINDOW_WIDTH / 2 - guiButtonSelect->GetRequisition().x / 2.f, 600.f));
 
     timerFirework.restart();
     timerState.restart();
@@ -79,6 +79,8 @@ void StateEnd::on_draw(sf::RenderWindow &window)
     particles_draw(window, sf::Vector2f(0.f, 0.f));
     if (state == 1) {
         sf::Sprite sprMsg(txtBye);
+        sprMsg.setOrigin(sf::Vector2f(txtBye.getSize().x / 2.f, txtBye.getSize().y / 2.f));
+        sprMsg.setPosition(WINDOW_WIDTH / 2.f, WINDOW_HEIGHT / 2.f);
         window.draw(sprMsg);
     }
 }
