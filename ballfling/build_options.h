@@ -7,7 +7,7 @@
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
 
-#define VERSION_STRING "rc3"
+#define VERSION_STRING "rc4"
 
 #define DEFAULT_CLEAR_COLOUR sf::Color(0, 0, 0)
 
