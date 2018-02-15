@@ -29,6 +29,8 @@ void Options::load(std::string filename)
         sfxVolume = .65f;
         trail = false;
         power = true;
+        fullscreen = false;
+        edges = true;
         return;
     }
 
