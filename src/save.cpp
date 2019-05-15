@@ -4,8 +4,8 @@
 
 static int prog = 1;
 static bool loaded = false;
-static char *filename = "data/prog";
-static char *entry = "prog";
+static const char *filename = "data/prog";
+static const char *entry = "prog";
 
 void savegame_save()
 {
