@@ -1,0 +1,8 @@
+[submodule "imgui"]
+	path = imgui
+	url = https://github.com/ocornut/imgui.git
+	branch = master
+[submodule "imgui-sfml"]
+	path = imgui-sfml
+	url = https://github.com/eliasdaler/imgui-sfml.git
+	branch = master
