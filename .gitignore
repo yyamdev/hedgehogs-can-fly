@@ -1,3 +1,11 @@
+.gitignore
+
+ballfling/ballfling.vcxproj
+ballfling/ballfling.vcxproj.filters
+ballfling.sln
+
+ballfling/data
+
 *.dll
 .dumbjump
 
